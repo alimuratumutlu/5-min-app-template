@@ -1,105 +1,131 @@
 import { useRouter } from "expo-router";
-import { Activity, Medal, TrendingUp, Trophy } from "lucide-react-native";
-import { Text, View } from "react-native";
-import { AppScreen, Button, Card, CompactTile, ListRow, Metric, ProgressStatus, textStyles } from "@/components/app-shell";
-import { BarChart, ChartCard, ComparisonBars, DonutChart, HeatmapChart, LineChart, RadarChart } from "@/components/charts";
-import { analyticsMetrics, recommendations, sessions, userProgress } from "@/lib/template-data";
+import { BrainCircuit, ClipboardCheck, FileChartLine, Goal, Lightbulb, ListChecks, ScanSearch, Sparkles, Target, WandSparkles } from "lucide-react-native";
+import { StyleSheet, Text, View } from "react-native";
+import { AppScreen, Button, Card, CompactTile, ListRow, ProgressStatus, colors, fonts, textStyles } from "@/components/app-shell";
+import { sessions, userProgress } from "@/lib/template-data";
+
+const insightCards = [
+  {
+    title: "Objective fit",
+    body: "The current objective is clear enough for a playable session, but the reward result should be shown earlier.",
+    score: 84,
+    tone: "green" as const
+  },
+  {
+    title: "AI confidence",
+    body: "High confidence because session completion, saved output, and level progress all point to the same behavior.",
+    score: userProgress.confidence,
+    tone: "purple" as const
+  },
+  {
+    title: "Validation trend",
+    body: "Trend is improving: completed session score, favorite saved review, and leaderboard progress are aligned.",
+    score: 78,
+    tone: "blue" as const
+  }
+];
 
 export default function AnalyticsScreen() {
   const router = useRouter();
-  const radarData = [
-    { label: "Focus", value: 88 },
-    { label: "Logic", value: 72 },
-    { label: "Speed", value: 64 },
-    { label: "Memory", value: 81 },
-    { label: "Social", value: 58 },
-    { label: "Boss", value: 76 }
-  ];
-  const lineData = [120, 180, 140, 260, 300, 420, 390, 520, 610, 740];
-  const barData = [
-    { label: "Mon", value: 6 },
-    { label: "Tue", value: 9 },
-    { label: "Wed", value: 5 },
-    { label: "Thu", value: 11 },
-    { label: "Fri", value: 8 }
-  ];
-  const heatmapValues = [12, 30, 54, 72, 20, 86, 44, 68, 10, 34, 90, 76, 48, 18, 64, 82, 26, 52, 78, 92, 40, 16, 70, 58, 36, 84, 98, 46, 24, 62, 88, 56, 32, 74, 66];
-  const comparisonData = [
-    { label: "Neon League", value: 86, meta: "#18" },
-    { label: "Daily quests", value: 74, meta: "24 done" },
-    { label: "Badge vault", value: 58, meta: "7 cards" },
-    { label: "Boss prep", value: 70, meta: "ready" }
-  ];
 
   return (
-    <AppScreen title="Quest stats" subtitle="XP, streak, league, and rewards" activeDomain="SkillQuest">
-      <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 10 }}>
-        {analyticsMetrics.map((metric) => (
-          <Metric key={metric.label} label={metric.label} value={metric.value} delta={metric.delta} tone={metric.tone} />
+    <AppScreen title="AI report" subtitle="Objective, insight, validation" activeDomain="SkillQuest">
+      <View style={styles.heroReport}>
+        <View style={styles.heroTop}>
+          <View style={styles.heroIcon}>
+            <BrainCircuit color="#FFFFFF" size={26} strokeWidth={3} />
+          </View>
+          <View style={{ flex: 1, gap: 3 }}>
+            <Text selectable style={styles.eyebrow}>
+              Objective intelligence
+            </Text>
+            <Text selectable style={styles.heroTitle}>
+              Make the next quest obvious
+            </Text>
+          </View>
+        </View>
+        <Text selectable style={styles.heroBody}>
+          AI insight report reads session results, completed outputs, saved favorites, level score, confidence, analytics stats, and performance trend to recommend the next playable objective.
+        </Text>
+        <View style={styles.scoreRow}>
+          <View style={styles.scoreBadge}>
+            <Text selectable style={styles.scoreValue}>
+              84
+            </Text>
+            <Text selectable style={styles.scoreLabel}>
+              objective score
+            </Text>
+          </View>
+          <View style={styles.scoreBadge}>
+            <Text selectable style={styles.scoreValue}>
+              {userProgress.confidence}%
+            </Text>
+            <Text selectable style={styles.scoreLabel}>
+              confidence
+            </Text>
+          </View>
+        </View>
+        <Button label="Generate AI report" icon={WandSparkles} onPress={() => router.push("/details/onboarding-lab")} fullWidth />
+      </View>
+
+      <View style={{ flexDirection: "row", flexWrap: "wrap", justifyContent: "space-between", gap: 14 }}>
+        <CompactTile title="Objective" body="Primary target, next action, and completion rule." tone="coral" icon={Goal} onPress={() => router.push("/session")} />
+        <CompactTile title="Insight" body="AI pattern read from recent quest results." tone="purple" icon={Lightbulb} onPress={() => router.push("/details/launch-plan")} />
+        <CompactTile title="Validation" body="Saved evidence, favorite output, and trend checks." tone="blue" icon={ClipboardCheck} onPress={() => router.push("/bookmarks")} />
+        <CompactTile title="Report" body="Brief summary for product iteration decisions." tone="green" icon={FileChartLine} onPress={() => router.push("/details/cloudflare-ready")} />
+      </View>
+
+      <View style={{ gap: 12 }}>
+        <Text selectable style={textStyles.sectionTitle}>
+          AI insight report
+        </Text>
+        {insightCards.map((card) => (
+          <Card key={card.title} tone={card.tone}>
+            <View style={{ flexDirection: "row", alignItems: "center", gap: 12 }}>
+              <View style={styles.reportBullet}>
+                <ScanSearch color={colors.blue} size={20} strokeWidth={3} />
+              </View>
+              <View style={{ flex: 1, gap: 4 }}>
+                <Text selectable style={textStyles.cardTitle}>
+                  {card.title}
+                </Text>
+                <Text selectable style={textStyles.body}>
+                  {card.body}
+                </Text>
+              </View>
+            </View>
+            <ProgressStatus label={`${card.title.toLowerCase()} progress`} value={card.score} tone={card.tone} />
+          </Card>
         ))}
       </View>
 
-      <View style={{ flexDirection: "row", flexWrap: "wrap", justifyContent: "space-between", gap: 10 }}>
-        <CompactTile title="Quest flow" body="Daily cadence and completed reward windows." tone="green" icon={Activity} onPress={() => router.push("/details/launch-plan")} />
-        <CompactTile title="Rewards" body={`${userProgress.points} points with ${userProgress.streak} day streak.`} tone="gold" icon={Trophy} onPress={() => router.push("/details/carousel-lab")} />
-        <CompactTile title="League" body="Ruby League rank, promotion, and weekly rivals." tone="blue" icon={Medal} onPress={() => router.push("/bookmarks")} />
-        <CompactTile title="Trend" body="XP velocity and mastery movement." tone="purple" icon={TrendingUp} onPress={() => router.push("/details/onboarding-lab")} />
-      </View>
-
-      <View style={{ gap: 10 }}>
-        <Text selectable style={textStyles.sectionTitle}>
-          Chart library
-        </Text>
-        <ChartCard title="Radar chart" subtitle="Skill mastery across six quest dimensions." tone="purple">
-          <RadarChart data={radarData} tone="purple" />
-        </ChartCard>
-        <ChartCard title="Line chart" subtitle="XP velocity over the latest ten sessions." tone="coral">
-          <LineChart data={lineData} tone="coral" />
-        </ChartCard>
-        <ChartCard title="Bar chart" subtitle="Completed quest volume by weekday." tone="green">
-          <BarChart data={barData} tone="green" />
-        </ChartCard>
-        <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 10 }}>
-          <View style={{ flex: 1, minWidth: 160 }}>
-            <ChartCard title="Donut" subtitle="Level progress." tone="gold">
-              <DonutChart value={userProgress.confidence} label="to Lv. 13" tone="gold" />
-            </ChartCard>
+      <Card tone="gold">
+        <View style={{ flexDirection: "row", alignItems: "center", gap: 12 }}>
+          <View style={styles.nextIcon}>
+            <Target color={colors.gold} size={22} strokeWidth={3} />
           </View>
-          <View style={{ flex: 1, minWidth: 160 }}>
-            <ChartCard title="Bars" subtitle="League state." tone="blue">
-              <ComparisonBars data={comparisonData.slice(0, 3)} tone="blue" />
-            </ChartCard>
+          <View style={{ flex: 1, gap: 4 }}>
+            <Text selectable style={textStyles.cardTitle}>
+              Recommended objective
+            </Text>
+            <Text selectable style={textStyles.body}>
+              Start a 5-minute Focus Sprint, then save the result output as a favorite review item for validation.
+            </Text>
           </View>
         </View>
-        <ChartCard title="Heatmap chart" subtitle="Daily streak intensity and activity density." tone="blue">
-          <HeatmapChart values={heatmapValues} tone="blue" />
-        </ChartCard>
-        <ChartCard title="Comparison bars" subtitle="Reference layout for ranked progress and account health." tone="purple">
-          <ComparisonBars data={comparisonData} tone="purple" />
-        </ChartCard>
-      </View>
-
-      <Card tone="purple">
-        <Text selectable style={textStyles.cardTitle}>
-          Weekly XP momentum
-        </Text>
-        <Text selectable style={textStyles.body}>
-          Quest quality is improving because short sessions, saved boosts, and streak protection are reused instead of restarting cold.
-        </Text>
-        <ProgressStatus label="confidence score" value={userProgress.confidence} tone="purple" />
-        <ProgressStatus label="completion rate" value={userProgress.completionRate} tone="green" />
+        <Button label="Start objective" icon={Sparkles} onPress={() => router.push("/session")} />
       </Card>
 
       <View style={{ gap: 10 }}>
         <Text selectable style={textStyles.sectionTitle}>
-          Quest results
+          Evidence log
         </Text>
         {sessions.map((session) => (
           <ListRow
             key={session.id}
-            title={`${session.title} - match ${session.score}`}
-            body={session.insight}
-            meta={`${session.minutes} min game result`}
+            title={`${session.title} - score ${session.score}`}
+            body={`${session.insight} AI report uses this completed session result as performance evidence.`}
+            meta={`${session.minutes} min validation output`}
             onPress={() => router.push(`/details/${session.id}`)}
           />
         ))}
@@ -107,13 +133,100 @@ export default function AnalyticsScreen() {
 
       <Card>
         <Text selectable style={textStyles.cardTitle}>
-          Reward loop
+          Report checklist
         </Text>
         <Text selectable style={textStyles.body}>
-          {recommendations.length} boost cards are connected to detail routes, saved review, and the next quest path.
+          Objective, analytics stats, completed session result, saved bookmark evidence, favorite review, confidence score, level progress, validation signal, and trend are all represented.
         </Text>
-        <Button label="Review saved boost" variant="secondary" onPress={() => router.push("/details/onboarding-lab")} />
+        <Button label="Open checklist" icon={ListChecks} variant="secondary" onPress={() => router.push("/details/learning-sprint")} />
       </Card>
     </AppScreen>
   );
 }
+
+const styles = StyleSheet.create({
+  heroReport: {
+    backgroundColor: "#FFFFFF",
+    borderRadius: 36,
+    borderCurve: "continuous",
+    gap: 15,
+    padding: 17,
+    boxShadow: "0 22px 48px rgba(135, 92, 255, 0.13)"
+  },
+  heroTop: {
+    alignItems: "center",
+    flexDirection: "row",
+    gap: 12
+  },
+  heroIcon: {
+    alignItems: "center",
+    backgroundColor: colors.purple,
+    borderRadius: 26,
+    height: 56,
+    justifyContent: "center",
+    width: 56
+  },
+  eyebrow: {
+    color: colors.blue,
+    fontFamily: fonts.black,
+    fontSize: 11,
+    fontWeight: "900",
+    lineHeight: 13,
+    textTransform: "uppercase"
+  },
+  heroTitle: {
+    color: colors.text,
+    fontFamily: fonts.black,
+    fontSize: 27,
+    fontWeight: "900",
+    lineHeight: 31
+  },
+  heroBody: {
+    color: colors.textMuted,
+    fontFamily: fonts.medium,
+    fontSize: 14,
+    lineHeight: 20
+  },
+  scoreRow: {
+    flexDirection: "row",
+    gap: 10
+  },
+  scoreBadge: {
+    backgroundColor: "#F7F3FF",
+    borderRadius: 24,
+    flex: 1,
+    padding: 13
+  },
+  scoreValue: {
+    color: colors.text,
+    fontFamily: fonts.black,
+    fontSize: 28,
+    fontVariant: ["tabular-nums"],
+    fontWeight: "900",
+    lineHeight: 32
+  },
+  scoreLabel: {
+    color: colors.textMuted,
+    fontFamily: fonts.bold,
+    fontSize: 11,
+    fontWeight: "700",
+    lineHeight: 14,
+    textTransform: "uppercase"
+  },
+  reportBullet: {
+    alignItems: "center",
+    backgroundColor: colors.blueSoft,
+    borderRadius: 22,
+    height: 46,
+    justifyContent: "center",
+    width: 46
+  },
+  nextIcon: {
+    alignItems: "center",
+    backgroundColor: "#FFFFFF",
+    borderRadius: 24,
+    height: 50,
+    justifyContent: "center",
+    width: 50
+  }
+});

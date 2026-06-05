@@ -1,6 +1,6 @@
 import { BlurView } from "expo-blur";
 import { Tabs } from "expo-router";
-import { BarChart3, Home, PlayCircle, Trophy, UserCircle } from "lucide-react-native";
+import { BrainCircuit, Home, PlayCircle, Trophy, UserCircle } from "lucide-react-native";
 import { StyleSheet } from "react-native";
 import { colors, TabBarIcon } from "@/components/app-shell";
 
@@ -53,8 +53,8 @@ export default function TabsLayout() {
       <Tabs.Screen
         name="analytics"
         options={{
-          title: "Analytics",
-          tabBarIcon: ({ color, focused }) => <TabBarIcon icon={BarChart3} color={color} focused={focused} />
+          title: "AI Report",
+          tabBarIcon: ({ color, focused }) => <TabBarIcon icon={BrainCircuit} color={color} focused={focused} />
         }}
       />
       <Tabs.Screen
