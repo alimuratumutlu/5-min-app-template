@@ -818,7 +818,7 @@ const styles = StyleSheet.create({
     gap: 10,
     justifyContent: "space-between",
     minHeight: 60,
-    paddingHorizontal: 16
+    paddingHorizontal: 18
   },
   choiceFaceActive: {
     backgroundColor: "#F6FAFF",
@@ -828,9 +828,9 @@ const styles = StyleSheet.create({
     color: colors.text,
     flex: 1,
     fontFamily: fonts.bold,
-    fontSize: 15,
+    fontSize: 17,
     fontWeight: "700",
-    lineHeight: 19
+    lineHeight: 21
   },
   choiceTextActive: {
     color: colors.blue
@@ -846,7 +846,7 @@ const styles = StyleSheet.create({
   matchShell: {
     backgroundColor: "#D8DFE8",
     borderRadius: 24,
-    minHeight: 56,
+    minHeight: 62,
     paddingBottom: 5
   },
   matchShellActive: {
@@ -862,10 +862,10 @@ const styles = StyleSheet.create({
     borderRadius: 24,
     borderWidth: 2,
     flexDirection: "row",
-    gap: 7,
+    gap: 8,
     justifyContent: "center",
-    minHeight: 51,
-    paddingHorizontal: 8
+    minHeight: 57,
+    paddingHorizontal: 10
   },
   matchFaceActive: {
     backgroundColor: colors.purple,
@@ -878,9 +878,9 @@ const styles = StyleSheet.create({
   matchText: {
     color: colors.text,
     fontFamily: fonts.black,
-    fontSize: 12,
+    fontSize: 15,
     fontWeight: "900",
-    lineHeight: 15,
+    lineHeight: 18,
     textAlign: "center"
   },
   matchTextActive: {
@@ -921,9 +921,9 @@ const styles = StyleSheet.create({
   selectedWordText: {
     color: "#FFFFFF",
     fontFamily: fonts.black,
-    fontSize: 13,
+    fontSize: 15,
     fontWeight: "900",
-    lineHeight: 15
+    lineHeight: 18
   },
   wordBank: {
     flexDirection: "row",
@@ -943,8 +943,8 @@ const styles = StyleSheet.create({
     borderColor: "#E6EAF0",
     borderRadius: 20,
     borderWidth: 2,
-    paddingHorizontal: 14,
-    paddingVertical: 10
+    paddingHorizontal: 16,
+    paddingVertical: 11
   },
   duoWordFaceUsed: {
     backgroundColor: "#F1F4F8"
@@ -952,9 +952,9 @@ const styles = StyleSheet.create({
   duoWordText: {
     color: colors.text,
     fontFamily: fonts.black,
-    fontSize: 14,
+    fontSize: 16,
     fontWeight: "900",
-    lineHeight: 16
+    lineHeight: 19
   },
   duoWordTextUsed: {
     color: "#B9C0C9"
@@ -985,8 +985,9 @@ const styles = StyleSheet.create({
   dragTokenText: {
     color: colors.text,
     fontFamily: fonts.black,
-    fontSize: 13,
-    fontWeight: "900"
+    fontSize: 15,
+    fontWeight: "900",
+    lineHeight: 18
   },
   dragTokenTextActive: {
     color: "#FFFFFF"
@@ -1074,7 +1075,7 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     flex: 1,
     gap: 4,
-    minHeight: 62,
+    minHeight: 66,
     justifyContent: "center"
   },
   energyButtonActive: {
@@ -1084,8 +1085,9 @@ const styles = StyleSheet.create({
   energyText: {
     color: colors.coral,
     fontFamily: fonts.black,
-    fontSize: 13,
-    fontWeight: "900"
+    fontSize: 16,
+    fontWeight: "900",
+    lineHeight: 19
   },
   energyTextActive: {
     color: "#FFFFFF"
