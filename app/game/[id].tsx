@@ -394,10 +394,7 @@ function QuestionCard({ step, children }: { step: LessonStep; children: ReactNod
         <View style={styles.questionIcon}>
           <Icon color="#FFFFFF" size={20} strokeWidth={3} />
         </View>
-        <View style={{ flex: 1, gap: 4 }}>
-          <Text selectable style={styles.questionEyebrow}>
-            {step.eyebrow}
-          </Text>
+        <View style={{ flex: 1, gap: 5 }}>
           <Text selectable style={styles.questionTitle}>
             {step.title}
           </Text>
@@ -785,14 +782,6 @@ const styles = StyleSheet.create({
     height: 50,
     justifyContent: "center",
     width: 50
-  },
-  questionEyebrow: {
-    color: colors.purple,
-    fontFamily: fonts.black,
-    fontSize: 11,
-    fontWeight: "900",
-    lineHeight: 13,
-    textTransform: "uppercase"
   },
   questionTitle: {
     color: colors.text,
