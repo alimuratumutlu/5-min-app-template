@@ -15,16 +15,13 @@ import {
   WandSparkles,
   type LucideIcon
 } from "lucide-react-native";
-import { useMemo, useState } from "react";
-import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
+import { useMemo } from "react";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 import { AppScreen, IconButton, colors, fonts, textStyles } from "@/components/app-shell";
 import {
   getMechanicsForStage,
-  inputMechanicStats,
-  mechanicStageMeta,
   type AiTiming,
-  type InputMechanic,
-  type MechanicStage
+  type InputMechanic
 } from "@/lib/input-mechanics";
 
 const navItems = [
@@ -35,13 +32,6 @@ const navItems = [
   { href: "/profile", icon: UserCircle, label: "Profile", size: 23 }
 ] as const;
 
-const filters: Array<{ value: "all" | MechanicStage; label: string; count: number }> = [
-  { value: "all", label: "All", count: inputMechanicStats.total },
-  { value: "research-25", label: "25", count: inputMechanicStats.research },
-  { value: "original-40", label: "40", count: inputMechanicStats.original },
-  { value: "hassar-100", label: "100", count: inputMechanicStats.hassar }
-];
-
 const timingCopy: Record<AiTiming, string> = {
   "instant-rule": "Instant rule",
   "after-run": "After-run AI",
@@ -51,8 +41,7 @@ const timingCopy: Record<AiTiming, string> = {
 
 export default function MechanicsScreen() {
   const router = useRouter();
-  const [activeFilter, setActiveFilter] = useState<"all" | MechanicStage>("all");
-  const mechanics = useMemo(() => getMechanicsForStage(activeFilter), [activeFilter]);
+  const mechanics = useMemo(() => getMechanicsForStage("all"), []);
 
   const goBack = () => {
     if (router.canGoBack()) {
@@ -73,49 +62,39 @@ export default function MechanicsScreen() {
           <WandSparkles color="#FFFFFF" size={26} strokeWidth={3} />
         </View>
         <Text selectable style={styles.heroTitle}>
-          100 ways to collect daily-life data without making forms feel like forms
+          Agent guide for choosing playful daily input mechanics
         </Text>
         <Text selectable style={styles.heroBody}>
-          The catalog moves from proven mobile patterns to HASSAR-native game loops, then maps them to the current app-projects portfolio.
+          Use this library as a product-generation reference: decide what data the app needs, then pick the mechanic that makes sharing it feel like play.
         </Text>
-        <View style={styles.statGrid}>
-          <StatPill value="25" label="researched" />
-          <StatPill value="40" label="expanded" />
-          <StatPill value="100" label="HASSAR fit" />
+      </View>
+
+      <View style={styles.agentGuide}>
+        <View style={styles.guideRow}>
+          <Text selectable style={styles.guideStep}>
+            1
+          </Text>
+          <Text selectable style={styles.guideText}>
+            Identify the data type: signal, preference, evidence, ranking, free text, media, or routine state.
+          </Text>
+        </View>
+        <View style={styles.guideRow}>
+          <Text selectable style={styles.guideStep}>
+            2
+          </Text>
+          <Text selectable style={styles.guideText}>
+            Choose the lowest-friction mechanic that captures enough context without making the user feel tested.
+          </Text>
+        </View>
+        <View style={styles.guideRow}>
+          <Text selectable style={styles.guideStep}>
+            3
+          </Text>
+          <Text selectable style={styles.guideText}>
+            Use instant rules only for completion, safety, and fixed quizzes; send personal interpretation to after-run AI.
+          </Text>
         </View>
       </View>
-
-      <View style={styles.stageStack}>
-        {(Object.keys(mechanicStageMeta) as MechanicStage[]).map((stage) => (
-          <View key={stage} style={styles.stageRow}>
-            <View style={styles.stageDot} />
-            <View style={{ flex: 1, gap: 2 }}>
-              <Text selectable style={styles.stageTitle}>
-                {mechanicStageMeta[stage].label}
-              </Text>
-              <Text selectable style={styles.stageBody}>
-                {mechanicStageMeta[stage].body}
-              </Text>
-            </View>
-          </View>
-        ))}
-      </View>
-
-      <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.filterRail}>
-        {filters.map((filter) => {
-          const selected = activeFilter === filter.value;
-          return (
-            <Pressable key={filter.value} onPress={() => setActiveFilter(filter.value)} style={({ pressed }) => [styles.filterChip, selected ? styles.filterChipActive : null, pressed ? styles.pressed : null]}>
-              <Text selectable style={[styles.filterText, selected ? styles.filterTextActive : null]}>
-                {filter.label}
-              </Text>
-              <Text selectable style={[styles.filterCount, selected ? styles.filterTextActive : null]}>
-                {filter.count}
-              </Text>
-            </Pressable>
-          );
-        })}
-      </ScrollView>
 
       <View style={styles.libraryHeader}>
         <Text selectable style={textStyles.sectionTitle}>
@@ -132,19 +111,6 @@ export default function MechanicsScreen() {
         ))}
       </View>
     </AppScreen>
-  );
-}
-
-function StatPill({ value, label }: { value: string; label: string }) {
-  return (
-    <View style={styles.statPill}>
-      <Text selectable style={styles.statValue}>
-        {value}
-      </Text>
-      <Text selectable style={styles.statLabel}>
-        {label}
-      </Text>
-    </View>
   );
 }
 
@@ -264,98 +230,41 @@ const styles = StyleSheet.create({
     fontSize: 15,
     lineHeight: 21
   },
-  statGrid: {
-    flexDirection: "row",
-    gap: 9
-  },
-  statPill: {
+  agentGuide: {
     backgroundColor: "#FFFFFF",
-    borderRadius: 22,
-    flex: 1,
-    padding: 12
-  },
-  statValue: {
-    color: colors.coral,
-    fontFamily: fonts.black,
-    fontSize: 24,
-    fontWeight: "900",
-    lineHeight: 26
-  },
-  statLabel: {
-    color: colors.textMuted,
-    fontFamily: fonts.bold,
-    fontSize: 11,
-    fontWeight: "700",
-    lineHeight: 13,
-    textTransform: "uppercase"
-  },
-  stageStack: {
-    gap: 10
-  },
-  stageRow: {
-    alignItems: "flex-start",
-    backgroundColor: "#FFFFFF",
-    borderRadius: 24,
-    flexDirection: "row",
-    gap: 11,
-    padding: 14,
-    boxShadow: "0 16px 34px rgba(16,17,22,0.07)"
-  },
-  stageDot: {
-    backgroundColor: colors.coral,
-    borderRadius: 9,
-    height: 18,
-    marginTop: 2,
-    width: 18
-  },
-  stageTitle: {
-    color: colors.text,
-    fontFamily: fonts.black,
-    fontSize: 17,
-    fontWeight: "900",
-    lineHeight: 20
-  },
-  stageBody: {
-    color: colors.textMuted,
-    fontFamily: fonts.medium,
-    fontSize: 13,
-    lineHeight: 18
-  },
-  filterRail: {
-    gap: 8,
-    paddingRight: 16
-  },
-  filterChip: {
-    alignItems: "center",
-    backgroundColor: "#FFFFFF",
-    borderColor: "#E8EDF4",
-    borderRadius: 22,
+    borderColor: "rgba(232, 237, 244, 0.92)",
+    borderCurve: "continuous",
+    borderRadius: 30,
     borderWidth: 1,
+    gap: 12,
+    padding: 16,
+    boxShadow: "0 18px 38px rgba(16,17,22,0.08)"
+  },
+  guideRow: {
+    alignItems: "flex-start",
     flexDirection: "row",
-    gap: 8,
-    paddingHorizontal: 14,
-    paddingVertical: 10
+    gap: 11
   },
-  filterChipActive: {
-    backgroundColor: colors.ink,
-    borderColor: colors.ink
-  },
-  filterText: {
-    color: colors.text,
+  guideStep: {
+    backgroundColor: colors.coral,
+    borderRadius: 16,
+    color: "#FFFFFF",
     fontFamily: fonts.black,
-    fontSize: 14,
+    fontSize: 13,
     fontWeight: "900",
-    lineHeight: 17
+    height: 32,
+    lineHeight: 32,
+    overflow: "hidden",
+    textAlign: "center",
+    width: 32
   },
-  filterCount: {
-    color: colors.textMuted,
+  guideText: {
+    color: colors.text,
+    flex: 1,
     fontFamily: fonts.bold,
-    fontSize: 12,
+    fontSize: 14,
     fontWeight: "700",
-    lineHeight: 14
-  },
-  filterTextActive: {
-    color: "#FFFFFF"
+    lineHeight: 19
   },
   libraryHeader: {
     gap: 2
