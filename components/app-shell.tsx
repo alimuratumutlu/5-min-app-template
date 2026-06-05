@@ -134,46 +134,65 @@ export function AppHeader({
     ? {
         paddingHorizontal: scrollY.interpolate({
           inputRange: [0, 52, 124],
-          outputRange: [12, 5, 0],
+          outputRange: overlay ? [12, 0, 0] : [12, 5, 0],
           extrapolate: "clamp"
         }),
         paddingTop: scrollY.interpolate({
           inputRange: [0, 52, 124],
-          outputRange: [8, 7, 6],
+          outputRange: overlay ? [8, 0, 0] : [8, 7, 6],
           extrapolate: "clamp"
-        })
+        }),
+        marginTop: overlay
+          ? scrollY.interpolate({
+              inputRange: [0, 52, 124],
+              outputRange: [0, -8, -8],
+              extrapolate: "clamp"
+            })
+          : 0
       }
     : null;
   const animatedBlurStyle = scrollY
     ? {
         borderRadius: scrollY.interpolate({
           inputRange: [0, 40, 116],
-          outputRange: [36, 24, 0],
+          outputRange: overlay ? [36, 22, 0] : [36, 24, 0],
           extrapolate: "clamp"
         }),
-        transform: [
-          {
-            translateY: scrollY.interpolate({
-              inputRange: [0, 48, 120],
-              outputRange: [0, -1, 0],
-              extrapolate: "clamp"
-            })
-          },
-          {
-            scaleX: scrollY.interpolate({
-              inputRange: [0, 36, 84, 124],
-              outputRange: [0.968, 0.995, 1.018, 1],
-              extrapolate: "clamp"
-            })
-          },
-          {
-            scaleY: scrollY.interpolate({
-              inputRange: [0, 72, 124],
-              outputRange: [1, 1.025, 1],
-              extrapolate: "clamp"
-            })
-          }
-        ]
+        paddingTop: scrollY.interpolate({
+          inputRange: [0, 52, 124],
+          outputRange: overlay ? [0, 16, 16] : [0, 0, 0],
+          extrapolate: "clamp"
+        }),
+        paddingHorizontal: scrollY.interpolate({
+          inputRange: [0, 52, 124],
+          outputRange: overlay ? [0, 12, 12] : [0, 0, 0],
+          extrapolate: "clamp"
+        }),
+        transform: overlay
+          ? []
+          : [
+              {
+                translateY: scrollY.interpolate({
+                  inputRange: [0, 48, 120],
+                  outputRange: [0, -1, 0],
+                  extrapolate: "clamp"
+                })
+              },
+              {
+                scaleX: scrollY.interpolate({
+                  inputRange: [0, 36, 84, 124],
+                  outputRange: [0.968, 0.995, 1.018, 1],
+                  extrapolate: "clamp"
+                })
+              },
+              {
+                scaleY: scrollY.interpolate({
+                  inputRange: [0, 72, 124],
+                  outputRange: [1, 1.025, 1],
+                  extrapolate: "clamp"
+                })
+              }
+            ]
       }
     : null;
 
