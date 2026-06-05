@@ -1,0 +1,40 @@
+{
+  "name": "5-min-app-template",
+  "version": "0.1.0",
+  "private": true,
+  "main": "expo-router/entry",
+  "scripts": {
+    "start": "expo start",
+    "web": "expo start --web",
+    "ios": "expo start --ios",
+    "android": "expo start --android",
+    "typecheck": "tsc --noEmit",
+    "platform:validate": "node /Users/muratumutlu/Hassar/agentic/scripts/validate-app-platform-contract.mjs .",
+    "start:check": "tsx scripts/check-template.ts"
+  },
+  "dependencies": {
+    "expo": "^55.0.24",
+    "expo-blur": "^55.0.14",
+    "expo-constants": "^55.0.16",
+    "expo-haptics": "^55.0.14",
+    "expo-linear-gradient": "^55.0.14",
+    "expo-linking": "^55.0.15",
+    "expo-router": "^55.0.14",
+    "expo-status-bar": "^55.0.6",
+    "lucide-react-native": "^0.554.0",
+    "react": "19.2.0",
+    "react-dom": "19.2.0",
+    "react-native": "0.83.6",
+    "react-native-safe-area-context": "~5.6.2",
+    "react-native-screens": "~4.23.0",
+    "react-native-svg": "15.15.3",
+    "react-native-web": "^0.21.2",
+    "tsx": "^4.22.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.19.41",
+    "@types/react": "^19.2.6",
+    "babel-preset-expo": "^55.0.21",
+    "typescript": "^5.9.3"
+  }
+}

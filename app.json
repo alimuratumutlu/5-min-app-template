@@ -1,0 +1,29 @@
+{
+  "expo": {
+    "name": "5-Min App Template",
+    "slug": "5-min-app-template",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "scheme": "five-min-template",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#FFFFFF"
+      }
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "server"
+    },
+    "plugins": [
+      "expo-router"
+    ],
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}

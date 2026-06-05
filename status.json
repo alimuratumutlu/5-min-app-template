@@ -1,0 +1,73 @@
+{
+  "product": "5-min-app-template",
+  "product_path": "/Users/muratumutlu/Hassar/app-projects/5-min-app-template",
+  "pipeline": "hassar-v1",
+  "status": "local_validation_ready",
+  "current_stage": "010-qa-pass",
+  "last_completed_stage": "010-qa-pass",
+  "next_stage": "011-store-assets-aso",
+  "started_at": "2026-06-05T00:00:00.000Z",
+  "updated_at": "2026-06-05T06:56:38.000Z",
+  "inputs": {
+    "requirements_md": "present",
+    "runbook_md": "present",
+    "raw_idea_available": true,
+    "actual_product_source_tree": "present"
+  },
+  "stages": {
+    "001-maker-decision": "complete",
+    "002-product-brief": "complete",
+    "003-user-flow": "complete",
+    "004-system-architecture": "complete",
+    "005-data-model": "complete",
+    "006-monetization": "pending",
+    "007-codex-plan": "complete",
+    "008-parallel-agent-tasks": "complete",
+    "009-integration-pass": "complete",
+    "010-qa-pass": "complete",
+    "011-store-assets-aso": "pending",
+    "012-launch-checklist": "pending",
+    "013-deploy": "pending",
+    "014-feedback-loop": "pending",
+    "015-next-iteration": "pending"
+  },
+  "blockers": [],
+  "decisions_count": 4,
+  "launch_gates": {
+    "value_clear": true,
+    "first_value_moment_works": true,
+    "analytics_visible": true,
+    "feedback_visible": true,
+    "security_review_passed": false,
+    "mobile_build_ready": true,
+    "production_deployed": false
+  },
+  "checks": {
+    "last_command": "npm run start:check && npm run typecheck && npm run platform:validate && Expo web browser smoke",
+    "last_result": "passed",
+    "last_checked_at": "2026-06-05T06:56:38.000Z",
+    "commands": [
+      {
+        "command": "npm run start:check",
+        "result": "passed",
+        "notes": "Template data, onboarding, metrics, adapter notes, shell signals, and route navigation checks passed."
+      },
+      {
+        "command": "npm run typecheck",
+        "result": "passed",
+        "notes": "TypeScript completed with no errors."
+      },
+      {
+        "command": "npm run platform:validate",
+        "result": "passed",
+        "notes": "HASSAR product shell validator passed with no blockers or warnings."
+      },
+      {
+        "command": "npx expo start --web --port 8097 + Playwright route smoke",
+        "result": "passed",
+        "notes": "Home, Analytics, Session, and detail routes rendered in browser. Expo/RN emitted a pointerEvents deprecation warning."
+      }
+    ]
+  },
+  "next_action": "Use this template as the shell source for generated 5-min apps; next stage is store assets/ASO or backend adapter integration."
+}
