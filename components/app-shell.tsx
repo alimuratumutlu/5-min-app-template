@@ -273,7 +273,7 @@ export function IconButton({
 
 export function Metric({ label, value, delta, tone = "blue" }: MetricProps) {
   return (
-    <View style={[styles.metricCard, { borderColor: translucentAccentByTone[tone] }]}>
+    <View style={[styles.metricCard, shadowByTone[tone]]}>
       <LinearGradient colors={gradientByTone[tone]} style={styles.cardGradientFill} />
       <View style={[styles.metricGlow, { backgroundColor: accentByTone[tone] }]} />
       <View style={styles.metricTopRow}>
@@ -545,7 +545,7 @@ export function CompactTile({
   onPress?: () => void;
 }) {
   return (
-    <Pressable onPress={onPress} style={({ pressed }) => [styles.compactTile, { borderColor: translucentAccentByTone[tone] }, pressed ? styles.pressed : null]}>
+    <Pressable onPress={onPress} style={({ pressed }) => [styles.compactTile, shadowByTone[tone], pressed ? styles.pressed : null]}>
       <LinearGradient colors={gradientByTone[tone]} style={styles.cardGradientFill} />
       <View style={[styles.compactTileGlow, { backgroundColor: accentByTone[tone] }]} />
       <View style={styles.compactTileTop}>
@@ -587,7 +587,7 @@ export function BoostCard({
   onPress?: () => void;
 }) {
   return (
-    <Pressable onPress={onPress} style={({ pressed }) => [styles.boostCard, { borderColor: translucentAccentByTone[tone] }, pressed ? styles.pressed : null]}>
+    <Pressable onPress={onPress} style={({ pressed }) => [styles.boostCard, shadowByTone[tone], pressed ? styles.pressed : null]}>
       <LinearGradient colors={gradientByTone[tone]} style={styles.cardGradientFill} />
       <View style={[styles.boostGlow, { backgroundColor: accentByTone[tone] }]} />
       <View style={styles.boostTopRow}>
@@ -746,6 +746,24 @@ const gradientByTone: Record<Tone, [string, string, string]> = {
   coral: ["#FFFFFF", "#FFF0E8", "#FFE0D2"],
   gold: ["#FFFFFF", "#FFF7DC", "#FFEFC0"]
 };
+
+const shadowByTone = StyleSheet.create({
+  blue: {
+    boxShadow: "0 18px 34px rgba(36, 123, 255, 0.16), 0 3px 0 rgba(36, 123, 255, 0.08)"
+  },
+  green: {
+    boxShadow: "0 18px 34px rgba(0, 201, 133, 0.16), 0 3px 0 rgba(0, 201, 133, 0.08)"
+  },
+  purple: {
+    boxShadow: "0 18px 34px rgba(135, 92, 255, 0.16), 0 3px 0 rgba(135, 92, 255, 0.08)"
+  },
+  coral: {
+    boxShadow: "0 18px 34px rgba(255, 111, 61, 0.17), 0 3px 0 rgba(255, 111, 61, 0.09)"
+  },
+  gold: {
+    boxShadow: "0 18px 34px rgba(255, 184, 0, 0.18), 0 3px 0 rgba(255, 184, 0, 0.09)"
+  }
+});
 
 const toneStyles = StyleSheet.create({
   default: {
@@ -930,14 +948,14 @@ const styles = StyleSheet.create({
   metricCard: {
     borderCurve: "continuous",
     borderRadius: 32,
+    borderColor: "rgba(255,255,255,0.82)",
     borderWidth: 1,
     flex: 1,
     gap: 8,
     minHeight: 132,
     minWidth: 142,
     overflow: "hidden",
-    padding: 15,
-    boxShadow: "0 18px 34px rgba(31, 34, 40, 0.08)"
+    padding: 15
   },
   metricTopRow: {
     alignItems: "flex-start",
@@ -1346,6 +1364,7 @@ const styles = StyleSheet.create({
   compactTile: {
     borderCurve: "continuous",
     borderRadius: 34,
+    borderColor: "rgba(255,255,255,0.82)",
     borderWidth: 1,
     gap: 10,
     minHeight: 148,
@@ -1415,11 +1434,11 @@ const styles = StyleSheet.create({
   boostCard: {
     borderCurve: "continuous",
     borderRadius: 34,
+    borderColor: "rgba(255,255,255,0.82)",
     borderWidth: 1,
     gap: 13,
     overflow: "hidden",
-    padding: 15,
-    boxShadow: "0 18px 36px rgba(31, 34, 40, 0.08)"
+    padding: 15
   },
   boostGlow: {
     borderRadius: 80,
