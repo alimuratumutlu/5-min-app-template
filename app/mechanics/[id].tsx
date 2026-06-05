@@ -21,6 +21,12 @@ import { useMemo, useState } from "react";
 import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 import { AppScreen, IconButton, colors, fonts, textStyles } from "@/components/app-shell";
 import { getMechanic, inputMechanics, type AiTiming, type InputMechanic } from "@/lib/input-mechanics";
+import {
+  buildMechanicMultiOptions,
+  buildMechanicOptions,
+  buildMechanicSampleValue,
+  getMechanicPreviewMode
+} from "@/lib/mechanic-preview";
 
 const navItems = [
   { href: "/", icon: Home, label: "Home", size: 23 },
@@ -176,10 +182,42 @@ function ExampleSurface({ mechanic }: { mechanic: InputMechanic }) {
         </View>
       </View>
 
-      {mode === "sort" ? (
-        <SortPreview mechanic={mechanic} />
-      ) : mode === "multi" ? (
+      {mode === "multi" ? (
         <MultiPickPreview mechanic={mechanic} chips={chips} onChip={toggleChip} />
+      ) : mode === "match" ? (
+        <MatchPreview mechanic={mechanic} />
+      ) : mode === "listen" ? (
+        <ListenPreview mechanic={mechanic} selected={selected} onSelect={setSelected} />
+      ) : mode === "picture" ? (
+        <PicturePreview mechanic={mechanic} selected={selected} onSelect={setSelected} />
+      ) : mode === "calendar" ? (
+        <CalendarPreview mechanic={mechanic} />
+      ) : mode === "body-map" ? (
+        <BodyMapPreview mechanic={mechanic} selected={selected} onSelect={setSelected} />
+      ) : mode === "rank" ? (
+        <RankPreview mechanic={mechanic} />
+      ) : mode === "swipe" ? (
+        <SwipePreview mechanic={mechanic} />
+      ) : mode === "branch" ? (
+        <BranchPreview mechanic={mechanic} />
+      ) : mode === "location" ? (
+        <LocationPreview mechanic={mechanic} selected={selected} onSelect={setSelected} />
+      ) : mode === "partner" ? (
+        <PartnerPreview mechanic={mechanic} />
+      ) : mode === "anonymous" ? (
+        <AnonymousPreview mechanic={mechanic} />
+      ) : mode === "avatar" ? (
+        <AvatarPreview mechanic={mechanic} />
+      ) : mode === "stamp" ? (
+        <StampPreview mechanic={mechanic} />
+      ) : mode === "toggle" ? (
+        <TogglePreview mechanic={mechanic} selected={selected} onSelect={setSelected} />
+      ) : mode === "timer" ? (
+        <TimerPreview mechanic={mechanic} />
+      ) : mode === "route" ? (
+        <RoutePreview mechanic={mechanic} />
+      ) : mode === "journal" ? (
+        <JournalPreview note={note} onNote={setNote} />
       ) : mode === "scale" ? (
         <ScalePreview mechanic={mechanic} />
       ) : mode === "media" ? (
@@ -248,6 +286,305 @@ function ChoicePreview({ mechanic, selected, onSelect }: { mechanic: InputMechan
         </Pressable>
       ))}
     </View>
+  );
+}
+
+function MatchPreview({ mechanic }: { mechanic: InputMechanic }) {
+  const options = buildOptions(mechanic);
+  const outcomes = ["Signal", "Action", "Reward"];
+  return (
+    <View style={styles.matchGrid}>
+      <View style={styles.matchColumn}>
+        {options.map((option) => (
+          <View key={option} style={styles.matchTile}>
+            <Text selectable style={styles.matchText}>
+              {option}
+            </Text>
+          </View>
+        ))}
+      </View>
+      <View style={styles.matchColumn}>
+        {outcomes.map((outcome, index) => (
+          <View key={outcome} style={[styles.matchTile, index === 0 ? styles.matchTileActive : null]}>
+            <Text selectable style={[styles.matchText, index === 0 ? styles.matchTextActive : null]}>
+              {outcome}
+            </Text>
+          </View>
+        ))}
+      </View>
+    </View>
+  );
+}
+
+function ListenPreview({ mechanic, selected, onSelect }: { mechanic: InputMechanic; selected: string; onSelect: (value: string) => void }) {
+  return (
+    <View style={styles.optionStack}>
+      <View style={styles.listenCard}>
+        {[12, 26, 18, 36, 22, 30, 15].map((height, index) => (
+          <View key={index} style={[styles.listenBar, { height }]} />
+        ))}
+      </View>
+      <ChoicePreview mechanic={mechanic} selected={selected} onSelect={onSelect} />
+    </View>
+  );
+}
+
+function PicturePreview({ mechanic, selected, onSelect }: { mechanic: InputMechanic; selected: string; onSelect: (value: string) => void }) {
+  const options = buildOptions(mechanic);
+  return (
+    <View style={styles.pictureGrid}>
+      {options.map((option, index) => (
+        <Pressable key={option} onPress={() => onSelect(option)} style={({ pressed }) => [styles.pictureTile, selected === option || index === 0 ? styles.pictureTileActive : null, pressed ? styles.pressed : null]}>
+          <View style={[styles.pictureBlob, { backgroundColor: index === 0 ? colors.coral : index === 1 ? colors.green : colors.purple }]} />
+          <Text selectable style={styles.pictureText}>
+            {option}
+          </Text>
+        </Pressable>
+      ))}
+    </View>
+  );
+}
+
+function CalendarPreview({ mechanic }: { mechanic: InputMechanic }) {
+  return (
+    <View style={styles.calendarGrid}>
+      {Array.from({ length: 21 }).map((_, index) => (
+        <View key={index} style={[styles.calendarCell, index % 4 === 0 ? styles.calendarCellHot : index % 5 === 0 ? styles.calendarCellWarm : null]} />
+      ))}
+    </View>
+  );
+}
+
+function BodyMapPreview({ mechanic, selected, onSelect }: { mechanic: InputMechanic; selected: string; onSelect: (value: string) => void }) {
+  return (
+    <View style={styles.bodyMapCard}>
+      {["Head", "Chest", "Core", "Legs"].map((part) => (
+        <Pressable key={part} onPress={() => onSelect(part)} style={({ pressed }) => [styles.bodyPart, selected === part ? styles.bodyPartActive : null, pressed ? styles.pressed : null]}>
+          <Text selectable style={[styles.bodyPartText, selected === part ? styles.bodyPartTextActive : null]}>
+            {part}
+          </Text>
+        </Pressable>
+      ))}
+    </View>
+  );
+}
+
+function RankPreview({ mechanic }: { mechanic: InputMechanic }) {
+  return (
+    <View style={styles.optionStack}>
+      {buildOptions(mechanic).map((option, index) => (
+        <View key={option} style={styles.rankRow}>
+          <View style={styles.rankNumber}>
+            <Text selectable style={styles.rankNumberText}>
+              {index + 1}
+            </Text>
+          </View>
+          <Text selectable style={styles.rankText}>
+            {option}
+          </Text>
+        </View>
+      ))}
+    </View>
+  );
+}
+
+function SwipePreview({ mechanic }: { mechanic: InputMechanic }) {
+  const option = buildOptions(mechanic)[0] ?? "Today";
+  return (
+    <View style={styles.swipeDeck}>
+      <View style={styles.swipeBackCard} />
+      <View style={styles.swipeCard}>
+        <Text selectable style={styles.swipeTitle}>
+          {option}
+        </Text>
+        <View style={styles.swipeActions}>
+          <Text selectable style={styles.swipeNo}>
+            No
+          </Text>
+          <Text selectable style={styles.swipeYes}>
+            Save
+          </Text>
+        </View>
+      </View>
+    </View>
+  );
+}
+
+function BranchPreview({ mechanic }: { mechanic: InputMechanic }) {
+  const options = buildOptions(mechanic);
+  return (
+    <View style={styles.branchCard}>
+      <View style={styles.branchNode}>
+        <Text selectable style={styles.branchText}>
+          {options[0]}
+        </Text>
+      </View>
+      <View style={styles.branchSplit}>
+        <View style={styles.branchLine} />
+        <View style={styles.branchLine} />
+      </View>
+      <View style={styles.branchBottom}>
+        <View style={styles.branchLeaf}>
+          <Text selectable style={styles.branchLeafText}>
+            {options[1]}
+          </Text>
+        </View>
+        <View style={styles.branchLeaf}>
+          <Text selectable style={styles.branchLeafText}>
+            {options[2]}
+          </Text>
+        </View>
+      </View>
+    </View>
+  );
+}
+
+function LocationPreview({ selected, onSelect }: { mechanic: InputMechanic; selected: string; onSelect: (value: string) => void }) {
+  return (
+    <View style={styles.locationGrid}>
+      {["Home", "Work", "Outside", "Commute"].map((place) => (
+        <Pressable key={place} onPress={() => onSelect(place)} style={({ pressed }) => [styles.locationChip, selected === place ? styles.locationChipActive : null, pressed ? styles.pressed : null]}>
+          <Text selectable style={[styles.locationText, selected === place ? styles.locationTextActive : null]}>
+            {place}
+          </Text>
+        </Pressable>
+      ))}
+    </View>
+  );
+}
+
+function PartnerPreview({ mechanic }: { mechanic: InputMechanic }) {
+  const options = buildOptions(mechanic);
+  return (
+    <View style={styles.partnerRow}>
+      <View style={styles.partnerCard}>
+        <Text selectable style={styles.partnerLabel}>
+          Me
+        </Text>
+        <Text selectable style={styles.partnerText}>
+          {options[0]}
+        </Text>
+      </View>
+      <View style={styles.partnerCard}>
+        <Text selectable style={styles.partnerLabel}>
+          Other
+        </Text>
+        <Text selectable style={styles.partnerText}>
+          {options[1]}
+        </Text>
+      </View>
+    </View>
+  );
+}
+
+function AnonymousPreview({ mechanic }: { mechanic: InputMechanic }) {
+  return (
+    <View style={styles.anonymousCard}>
+      <View style={styles.anonymousMask}>
+        <Text selectable style={styles.anonymousMaskText}>
+          --
+        </Text>
+      </View>
+      <Text selectable style={styles.anonymousText}>
+        Private pulse saved without profile labels.
+      </Text>
+    </View>
+  );
+}
+
+function AvatarPreview({ mechanic }: { mechanic: InputMechanic }) {
+  return (
+    <View style={styles.avatarCard}>
+      <View style={styles.avatarHead}>
+        <View style={styles.avatarEye} />
+        <View style={styles.avatarEye} />
+      </View>
+      <View style={styles.avatarTags}>
+        {buildOptions(mechanic).map((option) => (
+          <View key={option} style={styles.avatarTag}>
+            <Text selectable style={styles.avatarTagText}>
+              {option}
+            </Text>
+          </View>
+        ))}
+      </View>
+    </View>
+  );
+}
+
+function StampPreview({ mechanic }: { mechanic: InputMechanic }) {
+  return (
+    <View style={styles.stampGrid}>
+      {buildOptions(mechanic).map((option, index) => (
+        <View key={option} style={[styles.stampCard, index === 0 ? styles.stampCardActive : null]}>
+          <Check color={index === 0 ? "#FFFFFF" : colors.coral} size={17} strokeWidth={3} />
+          <Text selectable style={[styles.stampText, index === 0 ? styles.stampTextActive : null]}>
+            {option}
+          </Text>
+        </View>
+      ))}
+    </View>
+  );
+}
+
+function TogglePreview({ mechanic, selected, onSelect }: { mechanic: InputMechanic; selected: string; onSelect: (value: string) => void }) {
+  const on = selected !== "Off";
+  return (
+    <Pressable onPress={() => onSelect(on ? "Off" : "On")} style={({ pressed }) => [styles.toggleCard, pressed ? styles.pressed : null]}>
+      <Text selectable style={styles.toggleLabel}>
+        Today state
+      </Text>
+      <View style={[styles.toggleTrack, on ? styles.toggleTrackOn : null]}>
+        <View style={[styles.toggleKnob, on ? styles.toggleKnobOn : null]} />
+      </View>
+    </Pressable>
+  );
+}
+
+function TimerPreview({ mechanic }: { mechanic: InputMechanic }) {
+  return (
+    <View style={styles.timerCard}>
+      <View style={styles.timerRing}>
+        <Text selectable style={styles.timerText}>
+          5:00
+        </Text>
+      </View>
+      <Text selectable style={styles.timerLabel}>
+        Tiny run armed
+      </Text>
+    </View>
+  );
+}
+
+function RoutePreview({ mechanic }: { mechanic: InputMechanic }) {
+  return (
+    <View style={styles.routeCard}>
+      {buildOptions(mechanic).map((option, index) => (
+        <View key={option} style={styles.routeNodeWrap}>
+          <View style={[styles.routeNode, index === 1 ? styles.routeNodeActive : null]}>
+            <Text selectable style={[styles.routeNodeText, index === 1 ? styles.routeNodeTextActive : null]}>
+              {index + 1}
+            </Text>
+          </View>
+          <Text selectable style={styles.routeText}>
+            {option}
+          </Text>
+        </View>
+      ))}
+    </View>
+  );
+}
+
+function JournalPreview({ note, onNote }: { note: string; onNote: (value: string) => void }) {
+  return (
+    <TextInput
+      value={note}
+      onChangeText={onNote}
+      multiline
+      placeholder="Write one honest line..."
+      placeholderTextColor="#9397A0"
+      style={styles.noteInput}
+    />
   );
 }
 
@@ -395,13 +732,7 @@ function MechanicsBottomNav() {
 }
 
 function getExampleMode(mechanic: InputMechanic) {
-  const text = `${mechanic.title} ${mechanic.pattern} ${mechanic.captures}`.toLowerCase();
-  if (text.includes("photo") || text.includes("scan") || text.includes("visual") || text.includes("image")) return "media";
-  if (text.includes("voice") || text.includes("speak") || text.includes("pronunciation") || text.includes("audio")) return "voice";
-  if (text.includes("multi pick") || text.includes("chip tray") || text.includes("chips") || text.includes("selectable")) return "multi";
-  if (text.includes("sort") || text.includes("bucket") || text.includes("triage") || text.includes("slot")) return "sort";
-  if (text.includes("slider") || text.includes("scale") || text.includes("meter") || text.includes("pulse")) return "scale";
-  return "choice";
+  return getMechanicPreviewMode(mechanic);
 }
 
 function buildPrompt(mechanic: InputMechanic) {
@@ -410,27 +741,15 @@ function buildPrompt(mechanic: InputMechanic) {
 }
 
 function buildOptions(mechanic: Partial<InputMechanic>) {
-  const source = mechanic.captures ?? "energy, focus, next action";
-  const parts = source.split(",").map((part) => part.trim()).filter(Boolean);
-  const options = parts.length >= 3 ? parts.slice(0, 3) : [...parts, "Energy", "Next action", "Context"];
-  return Array.from(new Set(options)).slice(0, 3).map((item) => titleCase(item));
+  return buildMechanicOptions(mechanic);
 }
 
 function buildMultiOptions(mechanic: InputMechanic) {
-  const base = buildOptions(mechanic);
-  const extras = ["Mood", "Energy", "Sleep", "Food", "Pain", "Context"];
-  return Array.from(new Set([...base, ...extras])).slice(0, 8);
+  return buildMechanicMultiOptions(mechanic);
 }
 
 function buildSampleValue(mechanic: InputMechanic) {
-  if (mechanic.effort === "rich") return "media-or-voice-capture-ready";
-  if (getExampleMode(mechanic) === "multi") return buildOptions(mechanic).slice(0, 2);
-  if (mechanic.effort === "short") return buildOptions(mechanic).join(" + ");
-  return buildOptions(mechanic)[0];
-}
-
-function titleCase(value: string) {
-  return value.replace(/\w\S*/g, (word) => word.charAt(0).toUpperCase() + word.slice(1));
+  return buildMechanicSampleValue(mechanic);
 }
 
 const styles = StyleSheet.create({
@@ -548,6 +867,521 @@ const styles = StyleSheet.create({
   },
   optionStack: {
     gap: 11
+  },
+  matchGrid: {
+    flexDirection: "row",
+    gap: 10
+  },
+  matchColumn: {
+    flex: 1,
+    gap: 9
+  },
+  matchTile: {
+    backgroundColor: "#FFFFFF",
+    borderColor: "#E1E8F2",
+    borderRadius: 21,
+    borderWidth: 2,
+    minHeight: 49,
+    justifyContent: "center",
+    paddingHorizontal: 12,
+    boxShadow: "0 5px 0 rgba(216,223,232,0.86)"
+  },
+  matchTileActive: {
+    backgroundColor: colors.blue,
+    borderColor: colors.blue,
+    boxShadow: "0 5px 0 rgba(24,93,205,0.85)"
+  },
+  matchText: {
+    color: colors.text,
+    fontFamily: fonts.black,
+    fontSize: 13,
+    fontWeight: "900",
+    lineHeight: 16
+  },
+  matchTextActive: {
+    color: "#FFFFFF"
+  },
+  listenCard: {
+    alignItems: "center",
+    backgroundColor: colors.purple,
+    borderRadius: 28,
+    flexDirection: "row",
+    gap: 9,
+    justifyContent: "center",
+    minHeight: 92,
+    padding: 14
+  },
+  listenBar: {
+    backgroundColor: "#FFFFFF",
+    borderRadius: 8,
+    width: 13
+  },
+  pictureGrid: {
+    flexDirection: "row",
+    gap: 9
+  },
+  pictureTile: {
+    alignItems: "center",
+    backgroundColor: "#FFFFFF",
+    borderColor: "#E1E8F2",
+    borderRadius: 24,
+    borderWidth: 2,
+    flex: 1,
+    gap: 8,
+    minHeight: 104,
+    justifyContent: "center",
+    padding: 10
+  },
+  pictureTileActive: {
+    borderColor: colors.blue
+  },
+  pictureBlob: {
+    borderRadius: 20,
+    height: 40,
+    width: 40
+  },
+  pictureText: {
+    color: colors.text,
+    fontFamily: fonts.black,
+    fontSize: 12,
+    fontWeight: "900",
+    lineHeight: 15,
+    textAlign: "center"
+  },
+  calendarGrid: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 7,
+    padding: 4
+  },
+  calendarCell: {
+    backgroundColor: "#EDF2F8",
+    borderRadius: 10,
+    height: 34,
+    width: "12.7%"
+  },
+  calendarCellWarm: {
+    backgroundColor: colors.goldSoft
+  },
+  calendarCellHot: {
+    backgroundColor: colors.coral
+  },
+  bodyMapCard: {
+    backgroundColor: "#F6FAFF",
+    borderColor: "#DDEBFF",
+    borderRadius: 30,
+    borderWidth: 1,
+    gap: 10,
+    padding: 14
+  },
+  bodyPart: {
+    alignItems: "center",
+    backgroundColor: "#FFFFFF",
+    borderColor: "#E1E8F2",
+    borderRadius: 24,
+    borderWidth: 2,
+    minHeight: 48,
+    justifyContent: "center"
+  },
+  bodyPartActive: {
+    backgroundColor: colors.coral,
+    borderColor: colors.coral
+  },
+  bodyPartText: {
+    color: colors.text,
+    fontFamily: fonts.black,
+    fontSize: 15,
+    fontWeight: "900"
+  },
+  bodyPartTextActive: {
+    color: "#FFFFFF"
+  },
+  rankRow: {
+    alignItems: "center",
+    backgroundColor: "#FFFFFF",
+    borderColor: "#E1E8F2",
+    borderRadius: 24,
+    borderWidth: 2,
+    flexDirection: "row",
+    gap: 12,
+    minHeight: 58,
+    paddingHorizontal: 13,
+    boxShadow: "0 5px 0 rgba(216,223,232,0.86)"
+  },
+  rankNumber: {
+    alignItems: "center",
+    backgroundColor: colors.coral,
+    borderRadius: 17,
+    height: 34,
+    justifyContent: "center",
+    width: 34
+  },
+  rankNumberText: {
+    color: "#FFFFFF",
+    fontFamily: fonts.black,
+    fontSize: 13,
+    fontWeight: "900"
+  },
+  rankText: {
+    color: colors.text,
+    flex: 1,
+    fontFamily: fonts.black,
+    fontSize: 16,
+    fontWeight: "900"
+  },
+  swipeDeck: {
+    minHeight: 158,
+    position: "relative"
+  },
+  swipeBackCard: {
+    backgroundColor: colors.purpleSoft,
+    borderRadius: 30,
+    height: 132,
+    left: 20,
+    position: "absolute",
+    right: 20,
+    top: 16,
+    transform: [{ rotate: "5deg" }]
+  },
+  swipeCard: {
+    backgroundColor: "#FFFFFF",
+    borderColor: "#E1E8F2",
+    borderRadius: 30,
+    borderWidth: 2,
+    gap: 24,
+    minHeight: 132,
+    padding: 18,
+    transform: [{ rotate: "-3deg" }],
+    boxShadow: "0 8px 0 rgba(216,223,232,0.86)"
+  },
+  swipeTitle: {
+    color: colors.text,
+    fontFamily: fonts.black,
+    fontSize: 25,
+    fontWeight: "900",
+    lineHeight: 29
+  },
+  swipeActions: {
+    flexDirection: "row",
+    justifyContent: "space-between"
+  },
+  swipeNo: {
+    color: colors.textMuted,
+    fontFamily: fonts.black,
+    fontSize: 15,
+    fontWeight: "900"
+  },
+  swipeYes: {
+    color: colors.green,
+    fontFamily: fonts.black,
+    fontSize: 15,
+    fontWeight: "900"
+  },
+  branchCard: {
+    alignItems: "center",
+    gap: 7
+  },
+  branchNode: {
+    backgroundColor: colors.blue,
+    borderRadius: 23,
+    paddingHorizontal: 18,
+    paddingVertical: 12
+  },
+  branchText: {
+    color: "#FFFFFF",
+    fontFamily: fonts.black,
+    fontSize: 14,
+    fontWeight: "900"
+  },
+  branchSplit: {
+    flexDirection: "row",
+    gap: 42
+  },
+  branchLine: {
+    backgroundColor: "#DDEBFF",
+    borderRadius: 3,
+    height: 26,
+    width: 6
+  },
+  branchBottom: {
+    flexDirection: "row",
+    gap: 9
+  },
+  branchLeaf: {
+    backgroundColor: "#FFFFFF",
+    borderColor: "#E1E8F2",
+    borderRadius: 22,
+    borderWidth: 2,
+    paddingHorizontal: 13,
+    paddingVertical: 10
+  },
+  branchLeafText: {
+    color: colors.text,
+    fontFamily: fonts.black,
+    fontSize: 13,
+    fontWeight: "900"
+  },
+  locationGrid: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 9
+  },
+  locationChip: {
+    backgroundColor: "#FFFFFF",
+    borderColor: "#E1E8F2",
+    borderRadius: 23,
+    borderWidth: 2,
+    minWidth: "47%",
+    paddingHorizontal: 14,
+    paddingVertical: 13
+  },
+  locationChipActive: {
+    backgroundColor: colors.green,
+    borderColor: colors.green
+  },
+  locationText: {
+    color: colors.text,
+    fontFamily: fonts.black,
+    fontSize: 15,
+    fontWeight: "900",
+    textAlign: "center"
+  },
+  locationTextActive: {
+    color: "#FFFFFF"
+  },
+  partnerRow: {
+    flexDirection: "row",
+    gap: 10
+  },
+  partnerCard: {
+    backgroundColor: "#FFFFFF",
+    borderColor: "#E1E8F2",
+    borderRadius: 26,
+    borderWidth: 2,
+    flex: 1,
+    gap: 8,
+    minHeight: 108,
+    padding: 13
+  },
+  partnerLabel: {
+    color: colors.purple,
+    fontFamily: fonts.black,
+    fontSize: 12,
+    fontWeight: "900",
+    textTransform: "uppercase"
+  },
+  partnerText: {
+    color: colors.text,
+    fontFamily: fonts.black,
+    fontSize: 15,
+    fontWeight: "900",
+    lineHeight: 18
+  },
+  anonymousCard: {
+    alignItems: "center",
+    backgroundColor: colors.purpleSoft,
+    borderRadius: 28,
+    flexDirection: "row",
+    gap: 13,
+    padding: 15
+  },
+  anonymousMask: {
+    alignItems: "center",
+    backgroundColor: colors.purple,
+    borderRadius: 24,
+    height: 48,
+    justifyContent: "center",
+    width: 48
+  },
+  anonymousMaskText: {
+    color: "#FFFFFF",
+    fontFamily: fonts.black,
+    fontSize: 18,
+    fontWeight: "900"
+  },
+  anonymousText: {
+    color: colors.text,
+    flex: 1,
+    fontFamily: fonts.black,
+    fontSize: 15,
+    fontWeight: "900",
+    lineHeight: 19
+  },
+  avatarCard: {
+    alignItems: "center",
+    backgroundColor: "#FFF4EC",
+    borderRadius: 30,
+    gap: 14,
+    padding: 16
+  },
+  avatarHead: {
+    alignItems: "center",
+    backgroundColor: colors.coral,
+    borderRadius: 34,
+    flexDirection: "row",
+    gap: 10,
+    height: 68,
+    justifyContent: "center",
+    width: 68
+  },
+  avatarEye: {
+    backgroundColor: "#FFFFFF",
+    borderRadius: 6,
+    height: 12,
+    width: 12
+  },
+  avatarTags: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 8,
+    justifyContent: "center"
+  },
+  avatarTag: {
+    backgroundColor: "#FFFFFF",
+    borderRadius: 18,
+    paddingHorizontal: 11,
+    paddingVertical: 8
+  },
+  avatarTagText: {
+    color: colors.coral,
+    fontFamily: fonts.black,
+    fontSize: 12,
+    fontWeight: "900"
+  },
+  stampGrid: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 9
+  },
+  stampCard: {
+    alignItems: "center",
+    backgroundColor: "#FFFFFF",
+    borderColor: "#FFE0D2",
+    borderRadius: 24,
+    borderWidth: 2,
+    flexDirection: "row",
+    gap: 7,
+    minHeight: 52,
+    paddingHorizontal: 13
+  },
+  stampCardActive: {
+    backgroundColor: colors.coral,
+    borderColor: colors.coral
+  },
+  stampText: {
+    color: colors.coral,
+    fontFamily: fonts.black,
+    fontSize: 13,
+    fontWeight: "900"
+  },
+  stampTextActive: {
+    color: "#FFFFFF"
+  },
+  toggleCard: {
+    alignItems: "center",
+    backgroundColor: "#FFFFFF",
+    borderColor: "#E1E8F2",
+    borderRadius: 28,
+    borderWidth: 2,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    minHeight: 78,
+    padding: 15
+  },
+  toggleLabel: {
+    color: colors.text,
+    fontFamily: fonts.black,
+    fontSize: 18,
+    fontWeight: "900"
+  },
+  toggleTrack: {
+    backgroundColor: "#D8DFE8",
+    borderRadius: 22,
+    height: 42,
+    justifyContent: "center",
+    paddingHorizontal: 4,
+    width: 74
+  },
+  toggleTrackOn: {
+    backgroundColor: colors.green
+  },
+  toggleKnob: {
+    backgroundColor: "#FFFFFF",
+    borderRadius: 17,
+    height: 34,
+    width: 34
+  },
+  toggleKnobOn: {
+    alignSelf: "flex-end"
+  },
+  timerCard: {
+    alignItems: "center",
+    backgroundColor: "#F6FAFF",
+    borderRadius: 30,
+    gap: 10,
+    padding: 18
+  },
+  timerRing: {
+    alignItems: "center",
+    borderColor: colors.blue,
+    borderRadius: 50,
+    borderWidth: 9,
+    height: 100,
+    justifyContent: "center",
+    width: 100
+  },
+  timerText: {
+    color: colors.text,
+    fontFamily: fonts.black,
+    fontSize: 24,
+    fontWeight: "900"
+  },
+  timerLabel: {
+    color: colors.blue,
+    fontFamily: fonts.black,
+    fontSize: 14,
+    fontWeight: "900"
+  },
+  routeCard: {
+    flexDirection: "row",
+    gap: 9,
+    justifyContent: "space-between"
+  },
+  routeNodeWrap: {
+    alignItems: "center",
+    flex: 1,
+    gap: 8
+  },
+  routeNode: {
+    alignItems: "center",
+    backgroundColor: "#FFFFFF",
+    borderColor: "#E1E8F2",
+    borderRadius: 25,
+    borderWidth: 2,
+    height: 50,
+    justifyContent: "center",
+    width: 50
+  },
+  routeNodeActive: {
+    backgroundColor: colors.blue,
+    borderColor: colors.blue
+  },
+  routeNodeText: {
+    color: colors.text,
+    fontFamily: fonts.black,
+    fontSize: 17,
+    fontWeight: "900"
+  },
+  routeNodeTextActive: {
+    color: "#FFFFFF"
+  },
+  routeText: {
+    color: colors.textMuted,
+    fontFamily: fonts.bold,
+    fontSize: 11,
+    fontWeight: "700",
+    lineHeight: 13,
+    textAlign: "center"
   },
   multiPickCard: {
     backgroundColor: "#F6FAFF",
