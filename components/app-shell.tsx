@@ -45,6 +45,15 @@ export const colors = {
   danger: "#D92D20"
 };
 
+export const fonts = {
+  regular: "Urbanist_400Regular",
+  medium: "Urbanist_500Medium",
+  semibold: "Urbanist_600SemiBold",
+  bold: "Urbanist_700Bold",
+  extraBold: "Urbanist_800ExtraBold",
+  black: "Urbanist_900Black"
+};
+
 type AppScreenProps = {
   title: string;
   subtitle?: string;
@@ -466,23 +475,27 @@ export function TabBarIcon({ icon: Icon, focused, color, size = 23 }: { icon: Lu
 export const textStyles = StyleSheet.create({
   sectionTitle: {
     color: colors.text,
+    fontFamily: fonts.extraBold,
     fontSize: 20,
-    fontWeight: "900",
+    fontWeight: "800",
     lineHeight: 25
   },
   cardTitle: {
     color: colors.text,
+    fontFamily: fonts.bold,
     fontSize: 17,
-    fontWeight: "800",
+    fontWeight: "700",
     lineHeight: 23
   },
   body: {
     color: colors.textMuted,
+    fontFamily: fonts.regular,
     fontSize: 14,
     lineHeight: 20
   },
   small: {
     color: colors.textMuted,
+    fontFamily: fonts.medium,
     fontSize: 12,
     lineHeight: 17
   }
@@ -594,19 +607,22 @@ const styles = StyleSheet.create({
   },
   eyebrow: {
     color: colors.blue,
+    fontFamily: fonts.bold,
     fontSize: 11,
-    fontWeight: "900",
+    fontWeight: "700",
     letterSpacing: 0,
     textTransform: "uppercase"
   },
   headerTitle: {
     color: colors.text,
+    fontFamily: fonts.extraBold,
     fontSize: 18,
-    fontWeight: "900",
+    fontWeight: "800",
     lineHeight: 22
   },
   headerSubtitle: {
     color: colors.textMuted,
+    fontFamily: fonts.medium,
     fontSize: 12,
     lineHeight: 16
   },
@@ -624,15 +640,17 @@ const styles = StyleSheet.create({
   },
   levelText: {
     color: colors.text,
+    fontFamily: fonts.bold,
     fontSize: 11,
-    fontWeight: "900",
+    fontWeight: "700",
     lineHeight: 13
   },
   points: {
     color: colors.textMuted,
+    fontFamily: fonts.semibold,
     fontSize: 10,
     fontVariant: ["tabular-nums"],
-    fontWeight: "800",
+    fontWeight: "600",
     lineHeight: 12
   },
   footer: {
@@ -659,6 +677,7 @@ const styles = StyleSheet.create({
   },
   metricValue: {
     color: colors.text,
+    fontFamily: fonts.black,
     fontSize: 28,
     fontVariant: ["tabular-nums"],
     fontWeight: "900",
@@ -666,17 +685,20 @@ const styles = StyleSheet.create({
   },
   metricLabel: {
     color: colors.textMuted,
+    fontFamily: fonts.semibold,
     fontSize: 12,
-    fontWeight: "800",
+    fontWeight: "600",
     lineHeight: 16,
     textTransform: "uppercase"
   },
   metricDelta: {
+    fontFamily: fonts.bold,
     fontSize: 12,
-    fontWeight: "900"
+    fontWeight: "700"
   },
   body: {
     color: colors.textMuted,
+    fontFamily: fonts.regular,
     fontSize: 14,
     lineHeight: 20
   },
@@ -692,8 +714,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 18
   },
   buttonText: {
+    fontFamily: fonts.bold,
     fontSize: 15,
-    fontWeight: "900",
+    fontWeight: "700",
     lineHeight: 19
   },
   buttonTextLight: {
@@ -733,14 +756,16 @@ const styles = StyleSheet.create({
   },
   progressLabel: {
     color: colors.text,
+    fontFamily: fonts.semibold,
     fontSize: 13,
-    fontWeight: "800"
+    fontWeight: "600"
   },
   progressValue: {
     color: colors.textMuted,
+    fontFamily: fonts.semibold,
     fontSize: 13,
     fontVariant: ["tabular-nums"],
-    fontWeight: "800"
+    fontWeight: "600"
   },
   progressTrack: {
     backgroundColor: "#EEF3FF",
@@ -785,19 +810,22 @@ const styles = StyleSheet.create({
   },
   carouselCategory: {
     color: "rgba(255,255,255,0.82)",
+    fontFamily: fonts.bold,
     fontSize: 11,
-    fontWeight: "900",
+    fontWeight: "700",
     lineHeight: 14,
     textTransform: "uppercase"
   },
   carouselTitle: {
     color: "#FFFFFF",
+    fontFamily: fonts.extraBold,
     fontSize: 18,
-    fontWeight: "900",
+    fontWeight: "800",
     lineHeight: 22
   },
   carouselBody: {
     color: "rgba(255,255,255,0.86)",
+    fontFamily: fonts.medium,
     fontSize: 13,
     lineHeight: 18
   },
@@ -821,8 +849,9 @@ const styles = StyleSheet.create({
   },
   searchText: {
     color: colors.textMuted,
+    fontFamily: fonts.semibold,
     fontSize: 14,
-    fontWeight: "700"
+    fontWeight: "600"
   },
   pillSelector: {
     gap: 8,
@@ -843,8 +872,9 @@ const styles = StyleSheet.create({
   },
   segmentText: {
     color: colors.textMuted,
+    fontFamily: fonts.bold,
     fontSize: 12,
-    fontWeight: "800"
+    fontWeight: "700"
   },
   segmentTextActive: {
     color: "#FFFFFF"
@@ -876,8 +906,9 @@ const styles = StyleSheet.create({
   },
   heroBadgeText: {
     color: "#FFFFFF",
+    fontFamily: fonts.extraBold,
     fontSize: 12,
-    fontWeight: "900"
+    fontWeight: "800"
   },
   heroCopy: {
     gap: 7,
@@ -885,12 +916,14 @@ const styles = StyleSheet.create({
   },
   heroTitle: {
     color: "#FFFFFF",
+    fontFamily: fonts.black,
     fontSize: 30,
     fontWeight: "900",
     lineHeight: 34
   },
   heroSubtitle: {
     color: "rgba(255,255,255,0.84)",
+    fontFamily: fonts.medium,
     fontSize: 14,
     lineHeight: 20
   },
@@ -915,12 +948,14 @@ const styles = StyleSheet.create({
   },
   compactTileTitle: {
     color: colors.text,
+    fontFamily: fonts.bold,
     fontSize: 15,
-    fontWeight: "900",
+    fontWeight: "700",
     lineHeight: 19
   },
   compactTileBody: {
     color: colors.textMuted,
+    fontFamily: fonts.regular,
     fontSize: 12,
     lineHeight: 16
   },
@@ -940,14 +975,16 @@ const styles = StyleSheet.create({
   },
   onboardingTitle: {
     color: colors.text,
+    fontFamily: fonts.extraBold,
     fontSize: 23,
-    fontWeight: "900",
+    fontWeight: "800",
     lineHeight: 28
   },
   skipText: {
     color: colors.textMuted,
+    fontFamily: fonts.semibold,
     fontSize: 13,
-    fontWeight: "800"
+    fontWeight: "600"
   },
   optionGrid: {
     flexDirection: "row",
@@ -971,8 +1008,9 @@ const styles = StyleSheet.create({
   },
   optionText: {
     color: colors.text,
+    fontFamily: fonts.semibold,
     fontSize: 12,
-    fontWeight: "800"
+    fontWeight: "600"
   },
   listRow: {
     alignItems: "center",
@@ -990,19 +1028,22 @@ const styles = StyleSheet.create({
   },
   listTitle: {
     color: colors.text,
+    fontFamily: fonts.bold,
     fontSize: 15,
-    fontWeight: "900",
+    fontWeight: "700",
     lineHeight: 19
   },
   listBody: {
     color: colors.textMuted,
+    fontFamily: fonts.regular,
     fontSize: 13,
     lineHeight: 18
   },
   listMeta: {
     color: colors.blue,
+    fontFamily: fonts.bold,
     fontSize: 11,
-    fontWeight: "900",
+    fontWeight: "700",
     textTransform: "uppercase"
   },
   tabIconWrap: {

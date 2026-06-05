@@ -13,9 +13,11 @@
     "start:check": "tsx scripts/check-template.ts"
   },
   "dependencies": {
+    "@expo-google-fonts/urbanist": "^0.4.2",
     "expo": "^55.0.24",
     "expo-blur": "^55.0.14",
     "expo-constants": "^55.0.16",
+    "expo-font": "~55.0.8",
     "expo-haptics": "^55.0.14",
     "expo-image": "~55.0.11",
     "expo-linear-gradient": "^55.0.14",

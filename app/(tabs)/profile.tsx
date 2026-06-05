@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useRouter } from "expo-router";
 import { Bell, CreditCard, Palette, ShieldCheck, UserRoundCheck } from "lucide-react-native";
 import { Switch, Text, View } from "react-native";
-import { AppScreen, Button, Card, CompactTile, IconButton, ListRow, ProgressStatus, colors, textStyles } from "@/components/app-shell";
+import { AppScreen, Button, Card, CompactTile, IconButton, ListRow, ProgressStatus, colors, fonts, textStyles } from "@/components/app-shell";
 import { domains, userProgress } from "@/lib/template-data";
 
 export default function ProfileScreen() {
@@ -17,7 +17,7 @@ export default function ProfileScreen() {
             style={{
               width: 64,
               height: 64,
-              borderRadius: 8,
+              borderRadius: 28,
               backgroundColor: colors.blueSoft,
               alignItems: "center",
               justifyContent: "center",
@@ -25,7 +25,7 @@ export default function ProfileScreen() {
               borderColor: "#BFC8FF"
             }}
           >
-            <Text selectable style={{ color: colors.blue, fontWeight: "900", fontSize: 22 }}>
+            <Text selectable style={{ color: colors.blue, fontFamily: fonts.black, fontWeight: "900", fontSize: 22 }}>
               MU
             </Text>
           </View>
