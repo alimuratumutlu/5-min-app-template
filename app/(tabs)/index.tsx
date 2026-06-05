@@ -14,7 +14,6 @@ import {
   PillSelector,
   ProgressStatus,
   RewardStrip,
-  SearchPill,
   SegmentedProgress,
   StatPill,
   textStyles
@@ -42,8 +41,6 @@ export default function HomeScreen() {
 
   return (
     <AppScreen title={`Ready, ${userProgress.name}?`} subtitle={`${userProgress.streak} day streak alive`} activeDomain="SkillQuest">
-      <SearchPill placeholder="Search quests, badges, rewards" />
-
       <View style={{ flexDirection: "row", gap: 8 }}>
         <StatPill label="XP" value={userProgress.points.toLocaleString()} tone="coral" />
         <StatPill label="Streak" value={`${userProgress.streak}d`} tone="gold" />
