@@ -1,14 +1,31 @@
 import { useState } from "react";
+import { Image } from "expo-image";
 import { useRouter } from "expo-router";
-import { Activity, Bell, CreditCard, Medal, Palette, ShieldCheck, TrendingUp, Trophy, UserRoundCheck } from "lucide-react-native";
-import { Switch, Text, View } from "react-native";
+import { Activity, Bell, CreditCard, Medal, Palette, ShieldCheck, Sparkles, TrendingUp, Trophy, UserRoundCheck, WandSparkles } from "lucide-react-native";
+import { Pressable, StyleSheet, Switch, Text, View } from "react-native";
 import { AppScreen, Button, Card, CompactTile, IconButton, ListRow, Metric, ProgressStatus, colors, fonts, textStyles } from "@/components/app-shell";
 import { BarChart, ChartCard, ComparisonBars, DonutChart, HeatmapChart, LineChart, RadarChart } from "@/components/charts";
 import { analyticsMetrics, domains, recommendations, sessions, userProgress } from "@/lib/template-data";
 
+const avatarStyles = [
+  { id: "notionists", label: "Soft" },
+  { id: "adventurer", label: "Quest" },
+  { id: "lorelei", label: "Clean" }
+] as const;
+
+type AvatarStyle = (typeof avatarStyles)[number]["id"];
+
+function avatarUrl(style: AvatarStyle, seed: number) {
+  const encodedSeed = encodeURIComponent(`${userProgress.name}-skillquest-${seed}`);
+  return `https://api.dicebear.com/9.x/${style}/png?seed=${encodedSeed}&backgroundColor=e7f0ff,ffe6d8,f0eaff&radius=50`;
+}
+
 export default function ProfileScreen() {
   const router = useRouter();
   const [personalized, setPersonalized] = useState(true);
+  const [avatarStyle, setAvatarStyle] = useState<AvatarStyle>("notionists");
+  const [avatarSeed, setAvatarSeed] = useState(12);
+  const generatedAvatar = avatarUrl(avatarStyle, avatarSeed);
   const radarData = [
     { label: "Focus", value: 88 },
     { label: "Logic", value: 72 },
@@ -37,21 +54,11 @@ export default function ProfileScreen() {
     <AppScreen title="Player profile" subtitle="Avatar, rewards, and account" activeDomain="SkillQuest">
       <Card>
         <View style={{ flexDirection: "row", alignItems: "center", gap: 13 }}>
-          <View
-            style={{
-              width: 64,
-              height: 64,
-              borderRadius: 28,
-              backgroundColor: colors.blueSoft,
-              alignItems: "center",
-              justifyContent: "center",
-              borderWidth: 1,
-              borderColor: "#BFC8FF"
-            }}
-          >
-            <Text selectable style={{ color: colors.blue, fontFamily: fonts.black, fontWeight: "900", fontSize: 22 }}>
-              MU
-            </Text>
+          <View style={styles.avatarFrame}>
+            <Image source={{ uri: generatedAvatar }} style={styles.avatarImage} contentFit="cover" />
+            <View style={styles.avatarSpark}>
+              <Sparkles color="#FFFFFF" size={13} strokeWidth={3} />
+            </View>
           </View>
           <View style={{ flex: 1, gap: 4 }}>
             <Text selectable style={textStyles.cardTitle}>
@@ -63,6 +70,35 @@ export default function ProfileScreen() {
           </View>
           <IconButton icon={Palette} label="Edit personalization" onPress={() => router.push("/details/cloudflare-ready")} />
         </View>
+      </Card>
+
+      <Card tone="purple">
+        <View style={{ flexDirection: "row", alignItems: "center", gap: 13 }}>
+          <View style={styles.generatorPreview}>
+            <Image source={{ uri: generatedAvatar }} style={styles.generatorImage} contentFit="cover" />
+          </View>
+          <View style={{ flex: 1, gap: 5 }}>
+            <Text selectable style={textStyles.cardTitle}>
+              Create profile image
+            </Text>
+            <Text selectable style={textStyles.body}>
+              Generate a playful avatar, choose a visual style, and keep it ready for Clerk profile image or R2 upload.
+            </Text>
+          </View>
+        </View>
+        <View style={styles.avatarStyleRow}>
+          {avatarStyles.map((option) => {
+            const selected = option.id === avatarStyle;
+            return (
+              <Pressable key={option.id} accessibilityRole="button" accessibilityState={{ selected }} onPress={() => setAvatarStyle(option.id)} style={[styles.avatarStylePill, selected ? styles.avatarStylePillActive : null]}>
+                <Text selectable style={[styles.avatarStyleText, selected ? styles.avatarStyleTextActive : null]}>
+                  {option.label}
+                </Text>
+              </Pressable>
+            );
+          })}
+        </View>
+        <Button label="Generate avatar" icon={WandSparkles} onPress={() => setAvatarSeed((value) => value + 1)} />
       </Card>
 
       <View style={{ flexDirection: "row", flexWrap: "wrap", justifyContent: "space-between", gap: 10 }}>
@@ -184,3 +220,73 @@ export default function ProfileScreen() {
     </AppScreen>
   );
 }
+
+const styles = StyleSheet.create({
+  avatarFrame: {
+    alignItems: "center",
+    backgroundColor: colors.blueSoft,
+    borderColor: "#BFC8FF",
+    borderRadius: 28,
+    borderWidth: 1,
+    height: 64,
+    justifyContent: "center",
+    overflow: "hidden",
+    width: 64
+  },
+  avatarImage: {
+    height: "100%",
+    width: "100%"
+  },
+  avatarSpark: {
+    alignItems: "center",
+    backgroundColor: colors.purple,
+    borderColor: "#FFFFFF",
+    borderRadius: 12,
+    borderWidth: 2,
+    bottom: -1,
+    height: 24,
+    justifyContent: "center",
+    position: "absolute",
+    right: -1,
+    width: 24
+  },
+  generatorPreview: {
+    alignItems: "center",
+    backgroundColor: "#FFFFFF",
+    borderRadius: 30,
+    height: 74,
+    justifyContent: "center",
+    overflow: "hidden",
+    width: 74
+  },
+  generatorImage: {
+    height: "100%",
+    width: "100%"
+  },
+  avatarStyleRow: {
+    flexDirection: "row",
+    gap: 8
+  },
+  avatarStylePill: {
+    backgroundColor: "rgba(255,255,255,0.72)",
+    borderColor: "rgba(135, 92, 255, 0.22)",
+    borderRadius: 20,
+    borderWidth: 1,
+    paddingHorizontal: 14,
+    paddingVertical: 9
+  },
+  avatarStylePillActive: {
+    backgroundColor: colors.purple,
+    borderColor: colors.purple
+  },
+  avatarStyleText: {
+    color: colors.textMuted,
+    fontFamily: fonts.black,
+    fontSize: 12,
+    fontWeight: "900",
+    lineHeight: 14
+  },
+  avatarStyleTextActive: {
+    color: "#FFFFFF"
+  }
+});
