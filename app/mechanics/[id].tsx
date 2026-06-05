@@ -17,8 +17,8 @@ import {
   WandSparkles,
   type LucideIcon
 } from "lucide-react-native";
-import { useMemo, useState } from "react";
-import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+import { useMemo, useRef, useState } from "react";
+import { PanResponder, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 import { AppScreen, IconButton, colors, fonts, textStyles } from "@/components/app-shell";
 import { getMechanic, inputMechanics, type AiTiming, type InputMechanic } from "@/lib/input-mechanics";
 import {
@@ -218,6 +218,8 @@ function ExampleSurface({ mechanic }: { mechanic: InputMechanic }) {
         <TimerPreview mechanic={mechanic} />
       ) : mode === "route" ? (
         <RoutePreview mechanic={mechanic} />
+      ) : mode === "radar" ? (
+        <RadarPreview mechanic={mechanic} selected={selected} onSelect={setSelected} />
       ) : mode === "journal" ? (
         <JournalPreview note={note} onNote={setNote} />
       ) : mode === "scale" ? (
@@ -712,19 +714,97 @@ function SortPreview({ mechanic }: { mechanic: InputMechanic }) {
   );
 }
 
+function RadarPreview({ mechanic, selected, onSelect }: { mechanic: InputMechanic; selected: string; onSelect: (value: string) => void }) {
+  const axes = buildOptions(mechanic);
+  const active = selected === "Today" ? axes[1] ?? axes[0] : selected;
+  return (
+    <View style={styles.radarCard}>
+      <View style={styles.radarWeb}>
+        <View style={styles.radarRingOuter} />
+        <View style={styles.radarRingMid} />
+        <View style={styles.radarRingInner} />
+        <View style={styles.radarAxisVertical} />
+        <View style={styles.radarAxisHorizontal} />
+        {axes.map((axis, index) => {
+          const isActive = active === axis;
+          return (
+            <Pressable key={axis} onPress={() => onSelect(axis)} style={({ pressed }) => [styles.radarHotspot, radarHotspotPositions[index] ?? radarHotspotPositions[0], isActive ? styles.radarHotspotActive : null, pressed ? styles.pressed : null]}>
+              <Text selectable style={[styles.radarHotspotText, isActive ? styles.radarHotspotTextActive : null]}>
+                {index + 1}
+              </Text>
+            </Pressable>
+          );
+        })}
+      </View>
+      <View style={styles.radarLegend}>
+        {axes.map((axis) => (
+          <Pressable key={axis} onPress={() => onSelect(axis)} style={({ pressed }) => [styles.radarLegendChip, active === axis ? styles.radarLegendChipActive : null, pressed ? styles.pressed : null]}>
+            <Text selectable style={[styles.radarLegendText, active === axis ? styles.radarLegendTextActive : null]}>
+              {axis}
+            </Text>
+          </Pressable>
+        ))}
+      </View>
+    </View>
+  );
+}
+
+const radarHotspotPositions = [
+  { left: "47%", top: 12 },
+  { right: 28, top: "48%" },
+  { bottom: 18, left: "24%" }
+] as const;
+
 function ScalePreview({ mechanic }: { mechanic: InputMechanic }) {
+  const initial = Math.max(1, Math.min(7, mechanic.number % 5 + 3));
+  const [value, setValue] = useState(initial);
+  const trackWidth = useRef(1);
+  const updateFromX = (x: number) => {
+    const clampedX = Math.max(0, Math.min(trackWidth.current, x));
+    setValue(Math.max(1, Math.min(7, Math.round((clampedX / trackWidth.current) * 6) + 1)));
+  };
+  const panResponder = useMemo(
+    () =>
+      PanResponder.create({
+        onStartShouldSetPanResponder: () => true,
+        onStartShouldSetPanResponderCapture: () => true,
+        onMoveShouldSetPanResponder: () => true,
+        onMoveShouldSetPanResponderCapture: () => true,
+        onPanResponderGrant: (event) => updateFromX(event.nativeEvent.locationX),
+        onPanResponderMove: (event) => updateFromX(event.nativeEvent.locationX)
+      }),
+    []
+  );
   return (
     <View style={styles.scaleCard}>
-      <View style={styles.scaleTrack}>
-        <View style={styles.scaleFill} />
-        <View style={styles.scaleKnob} />
+      <View
+        style={styles.scaleTrack}
+        onLayout={(event) => {
+          trackWidth.current = Math.max(1, event.nativeEvent.layout.width);
+        }}
+        {...panResponder.panHandlers}
+      >
+        <View style={styles.scaleFillRow}>
+          <View style={[styles.scaleFill, { flex: value }]} />
+          <View style={{ flex: Math.max(0, 7 - value) }} />
+        </View>
+        <View style={styles.scaleKnobRow}>
+          <View style={{ flex: Math.max(0, value - 0.5) }} />
+          <View style={styles.scaleKnob} />
+          <View style={{ flex: Math.max(0, 7.5 - value) }} />
+        </View>
+        <View style={styles.scaleTapRow}>
+          {Array.from({ length: 7 }).map((_, index) => (
+            <Pressable key={index} accessibilityRole="button" accessibilityLabel={`Set scale to ${index + 1}`} onPress={() => setValue(index + 1)} style={styles.scaleTapTarget} />
+          ))}
+        </View>
       </View>
       <View style={styles.scaleLabels}>
         <Text selectable style={styles.scaleText}>
           Low
         </Text>
         <Text selectable style={styles.scaleValue}>
-          {mechanic.number % 5 + 3}/7
+          {value}/7
         </Text>
         <Text selectable style={styles.scaleText}>
           High
@@ -1736,6 +1816,120 @@ const styles = StyleSheet.create({
     lineHeight: 24,
     marginTop: 5
   },
+  radarCard: {
+    backgroundColor: "#F6FAFF",
+    borderColor: "#DDEBFF",
+    borderCurve: "continuous",
+    borderRadius: 30,
+    borderWidth: 1,
+    gap: 13,
+    padding: 16
+  },
+  radarWeb: {
+    alignSelf: "center",
+    height: 184,
+    position: "relative",
+    width: 184
+  },
+  radarRingOuter: {
+    borderColor: "rgba(36,123,255,0.22)",
+    borderRadius: 92,
+    borderWidth: 2,
+    height: 184,
+    position: "absolute",
+    width: 184
+  },
+  radarRingMid: {
+    borderColor: "rgba(36,123,255,0.24)",
+    borderRadius: 62,
+    borderWidth: 2,
+    height: 124,
+    left: 30,
+    position: "absolute",
+    top: 30,
+    width: 124
+  },
+  radarRingInner: {
+    backgroundColor: "rgba(36,123,255,0.08)",
+    borderColor: "rgba(36,123,255,0.24)",
+    borderRadius: 34,
+    borderWidth: 2,
+    height: 68,
+    left: 58,
+    position: "absolute",
+    top: 58,
+    width: 68
+  },
+  radarAxisVertical: {
+    backgroundColor: "rgba(36,123,255,0.18)",
+    height: 184,
+    left: 91,
+    position: "absolute",
+    top: 0,
+    width: 2
+  },
+  radarAxisHorizontal: {
+    backgroundColor: "rgba(36,123,255,0.18)",
+    height: 2,
+    left: 0,
+    position: "absolute",
+    top: 91,
+    width: 184
+  },
+  radarHotspot: {
+    alignItems: "center",
+    backgroundColor: "#FFFFFF",
+    borderColor: "#DDEBFF",
+    borderRadius: 19,
+    borderWidth: 3,
+    height: 38,
+    justifyContent: "center",
+    position: "absolute",
+    width: 38,
+    boxShadow: "0 6px 0 rgba(216,223,232,0.9)"
+  },
+  radarHotspotActive: {
+    backgroundColor: colors.coral,
+    borderColor: colors.coral,
+    boxShadow: "0 6px 0 rgba(209,73,31,0.85)"
+  },
+  radarHotspotText: {
+    color: colors.blue,
+    fontFamily: fonts.black,
+    fontSize: 13,
+    fontWeight: "900"
+  },
+  radarHotspotTextActive: {
+    color: "#FFFFFF"
+  },
+  radarLegend: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 8,
+    justifyContent: "center"
+  },
+  radarLegendChip: {
+    backgroundColor: "#FFFFFF",
+    borderColor: "#E1E8F2",
+    borderRadius: 18,
+    borderWidth: 1,
+    paddingHorizontal: 10,
+    paddingVertical: 8
+  },
+  radarLegendChipActive: {
+    backgroundColor: colors.coral,
+    borderColor: colors.coral
+  },
+  radarLegendText: {
+    color: colors.text,
+    fontFamily: fonts.black,
+    fontSize: 12,
+    fontWeight: "900",
+    lineHeight: 14
+  },
+  radarLegendTextActive: {
+    color: "#FFFFFF"
+  },
   scaleCard: {
     backgroundColor: "#FFF4EC",
     borderRadius: 28,
@@ -1747,13 +1941,24 @@ const styles = StyleSheet.create({
     borderRadius: 18,
     height: 18,
     justifyContent: "center",
-    overflow: "visible"
+    overflow: "visible",
+    position: "relative"
+  },
+  scaleFillRow: {
+    ...StyleSheet.absoluteFillObject,
+    borderRadius: 18,
+    flexDirection: "row",
+    overflow: "hidden"
   },
   scaleFill: {
     backgroundColor: colors.coral,
     borderRadius: 18,
-    height: 18,
-    width: "68%"
+    height: 18
+  },
+  scaleKnobRow: {
+    ...StyleSheet.absoluteFillObject,
+    alignItems: "center",
+    flexDirection: "row"
   },
   scaleKnob: {
     backgroundColor: "#FFFFFF",
@@ -1761,9 +1966,15 @@ const styles = StyleSheet.create({
     borderRadius: 18,
     borderWidth: 4,
     height: 34,
-    left: "63%",
-    position: "absolute",
     width: 34
+  },
+  scaleTapRow: {
+    ...StyleSheet.absoluteFillObject,
+    flexDirection: "row"
+  },
+  scaleTapTarget: {
+    flex: 1,
+    minHeight: 44
   },
   scaleLabels: {
     alignItems: "center",

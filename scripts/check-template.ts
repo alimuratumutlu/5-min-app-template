@@ -56,6 +56,7 @@ const expectedPreviewModes = new Map([
   ["Listen And Choose", "listen"],
   ["Picture Flashcard", "picture"],
   ["Rating Slider", "scale"],
+  ["Risk Radar", "radar"],
   ["Body Map Tap", "body-map"],
   ["Calendar Heat Tap", "calendar"],
   ["Swipe Cards", "swipe"],

@@ -18,6 +18,7 @@ export type MechanicPreviewMode =
   | "partner"
   | "picture"
   | "rank"
+  | "radar"
   | "route"
   | "scale"
   | "stamp"
@@ -36,7 +37,8 @@ export function getMechanicPreviewMode(mechanic: InputMechanic): MechanicPreview
   if (hasAny(text, ["listen", "hear a prompt", "audio comprehension"])) return "listen";
   if (hasAny(text, ["picture flashcard", "image that matches", "visual preference"])) return "picture";
   if (hasAny(text, ["photo", "scan", "visual", "image", "selfie", "shot", "record slotter", "ocr"])) return "media";
-  if (hasAny(text, ["slider", "scale", "meter", "pulse", "orb", "wave", "comfort range", "rating", "ring", "progress toward target", "wheel", "radar"])) return "scale";
+  if (hasAny(text, ["radar", "hotspots"])) return "radar";
+  if (hasAny(text, ["slider", "scale", "meter", "pulse", "orb", "wave", "comfort range", "rating", "ring", "progress toward target", "wheel"])) return "scale";
   if (hasAny(text, ["calendar", "day cells", "week strip", "workday blocks"])) return "calendar";
   if (hasAny(text, ["branch", "triggers the next", "paired follow-up", "if-then"])) return "branch";
   if (hasAny(text, ["match", "pair", "concepts to outcomes"])) return "match";
@@ -81,6 +83,7 @@ export function buildMechanicSampleValue(mechanic: InputMechanic) {
       [options[1] ?? "Context"]: "Risk"
     };
   }
+  if (mode === "radar") return { high: "Risk", medium: "Priority", low: "Classification" };
   if (mechanic.effort === "rich") return "media-or-voice-capture-ready";
   if (mechanic.effort === "short") return buildMechanicOptions(mechanic).join(" + ");
   return buildMechanicOptions(mechanic)[0];
