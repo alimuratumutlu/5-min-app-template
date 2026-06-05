@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import { LinearGradient } from "expo-linear-gradient";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, useWindowDimensions, View } from "react-native";
 import Svg, {
   Circle,
   Defs,
@@ -83,33 +83,35 @@ export function RadarChart({
   const gridRings = [0.33, 0.66, 1];
 
   return (
-    <Svg width="100%" height={size} viewBox={`0 0 ${size} ${size}`}>
-      {gridRings.map((scale) => (
-        <Polygon key={scale} points={radarGridPoints(data.length, center, maxRadius * scale)} fill="none" stroke="#DCE2EA" strokeWidth={1} />
-      ))}
-      {data.map((item, index) => {
-        const angle = (Math.PI * 2 * index) / data.length - Math.PI / 2;
-        const lineX = center + Math.cos(angle) * maxRadius;
-        const lineY = center + Math.sin(angle) * maxRadius;
-        const labelX = center + Math.cos(angle) * (maxRadius + 24);
-        const labelY = center + Math.sin(angle) * (maxRadius + 22);
+    <View style={styles.svgCenter}>
+      <Svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
+        {gridRings.map((scale) => (
+          <Polygon key={scale} points={radarGridPoints(data.length, center, maxRadius * scale)} fill="none" stroke="#DCE2EA" strokeWidth={1} />
+        ))}
+        {data.map((item, index) => {
+          const angle = (Math.PI * 2 * index) / data.length - Math.PI / 2;
+          const lineX = center + Math.cos(angle) * maxRadius;
+          const lineY = center + Math.sin(angle) * maxRadius;
+          const labelX = center + Math.cos(angle) * (maxRadius + 24);
+          const labelY = center + Math.sin(angle) * (maxRadius + 22);
 
-        return (
-          <G key={item.label}>
-            <Line x1={center} y1={center} x2={lineX} y2={lineY} stroke="#E6EAF0" strokeWidth={1} />
-            <SvgText x={labelX} y={labelY} textAnchor="middle" fontSize={10} fontWeight="700" fill={colors.textMuted}>
-              {item.label}
-            </SvgText>
-          </G>
-        );
-      })}
-      <Polygon points={polygon} fill={withAlpha(accent, 0.22)} stroke={accent} strokeWidth={3} />
-      {data.map((item, index) => {
-        const angle = (Math.PI * 2 * index) / data.length - Math.PI / 2;
-        const radius = (Math.max(0, Math.min(100, item.value)) / 100) * maxRadius;
-        return <Circle key={item.label} cx={center + Math.cos(angle) * radius} cy={center + Math.sin(angle) * radius} r={5} fill="#FFFFFF" stroke={accent} strokeWidth={3} />;
-      })}
-    </Svg>
+          return (
+            <G key={item.label}>
+              <Line x1={center} y1={center} x2={lineX} y2={lineY} stroke="#E6EAF0" strokeWidth={1} />
+              <SvgText x={labelX} y={labelY} textAnchor="middle" fontSize={10} fontWeight="700" fill={colors.textMuted}>
+                {item.label}
+              </SvgText>
+            </G>
+          );
+        })}
+        <Polygon points={polygon} fill={withAlpha(accent, 0.22)} stroke={accent} strokeWidth={3} />
+        {data.map((item, index) => {
+          const angle = (Math.PI * 2 * index) / data.length - Math.PI / 2;
+          const radius = (Math.max(0, Math.min(100, item.value)) / 100) * maxRadius;
+          return <Circle key={item.label} cx={center + Math.cos(angle) * radius} cy={center + Math.sin(angle) * radius} r={5} fill="#FFFFFF" stroke={accent} strokeWidth={3} />;
+        })}
+      </Svg>
+    </View>
   );
 }
 
@@ -120,7 +122,7 @@ export function LineChart({
   data: number[];
   tone?: Tone;
 }) {
-  const width = 330;
+  const width = useChartWidth(330);
   const height = 180;
   const padding = 18;
   const accent = accentByTone[tone];
@@ -129,7 +131,7 @@ export function LineChart({
   const area = `${path} L ${width - padding} ${height - padding} L ${padding} ${height - padding} Z`;
 
   return (
-    <Svg width="100%" height={height} viewBox={`0 0 ${width} ${height}`}>
+    <Svg width={width} height={height} viewBox={`0 0 ${width} ${height}`}>
       <Defs>
         <SvgLinearGradient id="lineFill" x1="0" y1="0" x2="0" y2="1">
           <Stop offset="0" stopColor={accent} stopOpacity="0.28" />
@@ -155,7 +157,7 @@ export function BarChart({
   data: Array<{ label: string; value: number }>;
   tone?: Tone;
 }) {
-  const width = 330;
+  const width = useChartWidth(330);
   const height = 178;
   const accent = accentByTone[tone];
   const max = Math.max(...data.map((item) => item.value), 1);
@@ -163,7 +165,7 @@ export function BarChart({
   const barWidth = (width - 40 - gap * (data.length - 1)) / data.length;
 
   return (
-    <Svg width="100%" height={height} viewBox={`0 0 ${width} ${height}`}>
+    <Svg width={width} height={height} viewBox={`0 0 ${width} ${height}`}>
       {data.map((item, index) => {
         const barHeight = (item.value / max) * 110 + 16;
         const x = 20 + index * (barWidth + gap);
@@ -201,27 +203,29 @@ export function DonutChart({
   const accent = accentByTone[tone];
 
   return (
-    <Svg width="100%" height={size} viewBox={`0 0 ${size} ${size}`}>
-      <Circle cx={center} cy={center} r={radius} stroke="#EEF1F5" strokeWidth={strokeWidth} fill="none" />
-      <Circle
-        cx={center}
-        cy={center}
-        r={radius}
-        stroke={accent}
-        strokeWidth={strokeWidth}
-        fill="none"
-        strokeDasharray={`${circumference} ${circumference}`}
-        strokeDashoffset={dashOffset}
-        strokeLinecap="round"
-        transform={`rotate(-90 ${center} ${center})`}
-      />
-      <SvgText x={center} y={center - 5} textAnchor="middle" fontSize={34} fontWeight="900" fill={colors.text}>
-        {normalized}%
-      </SvgText>
-      <SvgText x={center} y={center + 24} textAnchor="middle" fontSize={12} fontWeight="800" fill={colors.textMuted}>
-        {label}
-      </SvgText>
-    </Svg>
+    <View style={styles.svgCenter}>
+      <Svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
+        <Circle cx={center} cy={center} r={radius} stroke="#EEF1F5" strokeWidth={strokeWidth} fill="none" />
+        <Circle
+          cx={center}
+          cy={center}
+          r={radius}
+          stroke={accent}
+          strokeWidth={strokeWidth}
+          fill="none"
+          strokeDasharray={`${circumference} ${circumference}`}
+          strokeDashoffset={dashOffset}
+          strokeLinecap="round"
+          transform={`rotate(-90 ${center} ${center})`}
+        />
+        <SvgText x={center} y={center - 5} textAnchor="middle" fontSize={34} fontWeight="900" fill={colors.text}>
+          {normalized}%
+        </SvgText>
+        <SvgText x={center} y={center + 24} textAnchor="middle" fontSize={12} fontWeight="800" fill={colors.textMuted}>
+          {label}
+        </SvgText>
+      </Svg>
+    </View>
   );
 }
 
@@ -303,6 +307,11 @@ function normalizePoints(data: number[], width: number, height: number, padding:
   }));
 }
 
+function useChartWidth(maxWidth: number) {
+  const { width } = useWindowDimensions();
+  return Math.min(maxWidth, Math.max(260, width - 64));
+}
+
 function withAlpha(hex: string, alpha: number) {
   const normalized = hex.replace("#", "");
   const red = parseInt(normalized.slice(0, 2), 16);
@@ -360,6 +369,11 @@ const styles = StyleSheet.create({
     fontFamily: fonts.medium,
     fontSize: 13,
     lineHeight: 18
+  },
+  svgCenter: {
+    alignItems: "center",
+    justifyContent: "center",
+    width: "100%"
   },
   heatmapGrid: {
     flexDirection: "row",
