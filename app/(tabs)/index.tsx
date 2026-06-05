@@ -42,10 +42,13 @@ export default function HomeScreen() {
 
   return (
     <AppScreen title={`Ready, ${userProgress.name}?`} subtitle={`${userProgress.streak} day streak alive`} activeDomain="SkillQuest">
-      <View style={{ flexDirection: "row", gap: 8 }}>
-        <StatPill label="XP" value={userProgress.points.toLocaleString()} tone="coral" />
-        <StatPill label="Streak" value={`${userProgress.streak}d`} tone="gold" />
-        <StatPill label="League" value="#18" tone="purple" />
+      <View style={{ alignItems: "center", flexDirection: "row", gap: 8, justifyContent: "space-between" }}>
+        <View style={{ flexDirection: "row", flexShrink: 1, gap: 8 }}>
+          <StatPill label="XP" value={userProgress.points.toLocaleString()} tone="coral" />
+          <StatPill label="Streak" value={`${userProgress.streak}d`} tone="gold" />
+          <StatPill label="League" value="#18" tone="purple" />
+        </View>
+        <IconButton icon={Route} label="Open onboarding test" tone="purple" onPress={() => router.push("/onboarding")} />
       </View>
 
       <PillSelector
