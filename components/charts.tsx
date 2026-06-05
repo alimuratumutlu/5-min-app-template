@@ -124,29 +124,47 @@ export function LineChart({
 }) {
   const width = useChartWidth(330);
   const height = 180;
-  const padding = 18;
   const accent = accentByTone[tone];
-  const points = normalizePoints(data, width, height, padding);
-  const path = points.map((point, index) => `${index === 0 ? "M" : "L"} ${point.x} ${point.y}`).join(" ");
-  const area = `${path} L ${width - padding} ${height - padding} L ${padding} ${height - padding} Z`;
+  const max = Math.max(...data, 1);
+  const min = Math.min(...data, 0);
+  const span = Math.max(max - min, 1);
+  const chartHeight = 112;
+  const points = data.map((value, index) => ({
+    left: (index / Math.max(data.length - 1, 1)) * width,
+    bottom: 22 + ((value - min) / span) * chartHeight
+  }));
 
   return (
-    <Svg width={width} height={height} viewBox={`0 0 ${width} ${height}`}>
-      <Defs>
-        <SvgLinearGradient id="lineFill" x1="0" y1="0" x2="0" y2="1">
-          <Stop offset="0" stopColor={accent} stopOpacity="0.28" />
-          <Stop offset="1" stopColor={accent} stopOpacity="0.02" />
-        </SvgLinearGradient>
-      </Defs>
+    <View style={[styles.nativeLineChart, { height, width }]}>
       {[0, 1, 2, 3].map((item) => (
-        <Line key={item} x1={padding} y1={padding + item * 38} x2={width - padding} y2={padding + item * 38} stroke="#E7EBF1" strokeWidth={1} />
+        <View key={item} style={[styles.lineGrid, { bottom: 22 + item * 36 }]} />
       ))}
-      <Path d={area} fill="url(#lineFill)" />
-      <Path d={path} fill="none" stroke={accent} strokeWidth={4} strokeLinecap="round" strokeLinejoin="round" />
+      <View style={[styles.lineArea, { backgroundColor: withAlpha(accent, 0.1) }]} />
+      {points.slice(0, -1).map((point, index) => {
+        const next = points[index + 1];
+        const left = (index / Math.max(points.length - 1, 1)) * width;
+        const segmentWidth = width / Math.max(points.length - 1, 1);
+        const delta = next.bottom - point.bottom;
+        return (
+          <View
+            key={`${point.left}-${index}`}
+            style={[
+              styles.lineSegment,
+              {
+                backgroundColor: accent,
+                bottom: point.bottom,
+                left,
+                transform: [{ rotate: `${delta > 0 ? -10 : delta < 0 ? 10 : 0}deg` }],
+                width: segmentWidth + 4
+              }
+            ]}
+          />
+        );
+      })}
       {points.map((point, index) => (
-        <Circle key={index} cx={point.x} cy={point.y} r={5} fill="#FFFFFF" stroke={accent} strokeWidth={3} />
+        <View key={index} style={[styles.lineDot, { backgroundColor: "#FFFFFF", borderColor: accent, bottom: point.bottom - 6, left: point.left }]} />
       ))}
-    </Svg>
+    </View>
   );
 }
 
@@ -157,30 +175,25 @@ export function BarChart({
   data: Array<{ label: string; value: number }>;
   tone?: Tone;
 }) {
-  const width = useChartWidth(330);
-  const height = 178;
   const accent = accentByTone[tone];
   const max = Math.max(...data.map((item) => item.value), 1);
-  const gap = 13;
-  const barWidth = (width - 40 - gap * (data.length - 1)) / data.length;
 
   return (
-    <Svg width={width} height={height} viewBox={`0 0 ${width} ${height}`}>
+    <View style={styles.nativeBarChart}>
       {data.map((item, index) => {
-        const barHeight = (item.value / max) * 110 + 16;
-        const x = 20 + index * (barWidth + gap);
-        const y = 132 - barHeight;
+        const barHeight = 28 + (item.value / max) * 104;
         return (
-          <G key={item.label}>
-            <Rect x={x} y={y} width={barWidth} height={barHeight} rx={16} fill={withAlpha(accent, 0.2 + index * 0.08)} />
-            <Rect x={x} y={y + barHeight - 18} width={barWidth} height={18} rx={9} fill={accent} />
-            <SvgText x={x + barWidth / 2} y={158} textAnchor="middle" fontSize={11} fontWeight="800" fill={colors.textMuted}>
+          <View key={item.label} style={styles.nativeBarColumn}>
+            <View style={[styles.nativeBar, { backgroundColor: withAlpha(accent, 0.2 + index * 0.08), height: barHeight }]}>
+              <View style={[styles.nativeBarCap, { backgroundColor: accent }]} />
+            </View>
+            <Text selectable style={styles.nativeBarLabel}>
               {item.label}
-            </SvgText>
-          </G>
+            </Text>
+          </View>
         );
       })}
-    </Svg>
+    </View>
   );
 }
 
@@ -295,29 +308,17 @@ function radarGridPoints(count: number, center: number, radius: number) {
     .join(" ");
 }
 
-function normalizePoints(data: number[], width: number, height: number, padding: number) {
-  const max = Math.max(...data, 1);
-  const min = Math.min(...data, 0);
-  const span = Math.max(max - min, 1);
-  const step = (width - padding * 2) / Math.max(data.length - 1, 1);
-
-  return data.map((value, index) => ({
-    x: padding + index * step,
-    y: height - padding - ((value - min) / span) * (height - padding * 2)
-  }));
-}
-
-function useChartWidth(maxWidth: number) {
-  const { width } = useWindowDimensions();
-  return Math.min(maxWidth, Math.max(260, width - 64));
-}
-
 function withAlpha(hex: string, alpha: number) {
   const normalized = hex.replace("#", "");
   const red = parseInt(normalized.slice(0, 2), 16);
   const green = parseInt(normalized.slice(2, 4), 16);
   const blue = parseInt(normalized.slice(4, 6), 16);
   return `rgba(${red}, ${green}, ${blue}, ${alpha})`;
+}
+
+function useChartWidth(maxWidth: number) {
+  const { width } = useWindowDimensions();
+  return Math.min(maxWidth, Math.max(260, width - 64));
 }
 
 const styles = StyleSheet.create({
@@ -374,6 +375,73 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     width: "100%"
+  },
+  nativeLineChart: {
+    overflow: "hidden",
+    width: "100%"
+  },
+  lineGrid: {
+    backgroundColor: "rgba(120, 130, 150, 0.14)",
+    height: 1,
+    left: 0,
+    position: "absolute",
+    right: 0
+  },
+  lineArea: {
+    borderCurve: "continuous",
+    borderRadius: 26,
+    bottom: 18,
+    height: 118,
+    left: 0,
+    position: "absolute",
+    right: 0
+  },
+  lineSegment: {
+    borderRadius: 4,
+    height: 5,
+    position: "absolute",
+    transformOrigin: "left center"
+  },
+  lineDot: {
+    borderRadius: 8,
+    borderWidth: 3,
+    height: 16,
+    marginLeft: -8,
+    position: "absolute",
+    width: 16
+  },
+  nativeBarChart: {
+    alignItems: "flex-end",
+    flexDirection: "row",
+    gap: 12,
+    height: 178,
+    justifyContent: "space-between",
+    paddingTop: 16
+  },
+  nativeBarColumn: {
+    alignItems: "center",
+    flex: 1,
+    gap: 10,
+    justifyContent: "flex-end"
+  },
+  nativeBar: {
+    borderCurve: "continuous",
+    borderRadius: 18,
+    justifyContent: "flex-end",
+    overflow: "hidden",
+    width: "100%"
+  },
+  nativeBarCap: {
+    borderRadius: 10,
+    height: 18,
+    width: "100%"
+  },
+  nativeBarLabel: {
+    color: colors.textMuted,
+    fontFamily: fonts.extraBold,
+    fontSize: 11,
+    fontWeight: "800",
+    lineHeight: 14
   },
   heatmapGrid: {
     flexDirection: "row",
