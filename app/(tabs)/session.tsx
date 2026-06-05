@@ -238,8 +238,7 @@ function EditorHero({ game, onPlay }: { game: GamePoster; onPlay: () => void }) 
   return (
     <View style={styles.heroBleed}>
       <Image source={{ uri: game.imageUrl }} style={styles.heroImage} contentFit="cover" />
-      <LinearGradient colors={["rgba(255,255,255,0.48)", "rgba(0,0,0,0.10)", "rgba(9,10,15,0.84)"]} style={styles.heroShade} />
-      <LinearGradient colors={["rgba(255,255,255,0.88)", "rgba(255,255,255,0.08)"]} style={styles.headerContinuation} />
+      <LinearGradient colors={["rgba(0,0,0,0.00)", "rgba(0,0,0,0.08)", "rgba(9,10,15,0.88)"]} style={styles.heroShade} />
       <View style={styles.heroContent}>
         <View style={[styles.editorBadge, { backgroundColor: game.accent }]}>
           <Sparkles color="#FFFFFF" size={14} strokeWidth={3} />
@@ -371,22 +370,14 @@ const styles = StyleSheet.create({
     borderCurve: "continuous",
     height: 428,
     marginHorizontal: -16,
-    marginTop: -8,
-    overflow: "hidden",
-    boxShadow: "0 24px 50px rgba(16, 17, 22, 0.18)"
+    marginTop: -16,
+    overflow: "hidden"
   },
   heroImage: {
     ...StyleSheet.absoluteFillObject
   },
   heroShade: {
     ...StyleSheet.absoluteFillObject
-  },
-  headerContinuation: {
-    height: 122,
-    left: 0,
-    position: "absolute",
-    right: 0,
-    top: 0
   },
   heroContent: {
     bottom: 24,
