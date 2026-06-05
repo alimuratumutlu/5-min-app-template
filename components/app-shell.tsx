@@ -136,7 +136,7 @@ export function AppHeader({
         }),
         paddingTop: scrollY.interpolate({
           inputRange: [0, 52, 124],
-          outputRange: [8, 4, 0],
+          outputRange: [8, 7, 6],
           extrapolate: "clamp"
         })
       }
@@ -152,7 +152,7 @@ export function AppHeader({
           {
             translateY: scrollY.interpolate({
               inputRange: [0, 48, 120],
-              outputRange: [0, -4, -8],
+              outputRange: [0, -1, 0],
               extrapolate: "clamp"
             })
           },
