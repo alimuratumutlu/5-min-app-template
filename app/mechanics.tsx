@@ -1,9 +1,10 @@
 import { BlurView } from "expo-blur";
-import { useRouter } from "expo-router";
+import { Link, useRouter } from "expo-router";
 import {
   ArrowLeft,
   BrainCircuit,
   CheckCircle2,
+  ChevronRight,
   Clock3,
   Home,
   Layers3,
@@ -149,45 +150,50 @@ function StatPill({ value, label }: { value: string; label: string }) {
 
 function MechanicCard({ mechanic }: { mechanic: InputMechanic }) {
   return (
-    <View style={styles.mechanicCard}>
-      <View style={styles.mechanicTop}>
-        <View style={styles.numberBadge}>
-          <Text selectable style={styles.numberText}>
-            {mechanic.number}
-          </Text>
-        </View>
-        <View style={{ flex: 1, gap: 3 }}>
-          <Text selectable style={styles.mechanicTitle}>
-            {mechanic.title}
-          </Text>
-          <Text selectable style={styles.mechanicPattern}>
-            {mechanic.pattern}
-          </Text>
-        </View>
-        <TimingBadge timing={mechanic.aiTiming} />
-      </View>
-
-      <View style={styles.captureBox}>
-        <Layers3 color={colors.blue} size={17} strokeWidth={3} />
-        <Text selectable style={styles.captureText}>
-          Captures: {mechanic.captures}
-        </Text>
-      </View>
-
-      <Text selectable style={styles.feedbackText}>
-        {mechanic.feedback}
-      </Text>
-
-      <View style={styles.fitRail}>
-        {mechanic.projectFits.slice(0, 3).map((fit) => (
-          <View key={fit} style={styles.fitChip}>
-            <Text selectable style={styles.fitText}>
-              {fit}
+    <Link href={`/mechanics/${mechanic.id}`} asChild>
+      <Pressable accessibilityRole="button" accessibilityLabel={`Open ${mechanic.title}`} style={({ pressed }) => [styles.mechanicCard, pressed ? styles.pressed : null]}>
+        <View style={styles.mechanicTop}>
+          <View style={styles.numberBadge}>
+            <Text selectable style={styles.numberText}>
+              {mechanic.number}
             </Text>
           </View>
-        ))}
-      </View>
-    </View>
+          <View style={{ flex: 1, gap: 3 }}>
+            <Text selectable style={styles.mechanicTitle}>
+              {mechanic.title}
+            </Text>
+            <Text selectable style={styles.mechanicPattern}>
+              {mechanic.pattern}
+            </Text>
+          </View>
+          <TimingBadge timing={mechanic.aiTiming} />
+          <View style={styles.openBadge}>
+            <ChevronRight color={colors.textMuted} size={17} strokeWidth={3} />
+          </View>
+        </View>
+
+        <View style={styles.captureBox}>
+          <Layers3 color={colors.blue} size={17} strokeWidth={3} />
+          <Text selectable style={styles.captureText}>
+            Captures: {mechanic.captures}
+          </Text>
+        </View>
+
+        <Text selectable style={styles.feedbackText}>
+          {mechanic.feedback}
+        </Text>
+
+        <View style={styles.fitRail}>
+          {mechanic.projectFits.slice(0, 3).map((fit) => (
+            <View key={fit} style={styles.fitChip}>
+              <Text selectable style={styles.fitText}>
+                {fit}
+              </Text>
+            </View>
+          ))}
+        </View>
+      </Pressable>
+    </Link>
   );
 }
 
@@ -428,6 +434,14 @@ const styles = StyleSheet.create({
   },
   timingTextHybrid: {
     color: colors.coral
+  },
+  openBadge: {
+    alignItems: "center",
+    backgroundColor: "#F5F7FA",
+    borderRadius: 15,
+    height: 30,
+    justifyContent: "center",
+    width: 30
   },
   captureBox: {
     alignItems: "center",

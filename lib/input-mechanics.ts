@@ -180,3 +180,7 @@ export function getMechanicsForStage(stage: "all" | MechanicStage) {
   if (stage === "original-40") return inputMechanics.slice(0, 40);
   return inputMechanics.slice(0, 100);
 }
+
+export function getMechanic(id: string) {
+  return inputMechanics.find((mechanic) => mechanic.id === id) ?? inputMechanics[0];
+}
