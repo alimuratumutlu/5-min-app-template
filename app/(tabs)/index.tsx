@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { useRouter } from "expo-router";
-import { Bell, Crown, Flame, Gamepad2, Gift, Route, ShieldCheck, Sparkles, Star, Zap } from "lucide-react-native";
+import { Clock3, Crown, Flame, Gamepad2, Gift, PlayCircle, Route, ShieldCheck, Sparkles, Star, Zap } from "lucide-react-native";
 import { Text, View } from "react-native";
 import {
   AppScreen,
@@ -12,11 +12,9 @@ import {
   HeroPoster,
   IconButton,
   Metric,
-  PillSelector,
   ProgressStatus,
   RewardStrip,
   SegmentedProgress,
-  StatPill,
   textStyles
 } from "@/components/app-shell";
 import { domains, quickActions, recommendations, rewardTrack, sessions, userProgress, type DomainKey } from "@/lib/template-data";
@@ -42,37 +40,55 @@ export default function HomeScreen() {
 
   return (
     <AppScreen title={`Ready, ${userProgress.name}?`} subtitle={`${userProgress.streak} day streak alive`} activeDomain="SkillQuest">
-      <View style={{ alignItems: "center", flexDirection: "row", gap: 8, justifyContent: "space-between" }}>
-        <View style={{ flexDirection: "row", flexShrink: 1, gap: 8 }}>
-          <StatPill label="XP" value={userProgress.points.toLocaleString()} tone="coral" />
-          <StatPill label="Streak" value={`${userProgress.streak}d`} tone="gold" />
-          <StatPill label="League" value="#18" tone="purple" />
+      <Card tone="coral">
+        <View style={{ alignItems: "flex-start", flexDirection: "row", justifyContent: "space-between", gap: 12 }}>
+          <View style={{ flex: 1, gap: 5 }}>
+            <Text selectable style={textStyles.small}>
+              TODAY'S 5-MIN SESSION
+            </Text>
+            <Text selectable style={textStyles.sectionTitle}>
+              Start Focus Sprint
+            </Text>
+            <Text selectable style={textStyles.body}>
+              One short run protects the streak, adds XP, and gives the next clear action.
+            </Text>
+          </View>
+          <IconButton icon={Route} label="Open onboarding test" tone="purple" onPress={() => router.push("/onboarding")} />
         </View>
-        <IconButton icon={Route} label="Open onboarding test" tone="purple" onPress={() => router.push("/onboarding")} />
-      </View>
 
-      <PillSelector
-        items={["Daily", "Skill", "Bonus", "Social", "Event"]}
-        selected={activeDomain.category}
-        onSelect={(item) => setSelectedDomain((domains.find((domain) => domain.category === item) ?? domains[0]).key)}
+        <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
+          <View style={{ alignItems: "center", backgroundColor: "#FFFFFF", borderRadius: 18, flexDirection: "row", gap: 6, paddingHorizontal: 11, paddingVertical: 8 }}>
+            <Clock3 color="#FF6F3D" size={15} strokeWidth={2.8} />
+            <Text selectable style={textStyles.small}>
+              5 min
+            </Text>
+          </View>
+          <View style={{ alignItems: "center", backgroundColor: "#FFFFFF", borderRadius: 18, flexDirection: "row", gap: 6, paddingHorizontal: 11, paddingVertical: 8 }}>
+            <Zap color="#FF6F3D" size={15} strokeWidth={2.8} />
+            <Text selectable style={textStyles.small}>
+              +120 XP
+            </Text>
+          </View>
+          <View style={{ alignItems: "center", backgroundColor: "#FFFFFF", borderRadius: 18, flexDirection: "row", gap: 6, paddingHorizontal: 11, paddingVertical: 8 }}>
+            <Flame color="#FF6F3D" size={15} strokeWidth={2.8} />
+            <Text selectable style={textStyles.small}>
+              {userProgress.streak}d streak
+            </Text>
+          </View>
+        </View>
+
+        <ProgressStatus label="daily run readiness" value={86} tone="coral" />
+        <Button label="Start 5-min run" icon={PlayCircle} onPress={() => router.push("/session")} />
+      </Card>
+
+      <HeroPoster
+        title={activeDomain.title}
+        subtitle={activeDomain.promise}
+        imageUrl={activeDomain.imageUrl}
+        accent={activeDomain.accent}
+        meta={`daily quest`}
+        onPress={() => router.push("/session")}
       />
-
-      <View style={{ gap: 10 }}>
-        <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", gap: 12 }}>
-          <Text selectable style={textStyles.sectionTitle}>
-            Today quest
-          </Text>
-          <IconButton icon={Bell} label="View quest alerts" tone="dark" onPress={() => router.push("/details/onboarding-lab")} />
-        </View>
-        <HeroPoster
-          title={activeDomain.title}
-          subtitle={activeDomain.promise}
-          imageUrl={activeDomain.imageUrl}
-          accent={activeDomain.accent}
-          meta={`+120 XP`}
-          onPress={() => router.push("/session")}
-        />
-      </View>
 
       <Card tone="gold">
         <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", gap: 12 }}>
