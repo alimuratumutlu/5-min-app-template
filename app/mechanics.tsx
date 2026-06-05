@@ -361,15 +361,18 @@ const styles = StyleSheet.create({
     gap: 2
   },
   mechanicList: {
-    gap: 13
+    gap: 18
   },
   mechanicCard: {
     backgroundColor: "#FFFFFF",
-    borderRadius: 28,
+    borderColor: "rgba(232, 237, 244, 0.92)",
+    borderRadius: 32,
     borderCurve: "continuous",
+    borderWidth: 1,
     gap: 12,
-    padding: 15,
-    boxShadow: "0 18px 38px rgba(16,17,22,0.08)"
+    overflow: "hidden",
+    padding: 17,
+    boxShadow: "0 22px 46px rgba(16,17,22,0.13)"
   },
   mechanicTop: {
     alignItems: "flex-start",
@@ -445,11 +448,14 @@ const styles = StyleSheet.create({
   },
   captureBox: {
     alignItems: "center",
-    backgroundColor: "#F6FAFF",
-    borderRadius: 20,
+    backgroundColor: "#F3F7FF",
+    borderColor: "#E3EEFF",
+    borderRadius: 22,
+    borderWidth: 1,
     flexDirection: "row",
     gap: 8,
-    padding: 11
+    paddingHorizontal: 12,
+    paddingVertical: 12
   },
   captureText: {
     color: colors.text,
