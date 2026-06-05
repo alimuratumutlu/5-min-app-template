@@ -1,7 +1,6 @@
 import { useMemo, useState, type ReactNode } from "react";
 import { BlurView } from "expo-blur";
-import { LinearGradient } from "expo-linear-gradient";
-import { useLocalSearchParams, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 import {
   ArrowLeft,
   BadgeCheck,
@@ -20,16 +19,14 @@ import {
   PlayCircle,
   ShieldCheck,
   Sparkles,
-  Timer,
   Trophy,
   UserCircle,
   Volume2,
   X,
-  Zap,
   type LucideIcon
 } from "lucide-react-native";
 import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
-import { AppScreen, Button, IconButton, ProgressStatus, colors, fonts, textStyles } from "@/components/app-shell";
+import { AppScreen, Button, IconButton, colors, fonts, textStyles } from "@/components/app-shell";
 
 type Feedback = { kind: "correct" | "wrong"; title: string; body: string } | null;
 type StepType = "choice" | "match" | "order" | "drop" | "text" | "audio" | "checkin";
@@ -136,8 +133,6 @@ const audioOptions = ["Start the timer now", "Skip today's run", "Open profile s
 
 export default function GameDetailScreen() {
   const router = useRouter();
-  const params = useLocalSearchParams<{ id?: string }>();
-  const gameId = params.id ?? "focus-sprint";
   const [stepIndex, setStepIndex] = useState(0);
   const [feedback, setFeedback] = useState<Feedback>(null);
   const [choice, setChoice] = useState("");
@@ -240,34 +235,28 @@ export default function GameDetailScreen() {
       activeDomain="SkillQuest"
       footer={<GameFooter feedback={feedback} onCheck={submit} onContinue={continueLesson} isFinalStep={stepIndex === lessonSteps.length - 1} />}
     >
-      <View style={{ alignItems: "flex-start" }}>
+      <View style={styles.topBar}>
         <IconButton icon={ArrowLeft} label="Go back" tone="dark" onPress={goBack} />
+        <View style={styles.topProgressCopy}>
+          <Text selectable style={styles.progressLabel}>
+            Question {stepIndex + 1} of {lessonSteps.length}
+          </Text>
+          <Text selectable style={styles.progressPercent}>
+            {progress}%
+          </Text>
+        </View>
       </View>
 
-      <LinearGradient colors={["#FFFFFF", "#FFF0E8", "#EAF3FF"]} style={styles.hero}>
-        <View style={styles.heroTop}>
-          <View style={styles.gameMark}>
-            <Zap color="#FFFFFF" size={25} strokeWidth={3} />
-          </View>
-          <View style={{ flex: 1, gap: 4 }}>
-            <Text selectable style={styles.eyebrow}>
-              {gameId.replaceAll("-", " ")}
-            </Text>
-            <Text selectable style={styles.heroTitle}>
-              Daily 5-min run
-            </Text>
-            <Text selectable style={styles.heroBody}>
-              One question at a time. Each daily input becomes habit data, XP, streak protection, and a saved result.
-            </Text>
-          </View>
-        </View>
+      <View style={styles.compactProgress}>
         <View style={styles.stepDots}>
           {lessonSteps.map((item, index) => (
             <View key={item.id} style={[styles.stepDot, index <= stepIndex ? styles.stepDotActive : null]} />
           ))}
         </View>
-        <ProgressStatus label={`question ${stepIndex + 1} of ${lessonSteps.length}`} value={progress} tone={progress > 70 ? "green" : "coral"} />
-      </LinearGradient>
+        <View style={styles.thinTrack}>
+          <View style={[styles.thinFill, { width: `${Math.max(6, progress)}%` }]} />
+        </View>
+      </View>
 
       <QuestionCard step={step}>
         {step.type === "choice" ? (
@@ -663,60 +652,58 @@ function GameBottomNav() {
 }
 
 const styles = StyleSheet.create({
-  hero: {
-    borderRadius: 36,
-    borderCurve: "continuous",
-    gap: 15,
-    overflow: "hidden",
-    padding: 17,
-    boxShadow: "0 24px 46px rgba(255, 111, 61, 0.14)"
-  },
-  heroTop: {
+  topBar: {
     alignItems: "center",
     flexDirection: "row",
-    gap: 13
+    gap: 12
   },
-  gameMark: {
+  topProgressCopy: {
     alignItems: "center",
-    backgroundColor: colors.coral,
-    borderRadius: 27,
-    height: 58,
-    justifyContent: "center",
-    width: 58
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "space-between"
   },
-  eyebrow: {
-    color: colors.blue,
-    fontFamily: fonts.black,
-    fontSize: 11,
-    fontWeight: "900",
-    lineHeight: 13,
-    textTransform: "uppercase"
-  },
-  heroTitle: {
+  progressLabel: {
     color: colors.text,
     fontFamily: fonts.black,
-    fontSize: 29,
+    fontSize: 13,
     fontWeight: "900",
-    lineHeight: 33
+    lineHeight: 16,
+    textTransform: "uppercase"
   },
-  heroBody: {
+  progressPercent: {
     color: colors.textMuted,
-    fontFamily: fonts.medium,
-    fontSize: 14,
-    lineHeight: 20
+    fontFamily: fonts.black,
+    fontSize: 13,
+    fontWeight: "900",
+    lineHeight: 16
+  },
+  compactProgress: {
+    gap: 9
   },
   stepDots: {
     flexDirection: "row",
     gap: 6
   },
   stepDot: {
-    backgroundColor: "rgba(255,255,255,0.9)",
+    backgroundColor: "#EEF1F5",
     borderRadius: 8,
     flex: 1,
-    height: 9
+    height: 7
   },
   stepDotActive: {
     backgroundColor: colors.coral
+  },
+  thinTrack: {
+    backgroundColor: "#EEF1F5",
+    borderRadius: 8,
+    height: 8,
+    overflow: "hidden"
+  },
+  thinFill: {
+    backgroundColor: colors.coral,
+    borderRadius: 8,
+    height: "100%"
   },
   questionCard: {
     backgroundColor: "#FFFFFF",
