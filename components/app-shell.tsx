@@ -841,7 +841,7 @@ const styles = StyleSheet.create({
     paddingBottom: 112
   },
   scrollWithFooter: {
-    paddingBottom: 150
+    paddingBottom: 242
   },
   headerFrame: {
     paddingHorizontal: 12,
