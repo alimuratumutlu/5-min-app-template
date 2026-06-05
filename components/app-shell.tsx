@@ -25,23 +25,23 @@ import { userProgress } from "@/lib/template-data";
 
 export const colors = {
   background: "#FFFFFF",
-  canvas: "#F0F1F0",
+  canvas: "#FFFFFF",
   surface: "#FFFFFF",
-  surfaceRaised: "#F8F8F6",
-  ink: "#202123",
-  text: "#171717",
-  textMuted: "#6E716F",
-  border: "#E4E4DF",
-  blue: "#4F7DFF",
-  blueSoft: "#E5EDFF",
-  green: "#2FBF8F",
-  greenSoft: "#DDF7EC",
-  purple: "#8B7CFF",
-  purpleSoft: "#ECE9FF",
-  coral: "#FF8A5B",
+  surfaceRaised: "#FFF8F1",
+  ink: "#18191C",
+  text: "#17171B",
+  textMuted: "#70737A",
+  border: "#F0E8DF",
+  blue: "#247BFF",
+  blueSoft: "#E7F0FF",
+  green: "#00C985",
+  greenSoft: "#DDFCED",
+  purple: "#875CFF",
+  purpleSoft: "#F0EAFF",
+  coral: "#FF6F3D",
   coralSoft: "#FFE6D8",
-  gold: "#E4A62F",
-  goldSoft: "#FFF1CF",
+  gold: "#FFB800",
+  goldSoft: "#FFF2C2",
   danger: "#D92D20"
 };
 
@@ -334,7 +334,7 @@ export function HeroPoster({
   return (
     <Pressable onPress={onPress} style={({ pressed }) => [styles.heroPoster, pressed ? styles.pressed : null]}>
       <Image source={{ uri: imageUrl }} style={styles.heroImage} contentFit="cover" />
-      <LinearGradient colors={["rgba(0,0,0,0.02)", "rgba(0,0,0,0.74)"]} style={styles.heroOverlay} />
+      <LinearGradient colors={["rgba(255,255,255,0.02)", "rgba(14,12,18,0.66)"]} style={styles.heroOverlay} />
       <View style={[styles.heroBadge, { backgroundColor: accent }]}>
         <Sparkles color="#FFFFFF" size={14} strokeWidth={3} />
         <Text selectable style={styles.heroBadgeText}>
@@ -392,7 +392,7 @@ export function OnboardingFlow({
   onSkip: () => void;
 }) {
   return (
-    <LinearGradient colors={["#FFFFFF", "#EEF3FF"]} style={styles.onboardingPanel}>
+    <LinearGradient colors={["#FFFFFF", "#FFF1E7", "#E9F2FF"]} style={styles.onboardingPanel}>
       <View style={styles.onboardingTop}>
         <Text selectable style={styles.eyebrow}>
           {current.eyebrow}
@@ -503,38 +503,38 @@ const toneStyles = StyleSheet.create({
   },
   blue: {
     backgroundColor: colors.blueSoft,
-    borderColor: "#BFC8FF"
+    borderColor: "#BDD7FF"
   },
   green: {
     backgroundColor: colors.greenSoft,
-    borderColor: "#B5EAD8"
+    borderColor: "#A7F2D3"
   },
   purple: {
     backgroundColor: colors.purpleSoft,
-    borderColor: "#D4C2FF"
+    borderColor: "#D5C8FF"
   },
   coral: {
     backgroundColor: colors.coralSoft,
-    borderColor: "#FFC3B4"
+    borderColor: "#FFC2AA"
   },
   gold: {
     backgroundColor: colors.goldSoft,
-    borderColor: "#F6DB83"
+    borderColor: "#FFE082"
   }
 });
 
 const buttonStyles = StyleSheet.create({
   primary: {
-    backgroundColor: colors.ink,
-    borderColor: colors.ink
+    backgroundColor: colors.coral,
+    borderColor: colors.coral
   },
   secondary: {
     backgroundColor: colors.surface,
     borderColor: colors.border
   },
   quiet: {
-    backgroundColor: colors.surfaceRaised,
-    borderColor: colors.border
+    backgroundColor: "#F6FAFF",
+    borderColor: "#DDEBFF"
   },
   danger: {
     backgroundColor: colors.danger,
@@ -551,42 +551,42 @@ const styles = StyleSheet.create({
     flex: 1
   },
   scrollContent: {
-    gap: 16,
+    gap: 18,
     paddingHorizontal: 16,
-    paddingTop: 12,
+    paddingTop: 14,
     paddingBottom: 112
   },
   scrollWithFooter: {
     paddingBottom: 150
   },
   headerFrame: {
-    paddingHorizontal: 14,
+    paddingHorizontal: 12,
     paddingTop: 8
   },
   headerBlur: {
-    borderRadius: 28,
+    borderRadius: 36,
     borderCurve: "continuous",
-    borderColor: "rgba(255, 255, 255, 0.22)",
-    borderWidth: 0,
-    backgroundColor: "rgba(240, 241, 240, 0.28)",
+    borderColor: "rgba(255, 255, 255, 0.92)",
+    borderWidth: 1,
+    backgroundColor: "rgba(255, 255, 255, 0.74)",
     overflow: "hidden",
-    boxShadow: "0 8px 22px rgba(18, 20, 22, 0.04)"
+    boxShadow: "0 18px 42px rgba(255, 111, 61, 0.13)"
   },
   headerContent: {
     alignItems: "center",
     flexDirection: "row",
     gap: 10,
-    minHeight: 68,
-    paddingHorizontal: 12,
-    paddingVertical: 10
+    minHeight: 74,
+    paddingHorizontal: 13,
+    paddingVertical: 11
   },
   logoMark: {
     alignItems: "center",
-    backgroundColor: colors.coralSoft,
-    borderRadius: 20,
-    height: 40,
+    backgroundColor: "#FFE1D3",
+    borderRadius: 24,
+    height: 46,
     justifyContent: "center",
-    width: 40
+    width: 46
   },
   headerCopy: {
     flex: 1,
@@ -612,14 +612,14 @@ const styles = StyleSheet.create({
   },
   levelPill: {
     alignItems: "center",
-    backgroundColor: "rgba(255,255,255,0.78)",
-    borderColor: "rgba(255,255,255,0.88)",
-    borderRadius: 24,
+    backgroundColor: "#FFFFFF",
+    borderColor: "#FFE2B4",
+    borderRadius: 28,
     borderWidth: 1,
     flexDirection: "row",
     gap: 6,
-    minHeight: 38,
-    paddingHorizontal: 12,
+    minHeight: 42,
+    paddingHorizontal: 13,
     paddingVertical: 6
   },
   levelText: {
@@ -646,12 +646,12 @@ const styles = StyleSheet.create({
     right: 0
   },
   card: {
-    borderRadius: 22,
+    borderRadius: 30,
     borderCurve: "continuous",
     borderWidth: 1,
-    gap: 11,
-    padding: 14,
-    boxShadow: "0 16px 32px rgba(22, 24, 24, 0.08)"
+    gap: 12,
+    padding: 15,
+    boxShadow: "0 18px 36px rgba(36, 123, 255, 0.08)"
   },
   metricCard: {
     flex: 1,
@@ -682,14 +682,14 @@ const styles = StyleSheet.create({
   },
   button: {
     alignItems: "center",
-    borderRadius: 24,
+    borderRadius: 28,
     borderCurve: "continuous",
     borderWidth: 1,
     flexDirection: "row",
     gap: 8,
     justifyContent: "center",
-    minHeight: 48,
-    paddingHorizontal: 16
+    minHeight: 52,
+    paddingHorizontal: 18
   },
   buttonText: {
     fontSize: 15,
@@ -714,15 +714,15 @@ const styles = StyleSheet.create({
   },
   iconButton: {
     alignItems: "center",
-    borderRadius: 22,
+    borderRadius: 24,
     borderWidth: 1,
-    height: 42,
+    height: 48,
     justifyContent: "center",
-    width: 42
+    width: 48
   },
   darkIconButton: {
-    backgroundColor: colors.ink,
-    borderColor: colors.ink
+    backgroundColor: colors.purple,
+    borderColor: colors.purple
   },
   progressWrap: {
     gap: 8
@@ -743,13 +743,13 @@ const styles = StyleSheet.create({
     fontWeight: "800"
   },
   progressTrack: {
-    backgroundColor: "#E8EDF5",
-    borderRadius: 8,
-    height: 10,
+    backgroundColor: "#EEF3FF",
+    borderRadius: 12,
+    height: 11,
     overflow: "hidden"
   },
   progressFill: {
-    borderRadius: 8,
+    borderRadius: 12,
     height: "100%"
   },
   carouselContent: {
@@ -757,31 +757,31 @@ const styles = StyleSheet.create({
     paddingRight: 16
   },
   carouselCard: {
-    borderRadius: 24,
+    borderRadius: 32,
     borderWidth: 1,
     gap: 9,
-    height: 228,
+    height: 232,
     justifyContent: "flex-end",
     overflow: "hidden",
-    padding: 13,
-    width: 214
+    padding: 14,
+    width: 218
   },
   carouselImage: {
     ...StyleSheet.absoluteFillObject
   },
   carouselScrim: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: "rgba(0, 0, 0, 0.28)"
+    backgroundColor: "rgba(0, 0, 0, 0.22)"
   },
   carouselIcon: {
     alignItems: "center",
-    borderRadius: 18,
-    height: 34,
+    borderRadius: 22,
+    height: 38,
     justifyContent: "center",
     position: "absolute",
     right: 12,
     top: 12,
-    width: 34
+    width: 38
   },
   carouselCategory: {
     color: "rgba(255,255,255,0.82)",
@@ -809,15 +809,15 @@ const styles = StyleSheet.create({
   searchPill: {
     alignItems: "center",
     backgroundColor: colors.surface,
-    borderColor: "rgba(255,255,255,0.88)",
-    borderRadius: 24,
+    borderColor: "#F1E7DE",
+    borderRadius: 30,
     borderWidth: 1,
     flex: 1,
     flexDirection: "row",
     gap: 10,
-    minHeight: 48,
-    paddingHorizontal: 14,
-    boxShadow: "0 12px 24px rgba(20, 22, 24, 0.06)"
+    minHeight: 52,
+    paddingHorizontal: 16,
+    boxShadow: "0 16px 32px rgba(255, 111, 61, 0.09)"
   },
   searchText: {
     color: colors.textMuted,
@@ -831,15 +831,15 @@ const styles = StyleSheet.create({
   segmentPill: {
     backgroundColor: colors.surface,
     borderColor: colors.border,
-    borderRadius: 20,
+    borderRadius: 24,
     borderWidth: 1,
-    minHeight: 38,
+    minHeight: 42,
     justifyContent: "center",
-    paddingHorizontal: 14
+    paddingHorizontal: 15
   },
   segmentPillActive: {
-    backgroundColor: colors.ink,
-    borderColor: colors.ink
+    backgroundColor: colors.blue,
+    borderColor: colors.blue
   },
   segmentText: {
     color: colors.textMuted,
@@ -851,13 +851,13 @@ const styles = StyleSheet.create({
   },
   heroPoster: {
     backgroundColor: colors.ink,
-    borderRadius: 28,
+    borderRadius: 38,
     borderCurve: "continuous",
     height: 312,
     overflow: "hidden",
-    padding: 16,
+    padding: 18,
     justifyContent: "space-between",
-    boxShadow: "0 22px 40px rgba(18, 20, 22, 0.18)"
+    boxShadow: "0 24px 48px rgba(255, 111, 61, 0.18)"
   },
   heroImage: {
     ...StyleSheet.absoluteFillObject
@@ -868,11 +868,11 @@ const styles = StyleSheet.create({
   heroBadge: {
     alignItems: "center",
     alignSelf: "flex-start",
-    borderRadius: 18,
+    borderRadius: 24,
     flexDirection: "row",
     gap: 6,
-    paddingHorizontal: 10,
-    paddingVertical: 7
+    paddingHorizontal: 12,
+    paddingVertical: 8
   },
   heroBadgeText: {
     color: "#FFFFFF",
@@ -897,20 +897,20 @@ const styles = StyleSheet.create({
   heroAction: {
     alignItems: "center",
     backgroundColor: "#FFFFFF",
-    borderRadius: 20,
-    bottom: 16,
-    height: 46,
+    borderRadius: 24,
+    bottom: 18,
+    height: 50,
     justifyContent: "center",
     position: "absolute",
-    right: 16,
-    width: 46
+    right: 18,
+    width: 50
   },
   compactTile: {
-    borderRadius: 22,
+    borderRadius: 30,
     borderWidth: 1,
     gap: 8,
-    minHeight: 126,
-    padding: 13,
+    minHeight: 132,
+    padding: 14,
     width: "48%"
   },
   compactTileTitle: {
@@ -926,12 +926,12 @@ const styles = StyleSheet.create({
   },
   onboardingPanel: {
     borderColor: "#FFFFFF",
-    borderRadius: 24,
+    borderRadius: 34,
     borderWidth: 1,
     gap: 13,
     overflow: "hidden",
-    padding: 15,
-    boxShadow: "0 16px 34px rgba(22, 24, 24, 0.08)"
+    padding: 16,
+    boxShadow: "0 18px 38px rgba(135, 92, 255, 0.12)"
   },
   onboardingTop: {
     alignItems: "center",
@@ -958,7 +958,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: colors.surface,
     borderColor: colors.border,
-    borderRadius: 18,
+    borderRadius: 22,
     borderWidth: 1,
     flexDirection: "row",
     gap: 5,
@@ -967,7 +967,7 @@ const styles = StyleSheet.create({
   },
   optionPillActive: {
     backgroundColor: colors.blueSoft,
-    borderColor: "#BFC8FF"
+    borderColor: "#BDD7FF"
   },
   optionText: {
     color: colors.text,
@@ -978,11 +978,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: colors.surface,
     borderColor: colors.border,
-    borderRadius: 22,
+    borderRadius: 30,
     borderWidth: 1,
     flexDirection: "row",
     gap: 10,
-    padding: 13
+    padding: 14
   },
   listCopy: {
     flex: 1,
@@ -1007,14 +1007,14 @@ const styles = StyleSheet.create({
   },
   tabIconWrap: {
     alignItems: "center",
-    borderRadius: 22,
-    height: 38,
+    borderRadius: 26,
+    height: 44,
     justifyContent: "center",
-    width: 44
+    width: 50
   },
   tabIconWrapFocused: {
-    backgroundColor: "#FFFFFF",
-    borderColor: "rgba(255,255,255,0.82)",
+    backgroundColor: "#FFE6D8",
+    borderColor: "#FFC2AA",
     borderWidth: 1
   }
 });
