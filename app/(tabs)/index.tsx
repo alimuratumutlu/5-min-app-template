@@ -4,7 +4,7 @@ import { Bell, Crown, Flame, Gamepad2, Gift, ShieldCheck, Sparkles, Star, Zap } 
 import { Text, View } from "react-native";
 import {
   AppScreen,
-  Button,
+  BoostCard,
   Card,
   CompactTile,
   DomainCarousel,
@@ -128,17 +128,20 @@ export default function HomeScreen() {
         <Text selectable style={textStyles.sectionTitle}>
           Smart boosts
         </Text>
-        {recommendations.map((item) => (
-          <Card key={item.id} tone={item.domain === selectedDomain ? "green" : "default"} onPress={() => router.push(`/details/${item.id}`)}>
-            <Text selectable style={textStyles.cardTitle}>
-              {item.title}
-            </Text>
-            <Text selectable style={textStyles.body}>
-              {item.reason}
-            </Text>
-            <Button label={item.action} icon={item.domain === "focus" ? Flame : item.domain === "creative" ? Sparkles : ShieldCheck} variant="secondary" onPress={() => router.push(`/details/${item.id}`)} />
-          </Card>
-        ))}
+        {recommendations.map((item) => {
+          const tone = item.domain === "focus" ? "coral" : item.domain === "creative" ? "purple" : item.domain === "social" ? "green" : "blue";
+          return (
+            <BoostCard
+              key={item.id}
+              title={item.title}
+              body={item.reason}
+              action={item.action}
+              tone={tone}
+              icon={item.domain === "focus" ? Flame : item.domain === "creative" ? Sparkles : ShieldCheck}
+              onPress={() => router.push(`/details/${item.id}`)}
+            />
+          );
+        })}
       </View>
     </AppScreen>
   );

@@ -269,10 +269,17 @@ export function IconButton({
 
 export function Metric({ label, value, delta, tone = "blue" }: MetricProps) {
   return (
-    <Card tone={tone} style={styles.metricCard}>
-      <Text selectable style={styles.metricValue}>
-        {value}
-      </Text>
+    <View style={[styles.metricCard, { borderColor: translucentAccentByTone[tone] }]}>
+      <LinearGradient colors={gradientByTone[tone]} style={styles.cardGradientFill} />
+      <View style={[styles.metricGlow, { backgroundColor: accentByTone[tone] }]} />
+      <View style={styles.metricTopRow}>
+        <Text selectable style={styles.metricValue}>
+          {value}
+        </Text>
+        <View style={[styles.metricBadge, { backgroundColor: accentByTone[tone] }]}>
+          <Sparkles color="#FFFFFF" size={15} strokeWidth={2.8} />
+        </View>
+      </View>
       <Text selectable style={styles.metricLabel}>
         {label}
       </Text>
@@ -281,7 +288,7 @@ export function Metric({ label, value, delta, tone = "blue" }: MetricProps) {
           {delta}
         </Text>
       ) : null}
-    </Card>
+    </View>
   );
 }
 
@@ -534,14 +541,70 @@ export function CompactTile({
   onPress?: () => void;
 }) {
   return (
-    <Pressable onPress={onPress} style={({ pressed }) => [styles.compactTile, toneStyles[tone], pressed ? styles.pressed : null]}>
-      <Icon color={accentByTone[tone]} size={20} strokeWidth={2.8} />
+    <Pressable onPress={onPress} style={({ pressed }) => [styles.compactTile, { borderColor: translucentAccentByTone[tone] }, pressed ? styles.pressed : null]}>
+      <LinearGradient colors={gradientByTone[tone]} style={styles.cardGradientFill} />
+      <View style={[styles.compactTileGlow, { backgroundColor: accentByTone[tone] }]} />
+      <View style={styles.compactTileTop}>
+        <View style={[styles.compactTileIcon, { backgroundColor: accentByTone[tone] }]}>
+          <Icon color="#FFFFFF" size={19} strokeWidth={2.8} />
+        </View>
+        <View style={[styles.compactTileMiniPill, { borderColor: translucentAccentByTone[tone] }]}>
+          <Text selectable style={[styles.compactTileMiniText, { color: accentByTone[tone] }]}>
+            +XP
+          </Text>
+        </View>
+      </View>
       <Text selectable style={styles.compactTileTitle}>
         {title}
       </Text>
       <Text selectable numberOfLines={2} style={styles.compactTileBody}>
         {body}
       </Text>
+      <View style={styles.compactTileTrack}>
+        <View style={[styles.compactTileFill, { backgroundColor: accentByTone[tone], width: title.length % 2 === 0 ? "72%" : "54%" }]} />
+      </View>
+    </Pressable>
+  );
+}
+
+export function BoostCard({
+  title,
+  body,
+  action,
+  tone = "green",
+  icon: Icon = Sparkles,
+  onPress
+}: {
+  title: string;
+  body: string;
+  action: string;
+  tone?: Tone;
+  icon?: LucideIcon;
+  onPress?: () => void;
+}) {
+  return (
+    <Pressable onPress={onPress} style={({ pressed }) => [styles.boostCard, { borderColor: translucentAccentByTone[tone] }, pressed ? styles.pressed : null]}>
+      <LinearGradient colors={gradientByTone[tone]} style={styles.cardGradientFill} />
+      <View style={[styles.boostGlow, { backgroundColor: accentByTone[tone] }]} />
+      <View style={styles.boostTopRow}>
+        <View style={[styles.boostIcon, { backgroundColor: accentByTone[tone] }]}>
+          <Icon color="#FFFFFF" size={20} strokeWidth={2.8} />
+        </View>
+        <View style={styles.boostCopy}>
+          <Text selectable style={styles.boostTitle}>
+            {title}
+          </Text>
+          <Text selectable numberOfLines={2} style={styles.boostBody}>
+            {body}
+          </Text>
+        </View>
+      </View>
+      <View style={[styles.boostAction, { borderColor: translucentAccentByTone[tone] }]}>
+        <Text selectable style={[styles.boostActionText, { color: accentByTone[tone] }]}>
+          {action}
+        </Text>
+        <ArrowRight color={accentByTone[tone]} size={17} strokeWidth={2.8} />
+      </View>
     </Pressable>
   );
 }
@@ -662,6 +725,22 @@ const accentByTone = {
   purple: colors.purple,
   coral: colors.coral,
   gold: colors.gold
+};
+
+const translucentAccentByTone = {
+  blue: "rgba(36, 123, 255, 0.28)",
+  green: "rgba(0, 201, 133, 0.28)",
+  purple: "rgba(135, 92, 255, 0.28)",
+  coral: "rgba(255, 111, 61, 0.3)",
+  gold: "rgba(255, 184, 0, 0.32)"
+};
+
+const gradientByTone: Record<Tone, [string, string, string]> = {
+  blue: ["#FFFFFF", "#EEF5FF", "#DDEBFF"],
+  green: ["#FFFFFF", "#E9FFF5", "#D9FBEA"],
+  purple: ["#FFFFFF", "#F5F0FF", "#E9DFFF"],
+  coral: ["#FFFFFF", "#FFF0E8", "#FFE0D2"],
+  gold: ["#FFFFFF", "#FFF7DC", "#FFEFC0"]
 };
 
 const toneStyles = StyleSheet.create({
@@ -826,17 +905,50 @@ const styles = StyleSheet.create({
     padding: 15,
     boxShadow: "0 18px 36px rgba(36, 123, 255, 0.08)"
   },
+  cardGradientFill: {
+    ...StyleSheet.absoluteFillObject
+  },
   metricCard: {
+    borderCurve: "continuous",
+    borderRadius: 32,
+    borderWidth: 1,
     flex: 1,
-    minWidth: 142
+    gap: 8,
+    minHeight: 132,
+    minWidth: 142,
+    overflow: "hidden",
+    padding: 15,
+    boxShadow: "0 18px 34px rgba(31, 34, 40, 0.08)"
+  },
+  metricTopRow: {
+    alignItems: "flex-start",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    gap: 10
+  },
+  metricGlow: {
+    borderRadius: 60,
+    height: 92,
+    opacity: 0.12,
+    position: "absolute",
+    right: -30,
+    top: -28,
+    width: 92
+  },
+  metricBadge: {
+    alignItems: "center",
+    borderRadius: 18,
+    height: 34,
+    justifyContent: "center",
+    width: 34
   },
   metricValue: {
     color: colors.text,
     fontFamily: fonts.black,
-    fontSize: 28,
+    fontSize: 34,
     fontVariant: ["tabular-nums"],
     fontWeight: "900",
-    lineHeight: 33
+    lineHeight: 38
   },
   metricLabel: {
     color: colors.textMuted,
@@ -848,7 +960,7 @@ const styles = StyleSheet.create({
   },
   metricDelta: {
     fontFamily: fonts.bold,
-    fontSize: 12,
+    fontSize: 13,
     fontWeight: "700"
   },
   body: {
@@ -1198,25 +1310,138 @@ const styles = StyleSheet.create({
     width: 50
   },
   compactTile: {
-    borderRadius: 30,
+    borderCurve: "continuous",
+    borderRadius: 34,
     borderWidth: 1,
-    gap: 8,
-    minHeight: 132,
-    padding: 14,
+    gap: 10,
+    minHeight: 148,
+    overflow: "hidden",
+    padding: 15,
     width: "48%"
+  },
+  compactTileGlow: {
+    borderRadius: 70,
+    bottom: -46,
+    height: 110,
+    opacity: 0.13,
+    position: "absolute",
+    right: -34,
+    width: 110
+  },
+  compactTileTop: {
+    alignItems: "center",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    gap: 8
+  },
+  compactTileIcon: {
+    alignItems: "center",
+    borderRadius: 20,
+    height: 40,
+    justifyContent: "center",
+    width: 40
+  },
+  compactTileMiniPill: {
+    backgroundColor: "rgba(255,255,255,0.72)",
+    borderRadius: 15,
+    borderWidth: 1,
+    paddingHorizontal: 8,
+    paddingVertical: 5
+  },
+  compactTileMiniText: {
+    fontFamily: fonts.black,
+    fontSize: 10,
+    fontWeight: "900",
+    lineHeight: 12
   },
   compactTileTitle: {
     color: colors.text,
-    fontFamily: fonts.bold,
-    fontSize: 15,
-    fontWeight: "700",
-    lineHeight: 19
+    fontFamily: fonts.extraBold,
+    fontSize: 17,
+    fontWeight: "800",
+    lineHeight: 21
   },
   compactTileBody: {
     color: colors.textMuted,
-    fontFamily: fonts.regular,
-    fontSize: 12,
-    lineHeight: 16
+    fontFamily: fonts.medium,
+    fontSize: 13,
+    lineHeight: 17
+  },
+  compactTileTrack: {
+    backgroundColor: "rgba(255,255,255,0.78)",
+    borderRadius: 12,
+    height: 9,
+    marginTop: "auto",
+    overflow: "hidden"
+  },
+  compactTileFill: {
+    borderRadius: 12,
+    height: "100%"
+  },
+  boostCard: {
+    borderCurve: "continuous",
+    borderRadius: 34,
+    borderWidth: 1,
+    gap: 13,
+    overflow: "hidden",
+    padding: 15,
+    boxShadow: "0 18px 36px rgba(31, 34, 40, 0.08)"
+  },
+  boostGlow: {
+    borderRadius: 80,
+    height: 126,
+    opacity: 0.12,
+    position: "absolute",
+    right: -42,
+    top: -52,
+    width: 126
+  },
+  boostTopRow: {
+    alignItems: "flex-start",
+    flexDirection: "row",
+    gap: 12
+  },
+  boostIcon: {
+    alignItems: "center",
+    borderRadius: 22,
+    height: 44,
+    justifyContent: "center",
+    width: 44
+  },
+  boostCopy: {
+    flex: 1,
+    gap: 5
+  },
+  boostTitle: {
+    color: colors.text,
+    fontFamily: fonts.extraBold,
+    fontSize: 17,
+    fontWeight: "800",
+    lineHeight: 22
+  },
+  boostBody: {
+    color: colors.textMuted,
+    fontFamily: fonts.medium,
+    fontSize: 13,
+    lineHeight: 18
+  },
+  boostAction: {
+    alignItems: "center",
+    alignSelf: "stretch",
+    backgroundColor: "rgba(255,255,255,0.78)",
+    borderRadius: 24,
+    borderWidth: 1,
+    flexDirection: "row",
+    gap: 8,
+    justifyContent: "center",
+    minHeight: 48,
+    paddingHorizontal: 14
+  },
+  boostActionText: {
+    fontFamily: fonts.extraBold,
+    fontSize: 14,
+    fontWeight: "800",
+    lineHeight: 18
   },
   onboardingPanel: {
     borderColor: "#FFFFFF",
