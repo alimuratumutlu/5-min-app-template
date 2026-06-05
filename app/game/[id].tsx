@@ -147,6 +147,7 @@ export default function GameDetailScreen() {
   const [shieldRule, setShieldRule] = useState("");
 
   const step = lessonSteps[stepIndex];
+  const needsManualCheck = step.type === "match" || step.type === "order" || step.type === "drop" || step.type === "text";
   const completedCount = useMemo(
     () =>
       [
@@ -168,6 +169,44 @@ export default function GameDetailScreen() {
       return;
     }
     router.replace("/session");
+  };
+
+  const answerChoice = (value: string) => {
+    setChoice(value);
+    setFeedback(
+      value === choiceOptions[1]
+        ? { kind: "correct", title: "Correct", body: "Small next action first. That keeps the daily run playable." }
+        : { kind: "wrong", title: "Try again", body: "The app should avoid heavy setup before the 5-minute session starts." }
+    );
+  };
+
+  const answerAudio = (value: string) => {
+    setAudioChoice(value);
+    setFeedback(
+      value === audioOptions[0]
+        ? { kind: "correct", title: "Heard correctly", body: "Voice instruction can drive the same game loop." }
+        : { kind: "wrong", title: "Listen again", body: "The spoken instruction is: Start the timer now." }
+    );
+  };
+
+  const assessCheckin = (nextEnergy: number, nextShieldRule: string) => {
+    if (nextEnergy > 0 && nextShieldRule) {
+      setFeedback(
+        nextEnergy >= 3 && nextShieldRule === "Spend shield only if combo breaks"
+          ? { kind: "correct", title: "Daily check-in saved", body: "Habit data and shield rule are ready for today." }
+          : { kind: "wrong", title: "Incomplete check-in", body: "Pick energy 3+ and the correct shield rule." }
+      );
+    }
+  };
+
+  const chooseEnergy = (value: number) => {
+    setEnergy(value);
+    assessCheckin(value, shieldRule);
+  };
+
+  const chooseShieldRule = (value: string) => {
+    setShieldRule(value);
+    assessCheckin(energy, value);
   };
 
   const pairLeft = (left: string) => {
@@ -233,7 +272,7 @@ export default function GameDetailScreen() {
       title="Focus Sprint"
       subtitle="Daily update test"
       activeDomain="SkillQuest"
-      footer={<GameFooter feedback={feedback} onCheck={submit} onContinue={continueLesson} isFinalStep={stepIndex === lessonSteps.length - 1} />}
+      footer={<GameFooter feedback={feedback} onCheck={submit} onContinue={continueLesson} isFinalStep={stepIndex === lessonSteps.length - 1} needsManualCheck={needsManualCheck} />}
     >
       <View style={styles.topBar}>
         <IconButton icon={ArrowLeft} label="Go back" tone="dark" onPress={goBack} />
@@ -260,7 +299,7 @@ export default function GameDetailScreen() {
 
       <QuestionCard step={step}>
         {step.type === "choice" ? (
-          <ChoiceQuestion selected={choice} onSelect={setChoice} />
+          <ChoiceQuestion selected={choice} onSelect={answerChoice} />
         ) : step.type === "match" ? (
           <MatchQuestion leftPick={leftPick} matchedPairs={matchedPairs} onLeft={pairLeft} onRight={pairRight} />
         ) : step.type === "order" ? (
@@ -270,9 +309,9 @@ export default function GameDetailScreen() {
         ) : step.type === "text" ? (
           <TextQuestion value={typedAnswer} onChange={setTypedAnswer} />
         ) : step.type === "audio" ? (
-          <AudioQuestion selected={audioChoice} onSelect={setAudioChoice} />
+          <AudioQuestion selected={audioChoice} onSelect={answerAudio} />
         ) : (
-          <CheckinQuestion energy={energy} shieldRule={shieldRule} onEnergy={setEnergy} onShieldRule={setShieldRule} />
+          <CheckinQuestion energy={energy} shieldRule={shieldRule} onEnergy={chooseEnergy} onShieldRule={chooseShieldRule} />
         )}
       </QuestionCard>
     </AppScreen>
@@ -580,13 +619,16 @@ function GameFooter({
   feedback,
   onCheck,
   onContinue,
-  isFinalStep
+  isFinalStep,
+  needsManualCheck
 }: {
   feedback: Feedback;
   onCheck: () => void;
   onContinue: () => void;
   isFinalStep: boolean;
+  needsManualCheck: boolean;
 }) {
+  const showPrimaryAction = Boolean(feedback) || needsManualCheck;
   return (
     <View style={styles.footerStack}>
       <View style={[styles.feedbackPanel, feedback?.kind === "correct" ? styles.feedbackCorrect : feedback?.kind === "wrong" ? styles.feedbackWrong : null]}>
@@ -611,21 +653,23 @@ function GameFooter({
             </View>
             <View style={{ flex: 1, gap: 2 }}>
               <Text selectable style={styles.feedbackTitle}>
-                Ready to check
+                {needsManualCheck ? "Ready to check" : "Answer to continue"}
               </Text>
               <Text selectable style={styles.feedbackBody}>
-                Answer the current question, then check it here.
+                {needsManualCheck ? "Answer the current question, then check it here." : "This question gives instant feedback after selection."}
               </Text>
             </View>
           </View>
         )}
-        <Button
-          label={feedback ? (feedback.kind === "correct" ? (isFinalStep ? "Finish run" : "Continue") : "Try again") : "Check answer"}
-          icon={feedback?.kind === "correct" ? Check : Sparkles}
-          onPress={feedback ? onContinue : onCheck}
-          variant={feedback?.kind === "wrong" ? "secondary" : "primary"}
-          fullWidth
-        />
+        {showPrimaryAction ? (
+          <Button
+            label={feedback ? (feedback.kind === "correct" ? (isFinalStep ? "Finish run" : "Continue") : "Try again") : "Check answer"}
+            icon={feedback?.kind === "correct" ? Check : Sparkles}
+            onPress={feedback ? onContinue : onCheck}
+            variant={feedback?.kind === "wrong" ? "secondary" : "primary"}
+            fullWidth
+          />
+        ) : null}
       </View>
       <GameBottomNav />
     </View>
