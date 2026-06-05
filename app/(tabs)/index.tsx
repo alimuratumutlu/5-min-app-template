@@ -1,10 +1,11 @@
 import { useMemo, useState } from "react";
 import { useRouter } from "expo-router";
-import { Bell, Crown, Flame, Gamepad2, Gift, ShieldCheck, Sparkles, Star, Zap } from "lucide-react-native";
+import { Bell, Crown, Flame, Gamepad2, Gift, Route, ShieldCheck, Sparkles, Star, Zap } from "lucide-react-native";
 import { Text, View } from "react-native";
 import {
   AppScreen,
   BoostCard,
+  Button,
   Card,
   CompactTile,
   DomainCarousel,
@@ -83,6 +84,7 @@ export default function HomeScreen() {
           <Gift color="#FFB800" size={30} strokeWidth={2.7} />
         </View>
         <RewardStrip items={rewardTrack} />
+        <Button label="Open onboarding lab" icon={Route} variant="secondary" onPress={() => router.push("/onboarding")} />
       </Card>
 
       <View style={{ gap: 10 }}>
