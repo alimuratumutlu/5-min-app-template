@@ -200,6 +200,8 @@ function ExampleSurface({ mechanic }: { mechanic: InputMechanic }) {
         <SwipePreview mechanic={mechanic} />
       ) : mode === "branch" ? (
         <BranchPreview mechanic={mechanic} />
+      ) : mode === "bucket" ? (
+        <BucketSortPreview mechanic={mechanic} />
       ) : mode === "location" ? (
         <LocationPreview mechanic={mechanic} selected={selected} onSelect={setSelected} />
       ) : mode === "partner" ? (
@@ -384,6 +386,74 @@ function RankPreview({ mechanic }: { mechanic: InputMechanic }) {
           </Text>
         </View>
       ))}
+    </View>
+  );
+}
+
+function BucketSortPreview({ mechanic }: { mechanic: InputMechanic }) {
+  const tokens = buildOptions(mechanic);
+  const zones = buildBucketZones(mechanic);
+  const [selectedToken, setSelectedToken] = useState(tokens[0] ?? "Signal");
+  const [placements, setPlacements] = useState<Record<string, string>>(() => ({
+    [tokens[1] ?? "Context"]: zones[1] ?? zones[0]
+  }));
+
+  const placeToken = (zone: string) => {
+    setPlacements((current) => ({ ...current, [selectedToken]: zone }));
+  };
+
+  return (
+    <View style={styles.bucketBoard}>
+      <View style={styles.bucketTokenTray}>
+        {tokens.map((token) => {
+          const active = selectedToken === token;
+          return (
+            <Pressable key={token} onPress={() => setSelectedToken(token)} style={({ pressed }) => [styles.bucketToken, active ? styles.bucketTokenActive : null, pressed ? styles.pressed : null]}>
+              <Text selectable style={[styles.bucketTokenText, active ? styles.bucketTokenTextActive : null]}>
+                {token}
+              </Text>
+            </Pressable>
+          );
+        })}
+      </View>
+
+      <Text selectable style={styles.bucketHint}>
+        Tap a token, then tap a bucket.
+      </Text>
+
+      <View style={styles.bucketZoneStack}>
+        {zones.map((zone) => {
+          const assigned = tokens.filter((token) => placements[token] === zone);
+          const target = placements[selectedToken] === zone;
+          return (
+            <Pressable key={zone} onPress={() => placeToken(zone)} style={({ pressed }) => [styles.bucketZone, target ? styles.bucketZoneActive : null, pressed ? styles.pressed : null]}>
+              <View style={styles.bucketZoneHeader}>
+                <Text selectable style={[styles.bucketZoneTitle, target ? styles.bucketZoneTitleActive : null]}>
+                  {zone}
+                </Text>
+                <Text selectable style={[styles.bucketZoneCount, target ? styles.bucketZoneCountActive : null]}>
+                  {assigned.length}
+                </Text>
+              </View>
+              <View style={styles.bucketAssignedRail}>
+                {assigned.length ? (
+                  assigned.map((token) => (
+                    <View key={token} style={styles.bucketAssignedChip}>
+                      <Text selectable style={styles.bucketAssignedText}>
+                        {token}
+                      </Text>
+                    </View>
+                  ))
+                ) : (
+                  <Text selectable style={styles.bucketEmptyText}>
+                    Drop here
+                  </Text>
+                )}
+              </View>
+            </Pressable>
+          );
+        })}
+      </View>
     </View>
   );
 }
@@ -573,6 +643,14 @@ function RoutePreview({ mechanic }: { mechanic: InputMechanic }) {
       ))}
     </View>
   );
+}
+
+function buildBucketZones(mechanic: InputMechanic) {
+  const text = `${mechanic.title} ${mechanic.pattern} ${mechanic.captures}`.toLowerCase();
+  if (text.includes("triage") || text.includes("red flag")) return ["Normal", "Watch", "Urgent"];
+  if (text.includes("pantry") || text.includes("expiry")) return ["Use today", "Soon", "Safe"];
+  if (text.includes("risk")) return ["Input", "Risk", "Output"];
+  return ["Now", "Watch", "Later"];
 }
 
 function JournalPreview({ note, onNote }: { note: string; onNote: (value: string) => void }) {
@@ -1028,6 +1106,116 @@ const styles = StyleSheet.create({
     fontFamily: fonts.black,
     fontSize: 16,
     fontWeight: "900"
+  },
+  bucketBoard: {
+    backgroundColor: "#F6FAFF",
+    borderColor: "#DDEBFF",
+    borderCurve: "continuous",
+    borderRadius: 28,
+    borderWidth: 1,
+    gap: 12,
+    padding: 14
+  },
+  bucketTokenTray: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 8
+  },
+  bucketToken: {
+    backgroundColor: "#FFFFFF",
+    borderColor: "#E1E8F2",
+    borderRadius: 22,
+    borderWidth: 2,
+    paddingHorizontal: 13,
+    paddingVertical: 10,
+    boxShadow: "0 5px 0 rgba(216,223,232,0.9)"
+  },
+  bucketTokenActive: {
+    backgroundColor: colors.blue,
+    borderColor: colors.blue,
+    boxShadow: "0 5px 0 rgba(24,93,205,0.9)"
+  },
+  bucketTokenText: {
+    color: colors.text,
+    fontFamily: fonts.black,
+    fontSize: 13,
+    fontWeight: "900",
+    lineHeight: 16
+  },
+  bucketTokenTextActive: {
+    color: "#FFFFFF"
+  },
+  bucketHint: {
+    color: colors.textMuted,
+    fontFamily: fonts.bold,
+    fontSize: 12,
+    fontWeight: "700",
+    lineHeight: 15
+  },
+  bucketZoneStack: {
+    gap: 10
+  },
+  bucketZone: {
+    backgroundColor: "#FFFFFF",
+    borderColor: "#E1E8F2",
+    borderRadius: 25,
+    borderWidth: 2,
+    gap: 10,
+    minHeight: 92,
+    padding: 13
+  },
+  bucketZoneActive: {
+    backgroundColor: "#ECFFF7",
+    borderColor: colors.green
+  },
+  bucketZoneHeader: {
+    alignItems: "center",
+    flexDirection: "row",
+    justifyContent: "space-between"
+  },
+  bucketZoneTitle: {
+    color: colors.text,
+    fontFamily: fonts.black,
+    fontSize: 16,
+    fontWeight: "900",
+    lineHeight: 19
+  },
+  bucketZoneTitleActive: {
+    color: colors.green
+  },
+  bucketZoneCount: {
+    color: colors.textMuted,
+    fontFamily: fonts.black,
+    fontSize: 13,
+    fontWeight: "900"
+  },
+  bucketZoneCountActive: {
+    color: colors.green
+  },
+  bucketAssignedRail: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 7
+  },
+  bucketAssignedChip: {
+    backgroundColor: colors.green,
+    borderRadius: 17,
+    paddingHorizontal: 10,
+    paddingVertical: 7
+  },
+  bucketAssignedText: {
+    color: "#FFFFFF",
+    fontFamily: fonts.black,
+    fontSize: 12,
+    fontWeight: "900",
+    lineHeight: 14
+  },
+  bucketEmptyText: {
+    color: colors.textMuted,
+    fontFamily: fonts.bold,
+    fontSize: 13,
+    fontWeight: "700",
+    lineHeight: 16
   },
   swipeDeck: {
     minHeight: 158,

@@ -5,6 +5,7 @@ export type MechanicPreviewMode =
   | "avatar"
   | "body-map"
   | "branch"
+  | "bucket"
   | "builder"
   | "calendar"
   | "choice"
@@ -41,7 +42,8 @@ export function getMechanicPreviewMode(mechanic: InputMechanic): MechanicPreview
   if (hasAny(text, ["match", "pair", "concepts to outcomes"])) return "match";
   if (hasAny(text, ["missing slot", "blank", "fill one blank"])) return "builder";
   if (hasAny(text, ["builder", "build a boundary", "emergency card builder"])) return "builder";
-  if (hasAny(text, ["timeline", "sort", "bucket", "triage", "slot", "drop", "drag", "move tokens", "tokens across", "budget", "impact/effort grid", "place options"])) return "rank";
+  if (hasAny(text, ["drag sort", "move tokens into buckets", "bucket", "triage"])) return "bucket";
+  if (hasAny(text, ["timeline", "sort", "slot", "drop", "drag", "move tokens", "tokens across", "budget", "impact/effort grid", "place options"])) return "rank";
   if (hasAny(text, ["stamp", "tap activity icons", "activity stamp", "dose confirm", "kick count", "confirm medicine", "tile flip", "spark capture"])) return "stamp";
   if (hasAny(text, ["multi pick", "chip tray", "chips", "selectable", "tiles", "tag cloud", "symptom tiles", "side-effect chips"])) return "multi";
   if (hasAny(text, ["location", "environment", "commute", "room map", "trigger map", "budget map"])) return "location";
@@ -72,6 +74,13 @@ export function buildMechanicMultiOptions(mechanic: InputMechanic) {
 export function buildMechanicSampleValue(mechanic: InputMechanic) {
   const mode = getMechanicPreviewMode(mechanic);
   if (mode === "multi") return buildMechanicOptions(mechanic).slice(0, 2);
+  if (mode === "bucket") {
+    const options = buildMechanicOptions(mechanic);
+    return {
+      [options[0] ?? "Signal"]: "Input",
+      [options[1] ?? "Context"]: "Risk"
+    };
+  }
   if (mechanic.effort === "rich") return "media-or-voice-capture-ready";
   if (mechanic.effort === "short") return buildMechanicOptions(mechanic).join(" + ");
   return buildMechanicOptions(mechanic)[0];

@@ -51,6 +51,7 @@ assert(new Set(previewModes).size >= 20, "mechanics detail pages must not collap
 
 const expectedPreviewModes = new Map([
   ["Multi Pick Tray", "multi"],
+  ["Drag Sort", "bucket"],
   ["Pair Match", "match"],
   ["Listen And Choose", "listen"],
   ["Picture Flashcard", "picture"],
@@ -62,6 +63,7 @@ const expectedPreviewModes = new Map([
   ["Token Budget", "rank"],
   ["Skin Diary Shot", "media"],
   ["Side Effect Chips", "multi"],
+  ["Red Flag Triage", "bucket"],
   ["Social Trigger Map", "location"],
   ["Boundary Script Builder", "builder"]
 ]);
