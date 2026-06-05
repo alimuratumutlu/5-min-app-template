@@ -564,12 +564,13 @@ const styles = StyleSheet.create({
     paddingTop: 8
   },
   headerBlur: {
-    borderRadius: 8,
+    borderRadius: 28,
     borderCurve: "continuous",
-    borderColor: "rgba(255, 255, 255, 0.72)",
-    borderWidth: 1,
+    borderColor: "rgba(255, 255, 255, 0.22)",
+    borderWidth: 0,
+    backgroundColor: "rgba(240, 241, 240, 0.28)",
     overflow: "hidden",
-    boxShadow: "0 12px 34px rgba(18, 20, 22, 0.08)"
+    boxShadow: "0 8px 22px rgba(18, 20, 22, 0.04)"
   },
   headerContent: {
     alignItems: "center",
@@ -582,10 +583,10 @@ const styles = StyleSheet.create({
   logoMark: {
     alignItems: "center",
     backgroundColor: colors.coralSoft,
-    borderRadius: 8,
-    height: 38,
+    borderRadius: 20,
+    height: 40,
     justifyContent: "center",
-    width: 38
+    width: 40
   },
   headerCopy: {
     flex: 1,
@@ -611,13 +612,14 @@ const styles = StyleSheet.create({
   },
   levelPill: {
     alignItems: "center",
-    backgroundColor: colors.surface,
-    borderColor: colors.border,
-    borderRadius: 8,
+    backgroundColor: "rgba(255,255,255,0.78)",
+    borderColor: "rgba(255,255,255,0.88)",
+    borderRadius: 24,
     borderWidth: 1,
-    gap: 3,
-    minWidth: 82,
-    paddingHorizontal: 8,
+    flexDirection: "row",
+    gap: 6,
+    minHeight: 38,
+    paddingHorizontal: 12,
     paddingVertical: 6
   },
   levelText: {
@@ -644,12 +646,12 @@ const styles = StyleSheet.create({
     right: 0
   },
   card: {
-    borderRadius: 8,
+    borderRadius: 22,
     borderCurve: "continuous",
     borderWidth: 1,
     gap: 11,
     padding: 14,
-    boxShadow: "0 14px 32px rgba(22, 24, 24, 0.06)"
+    boxShadow: "0 16px 32px rgba(22, 24, 24, 0.08)"
   },
   metricCard: {
     flex: 1,
@@ -680,7 +682,7 @@ const styles = StyleSheet.create({
   },
   button: {
     alignItems: "center",
-    borderRadius: 8,
+    borderRadius: 24,
     borderCurve: "continuous",
     borderWidth: 1,
     flexDirection: "row",
@@ -712,7 +714,7 @@ const styles = StyleSheet.create({
   },
   iconButton: {
     alignItems: "center",
-    borderRadius: 8,
+    borderRadius: 22,
     borderWidth: 1,
     height: 42,
     justifyContent: "center",
@@ -755,7 +757,7 @@ const styles = StyleSheet.create({
     paddingRight: 16
   },
   carouselCard: {
-    borderRadius: 8,
+    borderRadius: 24,
     borderWidth: 1,
     gap: 9,
     height: 228,
@@ -773,7 +775,7 @@ const styles = StyleSheet.create({
   },
   carouselIcon: {
     alignItems: "center",
-    borderRadius: 8,
+    borderRadius: 18,
     height: 34,
     justifyContent: "center",
     position: "absolute",
@@ -808,7 +810,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: colors.surface,
     borderColor: "rgba(255,255,255,0.88)",
-    borderRadius: 8,
+    borderRadius: 24,
     borderWidth: 1,
     flex: 1,
     flexDirection: "row",
@@ -829,7 +831,7 @@ const styles = StyleSheet.create({
   segmentPill: {
     backgroundColor: colors.surface,
     borderColor: colors.border,
-    borderRadius: 8,
+    borderRadius: 20,
     borderWidth: 1,
     minHeight: 38,
     justifyContent: "center",
@@ -849,7 +851,7 @@ const styles = StyleSheet.create({
   },
   heroPoster: {
     backgroundColor: colors.ink,
-    borderRadius: 8,
+    borderRadius: 28,
     borderCurve: "continuous",
     height: 312,
     overflow: "hidden",
@@ -866,7 +868,7 @@ const styles = StyleSheet.create({
   heroBadge: {
     alignItems: "center",
     alignSelf: "flex-start",
-    borderRadius: 8,
+    borderRadius: 18,
     flexDirection: "row",
     gap: 6,
     paddingHorizontal: 10,
@@ -895,7 +897,7 @@ const styles = StyleSheet.create({
   heroAction: {
     alignItems: "center",
     backgroundColor: "#FFFFFF",
-    borderRadius: 8,
+    borderRadius: 20,
     bottom: 16,
     height: 46,
     justifyContent: "center",
@@ -904,7 +906,7 @@ const styles = StyleSheet.create({
     width: 46
   },
   compactTile: {
-    borderRadius: 8,
+    borderRadius: 22,
     borderWidth: 1,
     gap: 8,
     minHeight: 126,
@@ -924,7 +926,7 @@ const styles = StyleSheet.create({
   },
   onboardingPanel: {
     borderColor: "#FFFFFF",
-    borderRadius: 8,
+    borderRadius: 24,
     borderWidth: 1,
     gap: 13,
     overflow: "hidden",
@@ -956,7 +958,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: colors.surface,
     borderColor: colors.border,
-    borderRadius: 8,
+    borderRadius: 18,
     borderWidth: 1,
     flexDirection: "row",
     gap: 5,
@@ -976,7 +978,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: colors.surface,
     borderColor: colors.border,
-    borderRadius: 8,
+    borderRadius: 22,
     borderWidth: 1,
     flexDirection: "row",
     gap: 10,
@@ -1005,7 +1007,7 @@ const styles = StyleSheet.create({
   },
   tabIconWrap: {
     alignItems: "center",
-    borderRadius: 8,
+    borderRadius: 22,
     height: 38,
     justifyContent: "center",
     width: 44

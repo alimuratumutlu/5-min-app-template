@@ -1,26 +1,26 @@
-# 5-Min App Template Requirements
+# Solara Trips Requirements
 
 ## Product Brief
 
-Reusable Expo Router product shell for the HASSAR 5-minute app portfolio. The template exists to mature onboarding, header, bottom navigation, carousel, session workflow, analytics, bookmarks, profile, and detail-route experience before connecting production services.
+Solara Trips is a fictional travel discovery and booking app used as the reference product for the HASSAR mobile shell. It exists to mature header, bottom navigation, search, category pills, destination poster cards, booking workflow, analytics, bookmarks, profile, and detail-route experience before connecting production services.
 
 ## Target User
 
-- HASSAR agents generating new `5-min-*` mobile apps.
+- HASSAR agents generating mobile apps.
 - Founder/operator reviewing app UX standards before scaling app generation.
 - Future product variants that need Clerk auth, Cloudflare D1 records, Cloudflare R2 assets, analytics, and monetization without redesigning the shell.
 
 ## Core User Flow
 
-1. User sees a compact onboarding preview explaining app job, five-minute loop, and platform stack.
-2. Home answers what to do now with state, progress, next action, carousel domain preview, and recommendations.
-3. Session tab runs the strongest action surface: input, generated brief, save path, result preview, and step progress.
-4. Analytics shows session result metrics, score/level, progress, trend, and validation signals.
-5. Bookmarks shows real saved/favorite/resumable outputs, not an empty placeholder.
-6. Profile shows avatar, personalization, settings, account/subscription surface, and score.
+1. User searches destinations and selects a region.
+2. Home shows the next trip, destination poster, tour carousel, travel services, and recommendations.
+3. Booking tab runs the strongest action surface: input, generated trip brief, save path, result preview, and step progress.
+4. Analytics shows trip result metrics, reward level, progress, trend, and booking signals.
+5. Bookmarks shows real saved/favorite/resumable trips, not an empty placeholder.
+6. Profile shows avatar, personalization, settings, account/rewards surface, and score.
 7. Detail routes prove rows/cards/buttons are not inert.
 
-## Template Boundary
+## Product Boundary
 
 This is not yet a backend-integrated production app. The point is to establish the product shell and interaction standard first. Clerk, D1, R2, payment, and analytics are intentionally represented as adapter seams under `lib/platform-adapters.ts`.
 
@@ -30,7 +30,7 @@ This is not yet a backend-integrated production app. The point is to establish t
 - Blurred/glass inset header with logo, level, and points.
 - Blurred/glass inset bottom nav with active icon state.
 - Reusable `AppScreen`, `ScreenScaffold`, `AppHeader`, `Card`, `Button`, `IconButton`, `Metric`, `ProgressStatus`, `DomainCarousel`, `OnboardingFlow`, and `ListRow`.
-- Domain adapter data so agents can turn the shell into focus, health, learning, family, or work apps by replacing content, not structure.
+- Travel adapter data so agents can replace content without changing structure.
 - Internal detail route for saved outputs, recommendations, metrics, and profile rows.
 - Local-first demo data with clear adapter points for Clerk and Cloudflare.
 

@@ -26,7 +26,7 @@ const routes = [
 ].map(read).join("\n");
 
 assert((templateData.match(/key: "/g) ?? []).length === 5, "template must expose five domain concepts");
-assert((templateData.match(/eyebrow: "Step/g) ?? []).length === 3, "onboarding must have three reviewable steps");
+assert((templateData.match(/eyebrow: "/g) ?? []).length >= 3, "travel preference flow must have reviewable steps");
 assert((templateData.match(/score:/g) ?? []).length >= 3, "template must include non-empty session results");
 assert((templateData.match(/reason:/g) ?? []).length >= 3, "template must include domain-specific recommendations");
 assert((templateData.match(/delta:/g) ?? []).length >= 4, "analytics must include meaningful metrics");
@@ -34,6 +34,7 @@ assert(adapters.includes("Clerk"), "Clerk adapter note missing");
 assert(adapters.includes("D1"), "Cloudflare D1 adapter note missing");
 assert(adapters.includes("R2"), "Cloudflare R2 adapter note missing");
 assert(shell.includes("BlurView") && shell.includes("levelPill") && shell.includes("points"), "header shell signals missing");
+assert(templateData.includes("Solara") || routes.includes("Solara"), "Solara Trips product identity missing");
 assert(routes.includes("router.push"), "actionable route navigation missing");
 
-console.log("5-min app template smoke checks passed.");
+console.log("Solara Trips smoke checks passed.");

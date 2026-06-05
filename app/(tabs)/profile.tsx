@@ -10,7 +10,7 @@ export default function ProfileScreen() {
   const [personalized, setPersonalized] = useState(true);
 
   return (
-    <AppScreen title="Profile" subtitle="Avatar, settings, personalization, account" activeDomain="Account">
+    <AppScreen title="Traveler profile" subtitle="Preferences, rewards, and account" activeDomain="Solara Trips">
       <Card>
         <View style={{ flexDirection: "row", alignItems: "center", gap: 13 }}>
           <View
@@ -31,10 +31,10 @@ export default function ProfileScreen() {
           </View>
           <View style={{ flex: 1, gap: 4 }}>
             <Text selectable style={textStyles.cardTitle}>
-              Murat Umutlu
+              Vanessa Moreau
             </Text>
             <Text selectable style={textStyles.body}>
-              Profile image/avatar active. {userProgress.level}, {userProgress.points} points, {userProgress.streak} day streak.
+              Profile image/avatar active. {userProgress.level}, {userProgress.points.toLocaleString()} miles, {userProgress.streak} trip streak.
             </Text>
           </View>
           <IconButton icon={Palette} label="Edit personalization" onPress={() => router.push("/details/cloudflare-ready")} />
@@ -42,18 +42,18 @@ export default function ProfileScreen() {
       </Card>
 
       <View style={{ flexDirection: "row", flexWrap: "wrap", justifyContent: "space-between", gap: 10 }}>
-        <CompactTile title="2k" body="Profile events and app actions." tone="blue" icon={UserRoundCheck} onPress={() => router.push("/details/onboarding-lab")} />
-        <CompactTile title="7 apps" body="Reusable shell variants tested." tone="coral" icon={Palette} onPress={() => router.push("/details/carousel-lab")} />
+        <CompactTile title="2k" body="Traveler signals and saved preferences." tone="blue" icon={UserRoundCheck} onPress={() => router.push("/details/onboarding-lab")} />
+        <CompactTile title="7 trips" body="Routes compared this season." tone="coral" icon={Palette} onPress={() => router.push("/details/carousel-lab")} />
       </View>
 
       <Card tone="green">
         <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", gap: 12 }}>
           <View style={{ flex: 1, gap: 5 }}>
             <Text selectable style={textStyles.cardTitle}>
-              Personalization preferences
+              Travel preferences
             </Text>
             <Text selectable style={textStyles.body}>
-              Adapt recommendations by business model, interests, domain, and saved session behavior.
+              Adapt recommendations by hotel mood, route pace, guide style, and saved trip behavior.
             </Text>
           </View>
           <Switch value={personalized} onValueChange={setPersonalized} />
@@ -63,18 +63,18 @@ export default function ProfileScreen() {
 
       <View style={{ gap: 10 }}>
         <Text selectable style={textStyles.sectionTitle}>
-          Settings and subscription
+          Settings and rewards
         </Text>
-        <ListRow title="Preferred business model" body={domains.map((domain) => domain.shortTitle).join(", ")} meta="personalization" onPress={() => router.push("/details/onboarding-lab")} />
-        <ListRow title="Privacy and local-first mode" body="Keep sensitive session output local until Clerk and Cloudflare storage are attached." meta="settings" onPress={() => router.push("/details/cloudflare-ready")} />
-        <ListRow title="Subscription surface" body="Upgrade, trial, and account limits can live here after the core UX matures." meta="account subscription" onPress={() => router.push("/details/carousel-lab")} />
+        <ListRow title="Preferred destinations" body={domains.map((domain) => domain.shortTitle).join(", ")} meta="personalization" onPress={() => router.push("/details/onboarding-lab")} />
+        <ListRow title="Privacy and trip documents" body="Keep passport notes, saved cards, and itinerary output protected." meta="settings" onPress={() => router.push("/details/cloudflare-ready")} />
+        <ListRow title="Rewards membership" body="Upgrade, lounge perks, flexible holds, and account limits live here." meta="account subscription" onPress={() => router.push("/details/carousel-lab")} />
       </View>
 
       <View style={{ flexDirection: "row", gap: 10 }}>
         <Button label="Notifications" icon={Bell} variant="secondary" onPress={() => router.push("/details/onboarding-lab")} />
         <Button label="Billing" icon={CreditCard} variant="secondary" onPress={() => router.push("/details/carousel-lab")} />
       </View>
-      <Button label="Security review" icon={ShieldCheck} variant="quiet" onPress={() => router.push("/details/cloudflare-ready")} />
+      <Button label="Travel document security" icon={ShieldCheck} variant="quiet" onPress={() => router.push("/details/cloudflare-ready")} />
     </AppScreen>
   );
 }

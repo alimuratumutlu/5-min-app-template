@@ -19,7 +19,7 @@ export default function TabsLayout() {
           right: 34,
           bottom: 16,
           height: 66,
-          borderRadius: 8,
+          borderRadius: 34,
           borderCurve: "continuous",
           borderWidth: 1,
           borderColor: "rgba(255,255,255,0.12)",

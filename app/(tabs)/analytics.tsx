@@ -8,7 +8,7 @@ export default function AnalyticsScreen() {
   const router = useRouter();
 
   return (
-    <AppScreen title="Analytics" subtitle="Performance metrics and session results" activeDomain="Stats">
+    <AppScreen title="Travel stats" subtitle="Trip performance and saved results" activeDomain="Solara Trips">
       <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 10 }}>
         {analyticsMetrics.map((metric) => (
           <Metric key={metric.label} label={metric.label} value={metric.value} delta={metric.delta} tone={metric.tone} />
@@ -16,18 +16,18 @@ export default function AnalyticsScreen() {
       </View>
 
       <View style={{ flexDirection: "row", flexWrap: "wrap", justifyContent: "space-between", gap: 10 }}>
-        <CompactTile title="Tour schedule" body="Session cadence and completion windows." tone="green" icon={Activity} onPress={() => router.push("/details/launch-plan")} />
+        <CompactTile title="Tour schedule" body="Booking cadence and completed result windows." tone="green" icon={Activity} onPress={() => router.push("/details/launch-plan")} />
         <CompactTile title="Rewards" body={`${userProgress.points} points with ${userProgress.streak} day streak.`} tone="gold" icon={Trophy} onPress={() => router.push("/details/carousel-lab")} />
-        <CompactTile title="Saved" body="Favorite outputs reused across sessions." tone="blue" icon={BookmarkCheck} onPress={() => router.push("/bookmarks")} />
-        <CompactTile title="Trend" body="Confidence and validation movement." tone="purple" icon={TrendingUp} onPress={() => router.push("/details/onboarding-lab")} />
+        <CompactTile title="Saved" body="Favorite trips, hotels, and guide outputs." tone="blue" icon={BookmarkCheck} onPress={() => router.push("/bookmarks")} />
+        <CompactTile title="Trend" body="Price alerts and route confidence movement." tone="purple" icon={TrendingUp} onPress={() => router.push("/details/onboarding-lab")} />
       </View>
 
       <Card tone="purple">
         <Text selectable style={textStyles.cardTitle}>
-          Weekly progress and confidence trend
+          Weekly trip confidence trend
         </Text>
         <Text selectable style={textStyles.body}>
-          Session result quality is improving because saved outputs are being reused instead of recreated.
+          Trip result quality is improving because saved hotels, guide notes, and route outputs are reused instead of recreated.
         </Text>
         <ProgressStatus label="confidence score" value={userProgress.confidence} tone="purple" />
         <ProgressStatus label="completion rate" value={userProgress.completionRate} tone="green" />
@@ -35,14 +35,14 @@ export default function AnalyticsScreen() {
 
       <View style={{ gap: 10 }}>
         <Text selectable style={textStyles.sectionTitle}>
-          Session results
+          Trip results
         </Text>
         {sessions.map((session) => (
           <ListRow
             key={session.id}
-            title={`${session.title} - score ${session.score}`}
+            title={`${session.title} - match ${session.score}`}
             body={session.insight}
-            meta={`${session.minutes} min completed result`}
+            meta={`${session.minutes} day completed result`}
             onPress={() => router.push(`/details/${session.id}`)}
           />
         ))}
@@ -50,12 +50,12 @@ export default function AnalyticsScreen() {
 
       <Card>
         <Text selectable style={textStyles.cardTitle}>
-          Validation trend
+          Booking trend
         </Text>
         <Text selectable style={textStyles.body}>
-          {recommendations.length} idea recommendation cards are connected to detail routes, saved output review, and the next session path.
+          {recommendations.length} travel recommendation cards are connected to detail routes, saved output review, and the next booking path.
         </Text>
-        <Button label="Review saved idea" variant="secondary" onPress={() => router.push("/details/onboarding-lab")} />
+        <Button label="Review saved route" variant="secondary" onPress={() => router.push("/details/onboarding-lab")} />
       </Card>
     </AppScreen>
   );

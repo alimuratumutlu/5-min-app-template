@@ -50,7 +50,7 @@
       {
         "command": "npm run start:check",
         "result": "passed",
-        "notes": "Template data, onboarding, metrics, adapter notes, shell signals, and route navigation checks passed."
+        "notes": "Solara Trips data, metrics, adapter notes, shell signals, and route navigation checks passed."
       },
       {
         "command": "npm run typecheck",
@@ -74,5 +74,5 @@
       }
     ]
   },
-  "next_action": "Use this template as the shell source for generated 5-min apps; next stage is store assets/ASO or backend adapter integration."
+  "next_action": "Use Solara Trips as the visual reference shell; next stage is store assets/ASO or backend adapter integration."
 }

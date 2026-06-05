@@ -19,7 +19,7 @@ export type TemplateRepository = {
 export const localDemoUser: AuthUser = {
   id: "demo-user",
   email: "murat@example.com",
-  displayName: "Murat"
+  displayName: "Vanessa"
 };
 
 export const localTemplateRepository: TemplateRepository = {

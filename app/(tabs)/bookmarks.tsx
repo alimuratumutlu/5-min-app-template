@@ -15,10 +15,10 @@ export default function BookmarksScreen() {
   }))];
 
   return (
-    <AppScreen title="Bookmarks" subtitle="Saved, favorite, and resumable outputs" activeDomain="Saved">
+    <AppScreen title="Saved trips" subtitle="Favorite tours, hotels, and routes" activeDomain="Solara Trips">
       <HeroPoster
-        title="Saved outputs"
-        subtitle="Resume the strongest brief, schedule, recommendation, or generated item."
+        title="Saved journeys"
+        subtitle="Resume the strongest tour brief, hotel shortlist, route map, or guide match."
         imageUrl={domains[2].imageUrl}
         accent={domains[2].accent}
         meta={`${savedOutputs.length} saved`}
@@ -27,24 +27,24 @@ export default function BookmarksScreen() {
 
       <Card tone="gold">
         <Text selectable style={textStyles.cardTitle}>
-          Empty state is handled, but this demo has saved outputs
+          Your travel shelf
         </Text>
         <Text selectable style={textStyles.body}>
-          A new product should show a helpful empty saved list first, then recent bookmark and favorite result rows as soon as one session completes.
+          Saved tours stay ready to compare, continue, review, or open before booking.
         </Text>
-        <Button label="Create new saved output" icon={Plus} onPress={() => router.push("/session")} />
+        <Button label="Create new trip" icon={Plus} onPress={() => router.push("/session")} />
       </Card>
 
       <View style={{ gap: 10 }}>
         <Text selectable style={textStyles.sectionTitle}>
-          Favorite saved items
+          Favorite routes
         </Text>
         {savedOutputs.map((item) => (
           <ListRow
             key={item.id}
             title={item.title}
             body={item.insight}
-            meta={`${item.status} output - continue or review`}
+            meta={`${item.status} trip output - continue or review`}
             onPress={() => router.push(`/details/${item.id}`)}
           />
         ))}

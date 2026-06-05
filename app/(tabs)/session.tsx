@@ -7,27 +7,27 @@ import { domains, sessions } from "@/lib/template-data";
 
 export default function SessionScreen() {
   const router = useRouter();
-  const [input, setInput] = useState("Build the reusable 5-min app shell");
+  const [input, setInput] = useState("Rio coast, private guide, quiet hotel, late dinner");
   const [step, setStep] = useState(2);
   const activeDomain = domains[0];
 
   return (
-    <AppScreen title="5-Min Session" subtitle="Primary action workflow" activeDomain="Main Action">
+    <AppScreen title="Book a tour" subtitle="Build one flexible itinerary" activeDomain="Solara Trips">
       <HeroPoster
-        title="Your next action, decoded"
-        subtitle="One input becomes one script, one timer, one saved result."
+        title="Iconic Brazil Adventure"
+        subtitle="Tour schedule, accommodation, and guide notes in one booking flow."
         imageUrl={activeDomain.imageUrl}
         accent={activeDomain.accent}
-        meta={`${step}/4 steps`}
+        meta={`${step}/4 booking steps`}
         onPress={() => setStep((value) => Math.min(4, value + 1))}
       />
 
       <Card tone="blue">
         <Text selectable style={textStyles.cardTitle}>
-          Generate the first useful output
+          Generate a tour schedule
         </Text>
         <Text selectable style={textStyles.body}>
-          This interaction surface models the user's main reason to open the app: enter one problem, get one brief, save one result.
+          Enter the travel task, pace, hotel preference, or booking problem and Solara creates a clear trip brief with a saved output path.
         </Text>
         <View style={{ gap: 8 }}>
           <Text selectable style={textStyles.small}>
@@ -38,7 +38,7 @@ export default function SessionScreen() {
             value={input}
             onChangeText={setInput}
             multiline
-            placeholder="Describe the task, signal, topic, customer problem, or decision..."
+            placeholder="Describe the destination, dates, pace, hotel mood, customer problem, or task..."
             style={{
               minHeight: 94,
               borderRadius: 8,
@@ -53,26 +53,26 @@ export default function SessionScreen() {
         </View>
         <ProgressStatus label={`step ${step} of 4 action workflow`} value={Math.round((step / 4) * 100)} />
         <View style={{ flexDirection: "row", gap: 10 }}>
-          <Button label="Generate brief" icon={WandSparkles} onPress={() => setStep((value) => Math.min(4, value + 1))} />
+          <Button label="Generate trip brief" icon={WandSparkles} onPress={() => setStep((value) => Math.min(4, value + 1))} />
           <Button label="Save" icon={Save} variant="secondary" onPress={() => router.push("/details/launch-plan")} />
         </View>
       </Card>
 
       <Card tone="green">
         <Text selectable style={textStyles.cardTitle}>
-          Completed output path
+          Completed booking output
         </Text>
         <Text selectable style={textStyles.body}>
-          Result brief: split the product shell from backend services, mature the UX first, then attach Clerk, D1, R2, analytics, and payments through adapters.
+          Result brief: airport transfer, Rio hotel, coast day, and early guide pickup are grouped into one reviewable itinerary.
         </Text>
         <Button label="Open saved result" icon={Clock3} variant="secondary" onPress={() => router.push(`/details/${sessions[0].id}`)} />
       </Card>
 
       <View style={{ gap: 10 }}>
         <Text selectable style={textStyles.sectionTitle}>
-          Session steps
+          Booking steps
         </Text>
-        {["Clarify problem", "Choose template domain", "Generate output", "Save and score"].map((title, index) => (
+        {["Choose destination", "Match accommodation", "Generate schedule", "Save booking result"].map((title, index) => (
           <Card key={title} tone={index + 1 <= step ? "gold" : "default"} onPress={() => setStep(index + 1)}>
             <Text selectable style={textStyles.cardTitle}>
               {index + 1}. {title}
