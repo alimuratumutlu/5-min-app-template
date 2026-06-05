@@ -394,7 +394,7 @@ function QuestionCard({ step, children }: { step: LessonStep; children: ReactNod
         <View style={styles.questionIcon}>
           <Icon color="#FFFFFF" size={20} strokeWidth={3} />
         </View>
-        <View style={{ flex: 1, gap: 5 }}>
+        <View style={styles.questionCopy}>
           <Text selectable style={styles.questionTitle}>
             {step.title}
           </Text>
@@ -767,17 +767,20 @@ const styles = StyleSheet.create({
     paddingVertical: 10
   },
   questionHeader: {
-    alignItems: "center",
-    flexDirection: "row",
-    gap: 12
+    alignItems: "flex-start",
+    gap: 10
   },
   questionIcon: {
     alignItems: "center",
     backgroundColor: colors.blue,
-    borderRadius: 24,
-    height: 50,
+    borderRadius: 22,
+    height: 46,
     justifyContent: "center",
-    width: 50
+    width: 46
+  },
+  questionCopy: {
+    gap: 5,
+    width: "100%"
   },
   questionTitle: {
     color: colors.text,
@@ -794,7 +797,7 @@ const styles = StyleSheet.create({
   },
   questionSurface: {
     flex: 1,
-    justifyContent: "center"
+    justifyContent: "flex-start"
   },
   stack: {
     gap: 12
