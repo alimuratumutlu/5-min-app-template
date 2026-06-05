@@ -233,11 +233,26 @@ export default function GameDetailScreen() {
     setOrder([...order, word]);
   };
 
+  const chooseDropToken = (token: string) => {
+    setActiveToken(activeToken === token ? "" : token);
+    setFeedback(null);
+  };
+
   const dropIntoZone = (zone: string) => {
-    if (!activeToken) return;
+    if (!activeToken) {
+      const removedToken = dropState[zone];
+      if (!removedToken) return;
+      const nextDrop = { ...dropState };
+      delete nextDrop[zone];
+      setDropState(nextDrop);
+      setActiveToken(removedToken);
+      setFeedback(null);
+      return;
+    }
     const nextDrop = Object.fromEntries(Object.entries(dropState).filter(([, token]) => token !== activeToken));
     setDropState({ ...nextDrop, [zone]: activeToken });
     setActiveToken("");
+    setFeedback(null);
   };
 
   const submit = () => {
@@ -305,7 +320,7 @@ export default function GameDetailScreen() {
         ) : step.type === "order" ? (
           <OrderQuestion order={order} onWord={chooseWord} />
         ) : step.type === "drop" ? (
-          <DropQuestion activeToken={activeToken} dropState={dropState} onToken={setActiveToken} onDrop={dropIntoZone} />
+          <DropQuestion activeToken={activeToken} dropState={dropState} onToken={chooseDropToken} onDrop={dropIntoZone} />
         ) : step.type === "text" ? (
           <TextQuestion value={typedAnswer} onChange={setTypedAnswer} />
         ) : step.type === "audio" ? (
@@ -492,9 +507,9 @@ function DropQuestion({
         {dropTokens.map((token) => {
           const placed = placedTokens.includes(token);
           return (
-            <Pressable key={token} disabled={placed} onPress={() => onToken(token)} style={({ pressed }) => [styles.dragToken, activeToken === token ? styles.dragTokenActive : null, placed ? styles.dragTokenPlaced : null, pressed ? styles.pressed : null]}>
-              <Hand color={activeToken === token ? "#FFFFFF" : colors.purple} size={15} strokeWidth={3} />
-              <Text selectable style={[styles.dragTokenText, activeToken === token ? styles.dragTokenTextActive : null]}>
+            <Pressable key={token} onPress={() => onToken(token)} style={({ pressed }) => [styles.dragToken, activeToken === token ? styles.dragTokenActive : null, placed ? styles.dragTokenPlaced : null, pressed ? styles.pressed : null]}>
+              <Hand color={activeToken === token ? "#FFFFFF" : placed ? "#AEB6C1" : colors.purple} size={15} strokeWidth={3} />
+              <Text selectable style={[styles.dragTokenText, activeToken === token ? styles.dragTokenTextActive : null, placed ? styles.dragTokenTextPlaced : null]}>
                 {token}
               </Text>
             </Pressable>
@@ -514,7 +529,7 @@ function DropQuestion({
         ))}
       </View>
       <Text selectable style={styles.helperText}>
-        {activeToken ? `Dragging: ${activeToken}. Tap a zone to drop it.` : "Tap a token to pick it up."}
+        {activeToken ? `Dragging: ${activeToken}. Tap a zone to drop it.` : "Tap a filled zone to edit it, or pick a token."}
       </Text>
     </View>
   );
@@ -980,7 +995,8 @@ const styles = StyleSheet.create({
     borderColor: colors.purple
   },
   dragTokenPlaced: {
-    opacity: 0.32
+    backgroundColor: "#F3F6FA",
+    borderColor: "#E2E7EE"
   },
   dragTokenText: {
     color: colors.text,
@@ -991,6 +1007,9 @@ const styles = StyleSheet.create({
   },
   dragTokenTextActive: {
     color: "#FFFFFF"
+  },
+  dragTokenTextPlaced: {
+    color: "#AEB6C1"
   },
   dropGrid: {
     gap: 10
