@@ -2,6 +2,7 @@ import { useRouter } from "expo-router";
 import { BrainCircuit, ClipboardCheck, FileChartLine, Goal, Lightbulb, ListChecks, ScanSearch, Sparkles, Target, WandSparkles } from "lucide-react-native";
 import { StyleSheet, Text, View } from "react-native";
 import { AppScreen, Button, Card, CompactTile, ListRow, ProgressStatus, colors, fonts, textStyles } from "@/components/app-shell";
+import { BarChart, ChartCard, ComparisonBars, DonutChart, LineChart } from "@/components/charts";
 import { sessions, userProgress } from "@/lib/template-data";
 
 const insightCards = [
@@ -25,6 +26,44 @@ const insightCards = [
   }
 ];
 
+const dailyReports = [
+  {
+    day: "Today",
+    objective: "Focus Sprint",
+    summary: "User should complete one tiny next-action test. Habit input is ready, risk is low, reward confidence is high.",
+    score: 84,
+    tone: "coral" as const
+  },
+  {
+    day: "Yesterday",
+    objective: "Puzzle Gate",
+    summary: "Completion was slower, but the saved result shows better decision accuracy after one retry.",
+    score: 76,
+    tone: "blue" as const
+  },
+  {
+    day: "May 30",
+    objective: "Duo Rally",
+    summary: "Social challenge improved consistency. AI recommends keeping co-op prompts for low-energy days.",
+    score: 81,
+    tone: "green" as const
+  }
+];
+
+const objectiveTrend = [62, 68, 64, 73, 76, 84, 81, 88];
+const objectiveBars = [
+  { label: "Focus", value: 9 },
+  { label: "Habit", value: 7 },
+  { label: "Learn", value: 5 },
+  { label: "Duo", value: 4 }
+];
+const reportComparison = [
+  { label: "Objective clarity", value: 84, meta: "today" },
+  { label: "Habit signal", value: 78, meta: "ready" },
+  { label: "Risk level", value: 36, meta: "low" },
+  { label: "Reward pull", value: 88, meta: "strong" }
+];
+
 export default function AnalyticsScreen() {
   const router = useRouter();
 
@@ -45,7 +84,7 @@ export default function AnalyticsScreen() {
           </View>
         </View>
         <Text selectable style={styles.heroBody}>
-          AI insight report reads session results, completed outputs, saved favorites, level score, confidence, analytics stats, and performance trend to recommend the next playable objective.
+          AI insight report reads daily tests, completed session results, habit inputs, saved favorites, level score, confidence, analytics stats, and performance trend to recommend tomorrow's objective.
         </Text>
         <View style={styles.scoreRow}>
           <View style={styles.scoreBadge}>
@@ -65,14 +104,62 @@ export default function AnalyticsScreen() {
             </Text>
           </View>
         </View>
-        <Button label="Generate AI report" icon={WandSparkles} onPress={() => router.push("/details/onboarding-lab")} fullWidth />
+        <Button label="Run today's test" icon={WandSparkles} onPress={() => router.push("/game/focus-sprint")} fullWidth />
       </View>
 
       <View style={{ flexDirection: "row", flexWrap: "wrap", justifyContent: "space-between", gap: 14 }}>
-        <CompactTile title="Objective" body="Primary target, next action, and completion rule." tone="coral" icon={Goal} onPress={() => router.push("/session")} />
+        <CompactTile title="Objective" body="Primary target, next action, and completion rule." tone="coral" icon={Goal} onPress={() => router.push("/game/focus-sprint")} />
         <CompactTile title="Insight" body="AI pattern read from recent quest results." tone="purple" icon={Lightbulb} onPress={() => router.push("/details/launch-plan")} />
         <CompactTile title="Validation" body="Saved evidence, favorite output, and trend checks." tone="blue" icon={ClipboardCheck} onPress={() => router.push("/bookmarks")} />
         <CompactTile title="Report" body="Brief summary for product iteration decisions." tone="green" icon={FileChartLine} onPress={() => router.push("/details/cloudflare-ready")} />
+      </View>
+
+      <View style={{ gap: 12 }}>
+        <Text selectable style={textStyles.sectionTitle}>
+          Reports by day
+        </Text>
+        {dailyReports.map((report) => (
+          <Card key={`${report.day}-${report.objective}`} tone={report.tone}>
+            <View style={{ flexDirection: "row", alignItems: "center", gap: 12 }}>
+              <View style={styles.reportDayBadge}>
+                <BrainCircuit color={colors.purple} size={20} strokeWidth={3} />
+              </View>
+              <View style={{ flex: 1, gap: 4 }}>
+                <Text selectable style={styles.reportDay}>
+                  {report.day} - {report.objective}
+                </Text>
+                <Text selectable style={textStyles.body}>
+                  {report.summary}
+                </Text>
+              </View>
+            </View>
+            <ProgressStatus label="AI objective score" value={report.score} tone={report.tone} />
+          </Card>
+        ))}
+      </View>
+
+      <View style={{ gap: 10 }}>
+        <Text selectable style={textStyles.sectionTitle}>
+          Report charts
+        </Text>
+        <ChartCard title="Objective trend" subtitle="AI score by daily completion." tone="purple">
+          <LineChart data={objectiveTrend} tone="purple" />
+        </ChartCard>
+        <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 10 }}>
+          <View style={{ flex: 1, minWidth: 160 }}>
+            <ChartCard title="Goal mix" subtitle="Tests by objective." tone="coral">
+              <BarChart data={objectiveBars} tone="coral" />
+            </ChartCard>
+          </View>
+          <View style={{ flex: 1, minWidth: 160 }}>
+            <ChartCard title="Confidence" subtitle="Analysis readiness." tone="gold">
+              <DonutChart value={userProgress.confidence} label="AI confidence" tone="gold" />
+            </ChartCard>
+          </View>
+        </View>
+        <ChartCard title="Target signals" subtitle="Objective, habit, risk, and reward report." tone="blue">
+          <ComparisonBars data={reportComparison} tone="blue" />
+        </ChartCard>
       </View>
 
       <View style={{ gap: 12 }}>
@@ -109,11 +196,11 @@ export default function AnalyticsScreen() {
               Recommended objective
             </Text>
             <Text selectable style={textStyles.body}>
-              Start a 5-minute Focus Sprint, then save the result output as a favorite review item for validation.
+              Start today's Focus Sprint test, collect habit input, then let AI file the completed report under today's objective.
             </Text>
           </View>
         </View>
-        <Button label="Start objective" icon={Sparkles} onPress={() => router.push("/session")} />
+        <Button label="Start objective" icon={Sparkles} onPress={() => router.push("/game/focus-sprint")} />
       </Card>
 
       <View style={{ gap: 10 }}>
@@ -220,6 +307,21 @@ const styles = StyleSheet.create({
     height: 46,
     justifyContent: "center",
     width: 46
+  },
+  reportDayBadge: {
+    alignItems: "center",
+    backgroundColor: "#FFFFFF",
+    borderRadius: 23,
+    height: 48,
+    justifyContent: "center",
+    width: 48
+  },
+  reportDay: {
+    color: colors.text,
+    fontFamily: fonts.black,
+    fontSize: 16,
+    fontWeight: "900",
+    lineHeight: 20
   },
   nextIcon: {
     alignItems: "center",

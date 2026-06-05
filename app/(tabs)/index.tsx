@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { useRouter } from "expo-router";
-import { Clock3, Crown, Flame, Gamepad2, Gift, PlayCircle, Route, ShieldCheck, Sparkles, Star, Zap } from "lucide-react-native";
+import { BrainCircuit, Clock3, Crown, Flame, Gamepad2, Gift, PlayCircle, Route, ShieldCheck, Sparkles, Star, Zap } from "lucide-react-native";
 import { Text, View } from "react-native";
 import {
   AppScreen,
@@ -89,6 +89,39 @@ export default function HomeScreen() {
         meta={`daily quest`}
         onPress={() => router.push("/game/focus-sprint")}
       />
+
+      <Card tone="purple" onPress={() => router.push("/analytics")}>
+        <View style={{ alignItems: "center", flexDirection: "row", gap: 12 }}>
+          <View style={{ alignItems: "center", backgroundColor: "#FFFFFF", borderRadius: 24, height: 50, justifyContent: "center", width: 50 }}>
+            <BrainCircuit color="#875CFF" size={23} strokeWidth={3} />
+          </View>
+          <View style={{ flex: 1, gap: 5 }}>
+            <Text selectable style={textStyles.cardTitle}>
+              Today's AI summary
+            </Text>
+            <Text selectable style={textStyles.body}>
+              Focus risk is low. Finish one test, then AI will file today's objective report.
+            </Text>
+          </View>
+        </View>
+        <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
+          <View style={{ backgroundColor: "#FFFFFF", borderRadius: 18, paddingHorizontal: 11, paddingVertical: 8 }}>
+            <Text selectable style={textStyles.small}>
+              Objective 84
+            </Text>
+          </View>
+          <View style={{ backgroundColor: "#FFFFFF", borderRadius: 18, paddingHorizontal: 11, paddingVertical: 8 }}>
+            <Text selectable style={textStyles.small}>
+              Habit signal ready
+            </Text>
+          </View>
+          <View style={{ backgroundColor: "#FFFFFF", borderRadius: 18, paddingHorizontal: 11, paddingVertical: 8 }}>
+            <Text selectable style={textStyles.small}>
+              Report after test
+            </Text>
+          </View>
+        </View>
+      </Card>
 
       <Card tone="gold">
         <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", gap: 12 }}>

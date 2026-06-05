@@ -45,8 +45,8 @@ type LessonStep = {
 
 const navItems = [
   { href: "/", icon: Home, label: "Home", size: 23 },
-  { href: "/analytics", icon: BrainCircuit, label: "AI Report", size: 23 },
   { href: "/session", icon: PlayCircle, label: "Session", size: 27 },
+  { href: "/analytics", icon: BrainCircuit, label: "AI Report", size: 23 },
   { href: "/bookmarks", icon: Trophy, label: "Leaderboard", size: 23 },
   { href: "/profile", icon: UserCircle, label: "Profile", size: 23 }
 ] as const;
@@ -230,7 +230,7 @@ export default function GameDetailScreen() {
       setFeedback(null);
       return;
     }
-    router.push("/bookmarks");
+    router.push("/analytics");
   };
 
   return (

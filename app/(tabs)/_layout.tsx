@@ -51,17 +51,17 @@ export default function TabsLayout() {
         }}
       />
       <Tabs.Screen
-        name="analytics"
-        options={{
-          title: "AI Report",
-          tabBarIcon: ({ color, focused }) => <TabBarIcon icon={BrainCircuit} color={color} focused={focused} />
-        }}
-      />
-      <Tabs.Screen
         name="session"
         options={{
           title: "Session",
           tabBarIcon: ({ color, focused }) => <TabBarIcon icon={PlayCircle} color={color} focused={focused} size={27} />
+        }}
+      />
+      <Tabs.Screen
+        name="analytics"
+        options={{
+          title: "AI Report",
+          tabBarIcon: ({ color, focused }) => <TabBarIcon icon={BrainCircuit} color={color} focused={focused} />
         }}
       />
       <Tabs.Screen
