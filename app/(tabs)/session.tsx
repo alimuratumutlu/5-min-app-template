@@ -171,7 +171,7 @@ export default function SessionScreen() {
 
   return (
     <AppScreen title="Play quest" subtitle="Games, runs, rewards" activeDomain="SkillQuest">
-      <EditorHero game={selectedGame} onPlay={() => router.push("/details/launch-plan")} />
+      <EditorHero game={selectedGame} onPlay={() => router.push(`/game/${selectedGame.id}`)} />
 
       <View style={styles.continuePanel}>
         <View style={styles.sectionHeader}>
@@ -226,7 +226,7 @@ export default function SessionScreen() {
             Every poster can become a playable habit, learning, fitness, or productivity loop without changing the shell.
           </Text>
         </View>
-        <Button label="Play" icon={Play} onPress={() => router.push("/details/learning-sprint")} />
+        <Button label="Play" icon={Play} onPress={() => router.push("/game/focus-sprint")} />
       </View>
     </AppScreen>
   );

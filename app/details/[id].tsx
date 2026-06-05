@@ -44,7 +44,7 @@ export default function DetailScreen() {
           {recommendation?.reason ?? session.insight}
         </Text>
         <ProgressStatus label="detail score" value={isSession ? session.score : 78} tone={isSession ? "green" : "blue"} />
-        <Button label="Use this in quest" onPress={() => router.push("/session")} />
+        <Button label="Use this in quest" onPress={() => router.push("/game/focus-sprint")} />
       </Card>
 
       <View style={{ gap: 10 }}>

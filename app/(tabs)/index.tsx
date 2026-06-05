@@ -78,7 +78,7 @@ export default function HomeScreen() {
         </View>
 
         <ProgressStatus label="daily run readiness" value={86} tone="coral" />
-        <Button label="Start 5-min run" icon={PlayCircle} onPress={() => router.push("/session")} />
+        <Button label="Start 5-min run" icon={PlayCircle} onPress={() => router.push("/game/focus-sprint")} />
       </Card>
 
       <HeroPoster
@@ -87,7 +87,7 @@ export default function HomeScreen() {
         imageUrl={activeDomain.imageUrl}
         accent={activeDomain.accent}
         meta={`daily quest`}
-        onPress={() => router.push("/session")}
+        onPress={() => router.push("/game/focus-sprint")}
       />
 
       <Card tone="gold">
