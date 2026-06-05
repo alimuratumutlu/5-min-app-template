@@ -51,6 +51,8 @@ assert(new Set(previewModes).size >= 20, "mechanics detail pages must not collap
 
 const expectedPreviewModes = new Map([
   ["Multi Pick Tray", "multi"],
+  ["Word Tile Builder", "word-builder"],
+  ["Missing Slot", "slot-builder"],
   ["Drag Sort", "bucket"],
   ["Pair Match", "match"],
   ["Listen And Choose", "listen"],
@@ -62,11 +64,12 @@ const expectedPreviewModes = new Map([
   ["Swipe Cards", "swipe"],
   ["Partner Trigger", "partner"],
   ["Token Budget", "rank"],
+  ["Tomorrow Seed", "next-action"],
   ["Skin Diary Shot", "media"],
   ["Side Effect Chips", "multi"],
   ["Red Flag Triage", "bucket"],
   ["Social Trigger Map", "location"],
-  ["Boundary Script Builder", "builder"]
+  ["Boundary Script Builder", "script-builder"]
 ]);
 
 for (const [title, expectedMode] of expectedPreviewModes) {

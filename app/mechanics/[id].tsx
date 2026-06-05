@@ -222,6 +222,22 @@ function ExampleSurface({ mechanic }: { mechanic: InputMechanic }) {
         <RadarPreview mechanic={mechanic} selected={selected} onSelect={setSelected} />
       ) : mode === "journal" ? (
         <JournalPreview note={note} onNote={setNote} />
+      ) : mode === "word-builder" ? (
+        <WordBuilderPreview mechanic={mechanic} chips={chips} onChip={toggleChip} />
+      ) : mode === "slot-builder" ? (
+        <SlotBuilderPreview mechanic={mechanic} note={note} onNote={setNote} />
+      ) : mode === "stack-builder" ? (
+        <StackBuilderPreview mechanic={mechanic} />
+      ) : mode === "plate-builder" ? (
+        <PlateBuilderPreview mechanic={mechanic} />
+      ) : mode === "scenario" ? (
+        <ScenarioPreview mechanic={mechanic} selected={selected} onSelect={setSelected} />
+      ) : mode === "question-cards" ? (
+        <QuestionCardsPreview mechanic={mechanic} chips={chips} onChip={toggleChip} />
+      ) : mode === "script-builder" ? (
+        <ScriptBuilderPreview mechanic={mechanic} chips={chips} onChip={toggleChip} />
+      ) : mode === "next-action" ? (
+        <NextActionPreview mechanic={mechanic} note={note} onNote={setNote} />
       ) : mode === "scale" ? (
         <ScalePreview mechanic={mechanic} />
       ) : mode === "media" ? (
@@ -691,6 +707,162 @@ function BuilderPreview({ mechanic, chips, onChip, note, onNote }: { mechanic: I
         placeholderTextColor="#9397A0"
         style={styles.noteInput}
       />
+    </View>
+  );
+}
+
+function WordBuilderPreview({ mechanic, chips, onChip }: { mechanic: InputMechanic; chips: string[]; onChip: (value: string) => void }) {
+  const words = buildOptions(mechanic);
+  const active = chips.length ? chips : words.slice(0, 2);
+  return (
+    <View style={styles.wordBuilderCard}>
+      <View style={styles.sentenceTray}>
+        {active.map((word, index) => (
+          <View key={`${word}-${index}`} style={styles.sentenceTile}>
+            <Text selectable style={styles.sentenceText}>
+              {word}
+            </Text>
+          </View>
+        ))}
+      </View>
+      <View style={styles.wordBank}>
+        {words.map((word) => {
+          const selected = chips.includes(word);
+          return (
+            <Pressable key={word} onPress={() => onChip(word)} style={({ pressed }) => [styles.wordChip, selected ? styles.wordChipActive : null, pressed ? styles.pressed : null]}>
+              <Text selectable style={[styles.wordText, selected ? styles.wordTextActive : null]}>
+                {word}
+              </Text>
+            </Pressable>
+          );
+        })}
+      </View>
+    </View>
+  );
+}
+
+function SlotBuilderPreview({ mechanic, note, onNote }: { mechanic: InputMechanic; note: string; onNote: (value: string) => void }) {
+  return (
+    <View style={styles.slotCard}>
+      <Text selectable style={styles.slotSentence}>
+        Today I will protect my streak by{" "}
+        <Text selectable style={styles.slotBlank}>
+          {note || "_____"}
+        </Text>
+        .
+      </Text>
+      <TextInput value={note} onChangeText={onNote} placeholder="Fill the missing action..." placeholderTextColor="#9397A0" style={styles.slotInput} />
+    </View>
+  );
+}
+
+function StackBuilderPreview({ mechanic }: { mechanic: InputMechanic }) {
+  return (
+    <View style={styles.stackBoard}>
+      {buildOptions(mechanic).map((item, index) => (
+        <View key={item} style={[styles.stackCard, { transform: [{ translateY: index * -2 }] }]}>
+          <View style={styles.stackNumber}>
+            <Text selectable style={styles.stackNumberText}>
+              {index + 1}
+            </Text>
+          </View>
+          <Text selectable style={styles.stackText}>
+            {item}
+          </Text>
+        </View>
+      ))}
+    </View>
+  );
+}
+
+function PlateBuilderPreview({ mechanic }: { mechanic: InputMechanic }) {
+  const parts = buildOptions(mechanic);
+  return (
+    <View style={styles.plateCard}>
+      <View style={styles.plateCircle}>
+        {parts.map((part, index) => (
+          <View key={part} style={[styles.plateSlice, index === 0 ? styles.plateSliceA : index === 1 ? styles.plateSliceB : styles.plateSliceC]}>
+            <Text selectable style={styles.plateSliceText}>
+              {part}
+            </Text>
+          </View>
+        ))}
+      </View>
+    </View>
+  );
+}
+
+function ScenarioPreview({ mechanic, selected, onSelect }: { mechanic: InputMechanic; selected: string; onSelect: (value: string) => void }) {
+  const responses = ["Soft redirect", "Clear boundary", "Ask one question"];
+  return (
+    <View style={styles.scenarioCard}>
+      <Text selectable style={styles.scenarioPrompt}>
+        A tense moment starts. Choose the next response.
+      </Text>
+      {responses.map((response) => (
+        <Pressable key={response} onPress={() => onSelect(response)} style={({ pressed }) => [styles.scenarioOption, selected === response ? styles.scenarioOptionActive : null, pressed ? styles.pressed : null]}>
+          <Text selectable style={[styles.scenarioText, selected === response ? styles.scenarioTextActive : null]}>
+            {response}
+          </Text>
+        </Pressable>
+      ))}
+    </View>
+  );
+}
+
+function QuestionCardsPreview({ mechanic, chips, onChip }: { mechanic: InputMechanic; chips: string[]; onChip: (value: string) => void }) {
+  const questions = ["What matters?", "What changed?", "What should I ask?"];
+  return (
+    <View style={styles.questionGrid}>
+      {questions.map((question) => {
+        const active = chips.includes(question);
+        return (
+          <Pressable key={question} onPress={() => onChip(question)} style={({ pressed }) => [styles.questionCard, active ? styles.questionCardActive : null, pressed ? styles.pressed : null]}>
+            <Text selectable style={[styles.questionText, active ? styles.questionTextActive : null]}>
+              {question}
+            </Text>
+          </Pressable>
+        );
+      })}
+    </View>
+  );
+}
+
+function ScriptBuilderPreview({ mechanic, chips, onChip }: { mechanic: InputMechanic; chips: string[]; onChip: (value: string) => void }) {
+  const tiles = ["I need", "more time", "without pressure"];
+  return (
+    <View style={styles.scriptCard}>
+      <View style={styles.scriptLine}>
+        {tiles.map((tile) => (
+          <Pressable key={tile} onPress={() => onChip(tile)} style={({ pressed }) => [styles.scriptTile, chips.includes(tile) ? styles.scriptTileActive : null, pressed ? styles.pressed : null]}>
+            <Text selectable style={[styles.scriptTileText, chips.includes(tile) ? styles.scriptTileTextActive : null]}>
+              {tile}
+            </Text>
+          </Pressable>
+        ))}
+      </View>
+      <Text selectable style={styles.scriptPreviewText}>
+        I need more time without pressure.
+      </Text>
+    </View>
+  );
+}
+
+function NextActionPreview({ note, onNote }: { mechanic: InputMechanic; note: string; onNote: (value: string) => void }) {
+  return (
+    <View style={styles.nextActionCard}>
+      <Text selectable style={styles.nextActionLabel}>
+        One tiny action
+      </Text>
+      <TextInput value={note} onChangeText={onNote} placeholder="Open the doc for 2 minutes" placeholderTextColor="#9397A0" style={styles.nextActionInput} />
+      <View style={styles.nextActionMeta}>
+        <Text selectable style={styles.nextActionMetaText}>
+          5 min
+        </Text>
+        <Text selectable style={styles.nextActionMetaText}>
+          shield ready
+        </Text>
+      </View>
     </View>
   );
 }
@@ -1792,6 +1964,286 @@ const styles = StyleSheet.create({
     minHeight: 96,
     padding: 14,
     textAlignVertical: "top"
+  },
+  wordBuilderCard: {
+    backgroundColor: "#F6FAFF",
+    borderColor: "#DDEBFF",
+    borderRadius: 28,
+    borderWidth: 1,
+    gap: 14,
+    padding: 14
+  },
+  sentenceTray: {
+    backgroundColor: "#FFFFFF",
+    borderColor: "#E1E8F2",
+    borderRadius: 24,
+    borderWidth: 2,
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 8,
+    minHeight: 68,
+    padding: 10
+  },
+  sentenceTile: {
+    backgroundColor: colors.blue,
+    borderRadius: 18,
+    paddingHorizontal: 11,
+    paddingVertical: 8
+  },
+  sentenceText: {
+    color: "#FFFFFF",
+    fontFamily: fonts.black,
+    fontSize: 13,
+    fontWeight: "900"
+  },
+  slotCard: {
+    backgroundColor: "#FFF4EC",
+    borderRadius: 28,
+    gap: 12,
+    padding: 15
+  },
+  slotSentence: {
+    color: colors.text,
+    fontFamily: fonts.black,
+    fontSize: 20,
+    fontWeight: "900",
+    lineHeight: 27
+  },
+  slotBlank: {
+    color: colors.coral
+  },
+  slotInput: {
+    backgroundColor: "#FFFFFF",
+    borderColor: "#FFE0D2",
+    borderRadius: 22,
+    borderWidth: 2,
+    color: colors.text,
+    fontFamily: fonts.black,
+    fontSize: 15,
+    minHeight: 54,
+    paddingHorizontal: 13
+  },
+  stackBoard: {
+    gap: 0,
+    paddingTop: 4
+  },
+  stackCard: {
+    alignItems: "center",
+    backgroundColor: "#FFFFFF",
+    borderColor: "#E1E8F2",
+    borderRadius: 25,
+    borderWidth: 2,
+    flexDirection: "row",
+    gap: 12,
+    minHeight: 58,
+    paddingHorizontal: 13,
+    boxShadow: "0 6px 0 rgba(216,223,232,0.88)"
+  },
+  stackNumber: {
+    alignItems: "center",
+    backgroundColor: colors.green,
+    borderRadius: 17,
+    height: 34,
+    justifyContent: "center",
+    width: 34
+  },
+  stackNumberText: {
+    color: "#FFFFFF",
+    fontFamily: fonts.black,
+    fontSize: 13,
+    fontWeight: "900"
+  },
+  stackText: {
+    color: colors.text,
+    flex: 1,
+    fontFamily: fonts.black,
+    fontSize: 16,
+    fontWeight: "900"
+  },
+  plateCard: {
+    alignItems: "center",
+    backgroundColor: "#FFF4EC",
+    borderRadius: 30,
+    padding: 16
+  },
+  plateCircle: {
+    borderColor: "#FFFFFF",
+    borderRadius: 76,
+    borderWidth: 6,
+    flexDirection: "row",
+    flexWrap: "wrap",
+    height: 152,
+    overflow: "hidden",
+    width: 152
+  },
+  plateSlice: {
+    alignItems: "center",
+    height: 76,
+    justifyContent: "center",
+    padding: 5,
+    width: 76
+  },
+  plateSliceA: {
+    backgroundColor: colors.green
+  },
+  plateSliceB: {
+    backgroundColor: colors.gold
+  },
+  plateSliceC: {
+    backgroundColor: colors.coral,
+    width: 152
+  },
+  plateSliceText: {
+    color: "#FFFFFF",
+    fontFamily: fonts.black,
+    fontSize: 11,
+    fontWeight: "900",
+    textAlign: "center"
+  },
+  scenarioCard: {
+    backgroundColor: "#F6FAFF",
+    borderColor: "#DDEBFF",
+    borderRadius: 28,
+    borderWidth: 1,
+    gap: 10,
+    padding: 14
+  },
+  scenarioPrompt: {
+    color: colors.text,
+    fontFamily: fonts.black,
+    fontSize: 17,
+    fontWeight: "900",
+    lineHeight: 22
+  },
+  scenarioOption: {
+    backgroundColor: "#FFFFFF",
+    borderColor: "#E1E8F2",
+    borderRadius: 22,
+    borderWidth: 2,
+    padding: 13
+  },
+  scenarioOptionActive: {
+    backgroundColor: colors.blue,
+    borderColor: colors.blue
+  },
+  scenarioText: {
+    color: colors.text,
+    fontFamily: fonts.black,
+    fontSize: 14,
+    fontWeight: "900"
+  },
+  scenarioTextActive: {
+    color: "#FFFFFF"
+  },
+  questionGrid: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 9
+  },
+  questionCard: {
+    backgroundColor: "#FFFFFF",
+    borderColor: "#E1E8F2",
+    borderRadius: 24,
+    borderWidth: 2,
+    flexGrow: 1,
+    minHeight: 74,
+    minWidth: "47%",
+    padding: 13,
+    justifyContent: "center"
+  },
+  questionCardActive: {
+    backgroundColor: colors.purple,
+    borderColor: colors.purple
+  },
+  questionText: {
+    color: colors.text,
+    fontFamily: fonts.black,
+    fontSize: 14,
+    fontWeight: "900",
+    lineHeight: 18
+  },
+  questionTextActive: {
+    color: "#FFFFFF"
+  },
+  scriptCard: {
+    backgroundColor: "#FFF4EC",
+    borderRadius: 28,
+    gap: 13,
+    padding: 14
+  },
+  scriptLine: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 8
+  },
+  scriptTile: {
+    backgroundColor: "#FFFFFF",
+    borderColor: "#FFE0D2",
+    borderRadius: 18,
+    borderWidth: 2,
+    paddingHorizontal: 11,
+    paddingVertical: 9
+  },
+  scriptTileActive: {
+    backgroundColor: colors.coral,
+    borderColor: colors.coral
+  },
+  scriptTileText: {
+    color: colors.coral,
+    fontFamily: fonts.black,
+    fontSize: 13,
+    fontWeight: "900"
+  },
+  scriptTileTextActive: {
+    color: "#FFFFFF"
+  },
+  scriptPreviewText: {
+    color: colors.text,
+    fontFamily: fonts.black,
+    fontSize: 20,
+    fontWeight: "900",
+    lineHeight: 25
+  },
+  nextActionCard: {
+    backgroundColor: "#F6FAFF",
+    borderColor: "#DDEBFF",
+    borderRadius: 28,
+    borderWidth: 1,
+    gap: 10,
+    padding: 14
+  },
+  nextActionLabel: {
+    color: colors.blue,
+    fontFamily: fonts.black,
+    fontSize: 12,
+    fontWeight: "900",
+    textTransform: "uppercase"
+  },
+  nextActionInput: {
+    backgroundColor: "#FFFFFF",
+    borderColor: "#DDEBFF",
+    borderRadius: 24,
+    borderWidth: 2,
+    color: colors.text,
+    fontFamily: fonts.black,
+    fontSize: 17,
+    minHeight: 62,
+    paddingHorizontal: 14
+  },
+  nextActionMeta: {
+    flexDirection: "row",
+    gap: 8
+  },
+  nextActionMetaText: {
+    backgroundColor: "#FFFFFF",
+    borderRadius: 17,
+    color: colors.textMuted,
+    fontFamily: fonts.black,
+    fontSize: 12,
+    fontWeight: "900",
+    overflow: "hidden",
+    paddingHorizontal: 10,
+    paddingVertical: 7
   },
   zoneCard: {
     backgroundColor: "#ECFFF7",

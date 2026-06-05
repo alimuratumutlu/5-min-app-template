@@ -25,7 +25,15 @@ export type MechanicPreviewMode =
   | "swipe"
   | "timer"
   | "toggle"
-  | "voice";
+  | "voice"
+  | "word-builder"
+  | "slot-builder"
+  | "stack-builder"
+  | "plate-builder"
+  | "scenario"
+  | "question-cards"
+  | "script-builder"
+  | "next-action";
 
 export function getMechanicPreviewMode(mechanic: InputMechanic): MechanicPreviewMode {
   const text = `${mechanic.title} ${mechanic.pattern} ${mechanic.captures}`.toLowerCase();
@@ -42,8 +50,16 @@ export function getMechanicPreviewMode(mechanic: InputMechanic): MechanicPreview
   if (hasAny(text, ["calendar", "day cells", "week strip", "workday blocks"])) return "calendar";
   if (hasAny(text, ["branch", "triggers the next", "paired follow-up", "if-then"])) return "branch";
   if (hasAny(text, ["match", "pair", "concepts to outcomes"])) return "match";
-  if (hasAny(text, ["missing slot", "blank", "fill one blank"])) return "builder";
-  if (hasAny(text, ["builder", "build a boundary", "emergency card builder"])) return "builder";
+  if (hasAny(text, ["word tile", "ordered sentence"])) return "word-builder";
+  if (hasAny(text, ["missing slot", "blank", "fill one blank"])) return "slot-builder";
+  if (hasAny(text, ["combo builder", "habit stack", "wind-down stack", "routine tile", "sleep routine cards"])) return "stack-builder";
+  if (hasAny(text, ["plate builder", "plate from food tiles"])) return "plate-builder";
+  if (hasAny(text, ["parenting rehearsal", "child scenario", "choose a response"])) return "scenario";
+  if (hasAny(text, ["appointment prep", "question cards"])) return "question-cards";
+  if (hasAny(text, ["boundary script", "build a boundary"])) return "script-builder";
+  if (hasAny(text, ["tiny next action", "tomorrow seed", "one tiny tomorrow", "next action"])) return "next-action";
+  if (hasAny(text, ["emergency card builder"])) return "question-cards";
+  if (hasAny(text, ["builder"])) return "builder";
   if (hasAny(text, ["drag sort", "move tokens into buckets", "bucket", "triage"])) return "bucket";
   if (hasAny(text, ["timeline", "sort", "slot", "drop", "drag", "move tokens", "tokens across", "budget", "impact/effort grid", "place options"])) return "rank";
   if (hasAny(text, ["stamp", "tap activity icons", "activity stamp", "dose confirm", "kick count", "confirm medicine", "tile flip", "spark capture"])) return "stamp";
@@ -64,7 +80,7 @@ export function buildMechanicOptions(mechanic: Partial<InputMechanic>) {
   const source = mechanic.captures ?? "energy, focus, next action";
   const parts = source.split(",").map((part) => part.trim()).filter(Boolean);
   const options = parts.length >= 3 ? parts.slice(0, 3) : [...parts, "Energy", "Next action", "Context"];
-  return Array.from(new Set(options)).slice(0, 3).map((item) => titleCase(item));
+  return Array.from(new Set(options)).slice(0, 3).map((item) => compactLabel(titleCase(item)));
 }
 
 export function buildMechanicMultiOptions(mechanic: InputMechanic) {
@@ -95,4 +111,12 @@ function hasAny(value: string, needles: string[]) {
 
 function titleCase(value: string) {
   return value.replace(/\w\S*/g, (word) => word.charAt(0).toUpperCase() + word.slice(1));
+}
+
+function compactLabel(value: string) {
+  if (value.length <= 18) return value;
+  const words = value.split(/\s+/).filter(Boolean);
+  if (words[0] && words[0].length >= 10) return words[0];
+  if (words.length <= 2) return value;
+  return words.slice(0, 2).join(" ");
 }
