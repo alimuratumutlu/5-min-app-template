@@ -886,7 +886,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     backgroundColor: "rgba(255, 255, 255, 0.74)",
     overflow: "hidden",
-    boxShadow: "0 18px 42px rgba(255, 111, 61, 0.13)"
+    boxShadow: "0 18px 42px rgba(36, 123, 255, 0.16), 0 6px 26px rgba(135, 92, 255, 0.1)"
   },
   headerContent: {
     alignItems: "center",
