@@ -10,6 +10,7 @@ import {
   SlidersHorizontal,
   Sparkles,
   Star,
+  Target,
   type LucideIcon
 } from "lucide-react-native";
 import {
@@ -84,6 +85,8 @@ type MetricProps = {
   delta?: string;
   tone?: "blue" | "green" | "purple" | "coral" | "gold";
 };
+
+type Tone = "blue" | "green" | "purple" | "coral" | "gold";
 
 export function AppScreen({ title, subtitle, activeDomain = "Template", children, footer }: AppScreenProps) {
   return (
@@ -233,6 +236,94 @@ export function ProgressStatus({ value, label, tone = "blue" }: { value: number;
         <View style={[styles.progressFill, { width: `${Math.max(8, Math.min(100, value))}%`, backgroundColor: accentByTone[tone] }]} />
       </View>
     </View>
+  );
+}
+
+export function SegmentedProgress({ value, segments = 16, tone = "blue" }: { value: number; segments?: number; tone?: Tone }) {
+  const activeCount = Math.round((Math.max(0, Math.min(100, value)) / 100) * segments);
+
+  return (
+    <View style={styles.segmentedTrack}>
+      {Array.from({ length: segments }).map((_, index) => (
+        <View
+          key={index}
+          style={[
+            styles.segmentDot,
+            index < activeCount
+              ? {
+                  backgroundColor: accentByTone[tone],
+                  borderColor: accentByTone[tone]
+                }
+              : null
+          ]}
+        />
+      ))}
+    </View>
+  );
+}
+
+export function StatPill({ label, value, tone = "blue" }: { label: string; value: string; tone?: Tone }) {
+  return (
+    <View style={[styles.statPill, toneStyles[tone]]}>
+      <Text selectable style={[styles.statPillValue, { color: accentByTone[tone] }]}>
+        {value}
+      </Text>
+      <Text selectable style={styles.statPillLabel}>
+        {label}
+      </Text>
+    </View>
+  );
+}
+
+export function RewardStrip({ items, tone = "gold" }: { items: Array<{ label: string; unlocked: boolean }>; tone?: Tone }) {
+  return (
+    <View style={styles.rewardStrip}>
+      {items.map((item) => (
+        <View key={item.label} style={[styles.rewardChip, item.unlocked ? { backgroundColor: accentByTone[tone], borderColor: accentByTone[tone] } : null]}>
+          <Text selectable style={[styles.rewardChipText, item.unlocked ? styles.rewardChipTextActive : null]}>
+            {item.label}
+          </Text>
+        </View>
+      ))}
+    </View>
+  );
+}
+
+export function QuestWidget({
+  title,
+  body,
+  meta,
+  progress,
+  tone = "blue",
+  icon: Icon = Target,
+  onPress
+}: {
+  title: string;
+  body: string;
+  meta: string;
+  progress: number;
+  tone?: Tone;
+  icon?: LucideIcon;
+  onPress?: () => void;
+}) {
+  return (
+    <Pressable onPress={onPress} style={({ pressed }) => [styles.questWidget, toneStyles[tone], pressed ? styles.pressed : null]}>
+      <View style={styles.questWidgetTop}>
+        <View style={[styles.questIcon, { backgroundColor: accentByTone[tone] }]}>
+          <Icon color="#FFFFFF" size={18} strokeWidth={2.8} />
+        </View>
+        <Text selectable style={[styles.questMeta, { color: accentByTone[tone] }]}>
+          {meta}
+        </Text>
+      </View>
+      <Text selectable style={styles.questTitle}>
+        {title}
+      </Text>
+      <Text selectable numberOfLines={2} style={styles.questBody}>
+        {body}
+      </Text>
+      <SegmentedProgress value={progress} tone={tone} />
+    </Pressable>
   );
 }
 
@@ -776,6 +867,110 @@ const styles = StyleSheet.create({
   progressFill: {
     borderRadius: 12,
     height: "100%"
+  },
+  segmentedTrack: {
+    flexDirection: "row",
+    gap: 4,
+    minHeight: 14
+  },
+  segmentDot: {
+    backgroundColor: "#FFFFFF",
+    borderColor: "#E7EAF0",
+    borderRadius: 6,
+    borderWidth: 1,
+    flex: 1,
+    height: 12
+  },
+  statPill: {
+    borderRadius: 24,
+    borderWidth: 1,
+    gap: 2,
+    minWidth: 84,
+    paddingHorizontal: 12,
+    paddingVertical: 9
+  },
+  statPillValue: {
+    fontFamily: fonts.black,
+    fontSize: 18,
+    fontVariant: ["tabular-nums"],
+    fontWeight: "900",
+    lineHeight: 21
+  },
+  statPillLabel: {
+    color: colors.textMuted,
+    fontFamily: fonts.semibold,
+    fontSize: 11,
+    fontWeight: "600",
+    lineHeight: 14,
+    textTransform: "uppercase"
+  },
+  rewardStrip: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 8
+  },
+  rewardChip: {
+    backgroundColor: "#FFFFFF",
+    borderColor: colors.border,
+    borderRadius: 20,
+    borderWidth: 1,
+    paddingHorizontal: 11,
+    paddingVertical: 8
+  },
+  rewardChipText: {
+    color: colors.textMuted,
+    fontFamily: fonts.bold,
+    fontSize: 12,
+    fontWeight: "700",
+    lineHeight: 14,
+    textTransform: "uppercase"
+  },
+  rewardChipTextActive: {
+    color: "#FFFFFF"
+  },
+  questWidget: {
+    borderRadius: 32,
+    borderCurve: "continuous",
+    borderWidth: 1,
+    gap: 10,
+    minHeight: 168,
+    padding: 15,
+    width: "48%"
+  },
+  questWidgetTop: {
+    alignItems: "center",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    gap: 8
+  },
+  questIcon: {
+    alignItems: "center",
+    borderRadius: 20,
+    height: 38,
+    justifyContent: "center",
+    width: 38
+  },
+  questMeta: {
+    flexShrink: 1,
+    fontFamily: fonts.bold,
+    fontSize: 11,
+    fontWeight: "700",
+    lineHeight: 14,
+    textAlign: "right",
+    textTransform: "uppercase"
+  },
+  questTitle: {
+    color: colors.text,
+    fontFamily: fonts.extraBold,
+    fontSize: 17,
+    fontWeight: "800",
+    lineHeight: 21
+  },
+  questBody: {
+    color: colors.textMuted,
+    fontFamily: fonts.medium,
+    fontSize: 12,
+    lineHeight: 17
   },
   carouselContent: {
     gap: 12,

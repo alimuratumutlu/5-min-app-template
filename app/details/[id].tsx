@@ -13,7 +13,7 @@ export default function DetailScreen() {
   const isSession = sessions.some((item) => item.id === id);
 
   return (
-    <AppScreen title="Trip detail" subtitle="Tour, hotel, and route drilldown" activeDomain="Solara Trips">
+    <AppScreen title="Quest detail" subtitle="Reward, boost, and progress drilldown" activeDomain="SkillQuest">
       <Card tone={isSession ? "green" : "blue"}>
         <Text selectable style={textStyles.cardTitle}>
           {recommendation?.title ?? session.title}
@@ -22,7 +22,7 @@ export default function DetailScreen() {
           {recommendation?.reason ?? session.insight}
         </Text>
         <ProgressStatus label="detail score" value={isSession ? session.score : 78} tone={isSession ? "green" : "blue"} />
-        <Button label="Use this in booking" onPress={() => router.push("/session")} />
+        <Button label="Use this in quest" onPress={() => router.push("/session")} />
       </Card>
 
       <View style={{ gap: 10 }}>

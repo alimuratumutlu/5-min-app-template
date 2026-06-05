@@ -1,13 +1,16 @@
 import {
-  Compass,
-  Hotel,
-  Map,
-  Mountain,
-  Palmtree,
+  Brain,
+  Crown,
+  Flame,
+  Rocket,
+  Sparkles,
+  Target,
+  Trophy,
+  Zap,
   type LucideIcon
 } from "lucide-react-native";
 
-export type DomainKey = "brazil" | "japan" | "morocco" | "iceland" | "peru";
+export type DomainKey = "focus" | "logic" | "creative" | "social" | "boss";
 
 export type TemplateDomain = {
   key: DomainKey;
@@ -43,179 +46,192 @@ export type Recommendation = {
 };
 
 export const userProgress = {
-  name: "Vanessa",
-  location: "Paris, France",
-  level: "Explorer",
-  points: 12480,
-  streak: 7,
-  weeklySessions: 4,
-  completionRate: 82,
-  confidence: 91
+  name: "Murat",
+  location: "Level 12 - Neon League",
+  level: "Lv. 12",
+  points: 1840,
+  streak: 9,
+  weeklySessions: 18,
+  completionRate: 86,
+  confidence: 74
 };
 
 export const domains: TemplateDomain[] = [
   {
-    key: "brazil",
-    title: "Iconic Brazil",
-    shortTitle: "Brazil",
-    category: "South America",
+    key: "focus",
+    title: "Focus Sprint",
+    shortTitle: "Focus",
+    category: "Daily",
     accent: "#FF6F3D",
-    softAccent: "#FFE6D8",
-    imageUrl: "https://images.unsplash.com/photo-1516306580123-e6e52b1b7b5f?auto=format&fit=crop&w=900&q=80",
-    icon: Palmtree,
-    promise: "Rio, waterfalls, coastal roads, and late dinners with local guides.",
-    sessionInput: "Trip preference",
-    sessionOutput: "Tour schedule",
-    metricLabel: "Booked tours"
+    softAccent: "#FFE2D4",
+    imageUrl: "https://images.unsplash.com/photo-1516321497487-e288fb19713f?auto=format&fit=crop&w=900&q=80",
+    icon: Zap,
+    promise: "Beat a short timer, keep the combo alive, and bank quick XP.",
+    sessionInput: "quest timer",
+    sessionOutput: "focus reward",
+    metricLabel: "XP earned"
   },
   {
-    key: "japan",
-    title: "Kyoto Slow Days",
-    shortTitle: "Japan",
-    category: "Asia",
+    key: "logic",
+    title: "Puzzle Gate",
+    shortTitle: "Logic",
+    category: "Skill",
+    accent: "#247BFF",
+    softAccent: "#E0EDFF",
+    imageUrl: "https://images.unsplash.com/photo-1606326608606-aa0b62935f2b?auto=format&fit=crop&w=900&q=80",
+    icon: Brain,
+    promise: "Solve tiny choices, unlock streak shields, and grow mastery.",
+    sessionInput: "answer choice",
+    sessionOutput: "logic score",
+    metricLabel: "combo score"
+  },
+  {
+    key: "creative",
+    title: "Spark Lab",
+    shortTitle: "Create",
+    category: "Bonus",
     accent: "#FF4D8D",
-    softAccent: "#FFE5F0",
-    imageUrl: "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=900&q=80",
-    icon: Compass,
-    promise: "Temples, train windows, tea rooms, and quiet side streets.",
-    sessionInput: "Travel style",
-    sessionOutput: "Day plan",
-    metricLabel: "Saved routes"
+    softAccent: "#FFE4F0",
+    imageUrl: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=900&q=80",
+    icon: Sparkles,
+    promise: "Turn a prompt into a fast artifact and earn cosmetic shards.",
+    sessionInput: "creative prompt",
+    sessionOutput: "reward card",
+    metricLabel: "shards"
   },
   {
-    key: "morocco",
-    title: "Marrakesh Glow",
-    shortTitle: "Morocco",
-    category: "Africa",
-    accent: "#FFB000",
-    softAccent: "#FFF2C7",
-    imageUrl: "https://images.unsplash.com/photo-1548018560-c7196548e84d?auto=format&fit=crop&w=900&q=80",
-    icon: Hotel,
-    promise: "Riads, desert light, craft markets, and rooftop breakfasts.",
-    sessionInput: "Hotel mood",
-    sessionOutput: "Stay shortlist",
-    metricLabel: "Hotel picks"
+    key: "social",
+    title: "Duo Challenge",
+    shortTitle: "Duo",
+    category: "Social",
+    accent: "#00C985",
+    softAccent: "#DDFCED",
+    imageUrl: "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=900&q=80",
+    icon: Trophy,
+    promise: "Join a quick co-op challenge and climb the weekly league.",
+    sessionInput: "team goal",
+    sessionOutput: "league boost",
+    metricLabel: "rank boost"
   },
   {
-    key: "iceland",
-    title: "Northern Lights",
-    shortTitle: "Iceland",
-    category: "Europe",
-    accent: "#19C8FF",
-    softAccent: "#E1F8FF",
-    imageUrl: "https://images.unsplash.com/photo-1504829857797-ddff29c27927?auto=format&fit=crop&w=900&q=80",
-    icon: Mountain,
-    promise: "Glacier lagoons, black sand, thermal pools, and aurora nights.",
-    sessionInput: "Adventure level",
-    sessionOutput: "Route map",
-    metricLabel: "Route days"
-  },
-  {
-    key: "peru",
-    title: "Andes Passage",
-    shortTitle: "Peru",
-    category: "South America",
-    accent: "#72D94E",
-    softAccent: "#EAFADB",
-    imageUrl: "https://images.unsplash.com/photo-1526392060635-9d6019884377?auto=format&fit=crop&w=900&q=80",
-    icon: Map,
-    promise: "Sacred Valley mornings, train rides, and high-altitude viewpoints.",
-    sessionInput: "Route priority",
-    sessionOutput: "Guide match",
-    metricLabel: "Guide matches"
+    key: "boss",
+    title: "Boss Round",
+    shortTitle: "Boss",
+    category: "Event",
+    accent: "#875CFF",
+    softAccent: "#EEE7FF",
+    imageUrl: "https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=900&q=80",
+    icon: Crown,
+    promise: "A higher-stakes round with multiplier XP and rare badge progress.",
+    sessionInput: "boss attempt",
+    sessionOutput: "badge progress",
+    metricLabel: "boss wins"
   }
 ];
 
 export const onboardingSteps = [
   {
-    id: "job",
-    eyebrow: "Trip style",
-    title: "Choose a travel mood",
-    body: "Solara matches destination, pace, hotel feel, and guide style into one clean itinerary.",
-    options: ["Slow culture", "Adventure", "Food route"]
+    id: "quest-style",
+    eyebrow: "Player setup",
+    title: "Choose your quest rhythm",
+    body: "SkillQuest turns app onboarding into a tiny game loop: goal, challenge, reward, repeat.",
+    options: ["Fast XP", "Calm streak", "Boss mode"]
   },
   {
-    id: "loop",
-    eyebrow: "Booking",
-    title: "Hold the best tour",
-    body: "Select a schedule, compare accommodation, and keep a flexible hold before checkout.",
-    options: ["Tour", "Hotel", "Guide"]
+    id: "reward-loop",
+    eyebrow: "Reward loop",
+    title: "Make every tap pay back",
+    body: "Each action can show progress, unlock a badge, protect a streak, or push the player toward the next level.",
+    options: ["XP", "Coins", "Badges"]
   },
   {
-    id: "stack",
-    eyebrow: "Travel kit",
-    title: "Save the trip card",
-    body: "Favorite tours, vouchers, boarding notes, and local contacts stay in one itinerary.",
-    options: ["Voucher", "Map", "Contacts"]
+    id: "collection",
+    eyebrow: "Collection",
+    title: "Give players something to keep",
+    body: "Saved results, power-ups, cards, and achievements become the reason to return tomorrow.",
+    options: ["Cards", "Power-ups", "Shields"]
   }
 ];
 
 export const sessions: SessionResult[] = [
   {
     id: "launch-plan",
-    title: "Rio arrival plan",
+    title: "Focus Sprint cleared",
     score: 92,
     minutes: 5,
     status: "completed",
-    insight: "Airport transfer, hotel check-in, and evening restaurant are reserved.",
-    nextAction: "Confirm sunset dinner table."
+    insight: "Perfect streak through 8 micro tasks. Combo multiplier reached x3.",
+    nextAction: "Claim the neon focus badge."
   },
   {
     id: "health-reset",
-    title: "Ipanema coast day",
+    title: "Puzzle Gate saved",
     score: 81,
     minutes: 4,
     status: "saved",
-    insight: "Beach walk, bike rental, and seafood lunch are grouped by distance.",
-    nextAction: "Choose morning or golden-hour start."
+    insight: "Two answer paths are still open, with one streak shield available.",
+    nextAction: "Use shield before the boss round."
   },
   {
     id: "learning-sprint",
-    title: "Christ the Redeemer slot",
+    title: "Boss Round resumable",
     score: 76,
     minutes: 5,
     status: "resumable",
-    insight: "Early access guide slot is available with hotel pickup.",
-    nextAction: "Save the 07:30 pickup window."
+    insight: "Rare badge is 70% complete. One clean run unlocks the crown card.",
+    nextAction: "Start the final 90-second attempt."
   }
 ];
 
 export const recommendations: Recommendation[] = [
   {
     id: "onboarding-lab",
-    title: "Book Rio with a private guide",
-    reason: "Best match for cultural pace, hotel pickup, and flexible dinner plans.",
-    action: "Open tour detail",
-    domain: "brazil"
+    title: "Protect the 9-day streak",
+    reason: "One light quest today keeps the streak alive and adds 120 XP.",
+    action: "Start light quest",
+    domain: "focus"
   },
   {
     id: "carousel-lab",
-    title: "Save Kyoto for spring",
-    reason: "Lower crowd days are available after the first cherry blossom weekend.",
-    action: "Save route",
-    domain: "japan"
+    title: "Open the Spark Lab chest",
+    reason: "Creative shard chest is ready after two saved quest cards.",
+    action: "Claim chest",
+    domain: "creative"
   },
   {
     id: "cloudflare-ready",
-    title: "Compare riads in Marrakesh",
-    reason: "Three quiet properties match rooftop breakfast and walkable souk access.",
-    action: "Compare stays",
-    domain: "morocco"
+    title: "Enter Neon League push",
+    reason: "A duo challenge can move the player from rank 18 to rank 12.",
+    action: "Join challenge",
+    domain: "social"
   }
 ];
 
 export const analyticsMetrics = [
-  { label: "trips planned", value: "12", delta: "+3", tone: "blue" as const },
-  { label: "saved tours", value: "8", delta: "+2", tone: "green" as const },
-  { label: "match score", value: "91%", delta: "+6%", tone: "purple" as const },
-  { label: "price alerts", value: "4", delta: "live", tone: "gold" as const }
+  { label: "XP this week", value: "1.8k", delta: "+420", tone: "coral" as const },
+  { label: "streak", value: "9d", delta: "safe", tone: "gold" as const },
+  { label: "league rank", value: "#18", delta: "+4", tone: "purple" as const },
+  { label: "quests done", value: "24", delta: "+6", tone: "green" as const }
 ];
 
 export const quickActions = [
-  { label: "Flights", tone: "coral" as const },
-  { label: "Hotels", tone: "green" as const },
-  { label: "Guides", tone: "blue" as const },
-  { label: "Insurance", tone: "gold" as const }
+  { label: "Daily", tone: "coral" as const },
+  { label: "Chest", tone: "gold" as const },
+  { label: "Duo", tone: "green" as const },
+  { label: "Boss", tone: "purple" as const }
+];
+
+export const rewardTrack = [
+  { label: "120 XP", unlocked: true },
+  { label: "coin x40", unlocked: true },
+  { label: "shield", unlocked: false },
+  { label: "badge", unlocked: false }
+];
+
+export const activeLessons = [
+  { title: "Combo Basics", progress: 78, meta: "5 tasks left", tone: "blue" as const },
+  { title: "Memory Dash", progress: 54, meta: "2 shields ready", tone: "green" as const },
+  { title: "Boss Prep", progress: 70, meta: "rare badge", tone: "purple" as const }
 ];
 
 export function getDomain(key: DomainKey) {

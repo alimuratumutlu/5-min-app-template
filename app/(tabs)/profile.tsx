@@ -10,7 +10,7 @@ export default function ProfileScreen() {
   const [personalized, setPersonalized] = useState(true);
 
   return (
-    <AppScreen title="Traveler profile" subtitle="Preferences, rewards, and account" activeDomain="Solara Trips">
+    <AppScreen title="Player profile" subtitle="Avatar, rewards, and account" activeDomain="SkillQuest">
       <Card>
         <View style={{ flexDirection: "row", alignItems: "center", gap: 13 }}>
           <View
@@ -34,7 +34,7 @@ export default function ProfileScreen() {
               Vanessa Moreau
             </Text>
             <Text selectable style={textStyles.body}>
-              Profile image/avatar active. {userProgress.level}, {userProgress.points.toLocaleString()} miles, {userProgress.streak} trip streak.
+              Avatar active. {userProgress.level}, {userProgress.points.toLocaleString()} XP, {userProgress.streak} day streak.
             </Text>
           </View>
           <IconButton icon={Palette} label="Edit personalization" onPress={() => router.push("/details/cloudflare-ready")} />
@@ -42,18 +42,18 @@ export default function ProfileScreen() {
       </Card>
 
       <View style={{ flexDirection: "row", flexWrap: "wrap", justifyContent: "space-between", gap: 10 }}>
-        <CompactTile title="2k" body="Traveler signals and saved preferences." tone="blue" icon={UserRoundCheck} onPress={() => router.push("/details/onboarding-lab")} />
-        <CompactTile title="7 trips" body="Routes compared this season." tone="coral" icon={Palette} onPress={() => router.push("/details/carousel-lab")} />
+        <CompactTile title="2k" body="Player signals and saved preferences." tone="blue" icon={UserRoundCheck} onPress={() => router.push("/details/onboarding-lab")} />
+        <CompactTile title="7 cards" body="Rewards unlocked this season." tone="coral" icon={Palette} onPress={() => router.push("/details/carousel-lab")} />
       </View>
 
       <Card tone="green">
         <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", gap: 12 }}>
           <View style={{ flex: 1, gap: 5 }}>
             <Text selectable style={textStyles.cardTitle}>
-              Travel preferences
+              Game preferences
             </Text>
             <Text selectable style={textStyles.body}>
-              Adapt recommendations by hotel mood, route pace, guide style, and saved trip behavior.
+              Adapt recommendations by quest pace, reward style, challenge difficulty, and saved behavior.
             </Text>
           </View>
           <Switch value={personalized} onValueChange={setPersonalized} />
@@ -65,16 +65,16 @@ export default function ProfileScreen() {
         <Text selectable style={textStyles.sectionTitle}>
           Settings and rewards
         </Text>
-        <ListRow title="Preferred destinations" body={domains.map((domain) => domain.shortTitle).join(", ")} meta="personalization" onPress={() => router.push("/details/onboarding-lab")} />
-        <ListRow title="Privacy and trip documents" body="Keep passport notes, saved cards, and itinerary output protected." meta="settings" onPress={() => router.push("/details/cloudflare-ready")} />
-        <ListRow title="Rewards membership" body="Upgrade, lounge perks, flexible holds, and account limits live here." meta="account subscription" onPress={() => router.push("/details/carousel-lab")} />
+        <ListRow title="Preferred quest worlds" body={domains.map((domain) => domain.shortTitle).join(", ")} meta="personalization" onPress={() => router.push("/details/onboarding-lab")} />
+        <ListRow title="Privacy and saved cards" body="Keep profile state, reward cards, and session output protected." meta="settings" onPress={() => router.push("/details/cloudflare-ready")} />
+        <ListRow title="Rewards membership" body="Upgrade, cosmetics, streak shields, and account limits live here." meta="account subscription" onPress={() => router.push("/details/carousel-lab")} />
       </View>
 
       <View style={{ flexDirection: "row", gap: 10 }}>
         <Button label="Notifications" icon={Bell} variant="secondary" onPress={() => router.push("/details/onboarding-lab")} />
         <Button label="Billing" icon={CreditCard} variant="secondary" onPress={() => router.push("/details/carousel-lab")} />
       </View>
-      <Button label="Travel document security" icon={ShieldCheck} variant="quiet" onPress={() => router.push("/details/cloudflare-ready")} />
+      <Button label="Reward vault security" icon={ShieldCheck} variant="quiet" onPress={() => router.push("/details/cloudflare-ready")} />
     </AppScreen>
   );
 }

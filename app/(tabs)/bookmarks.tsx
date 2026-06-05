@@ -15,10 +15,10 @@ export default function BookmarksScreen() {
   }))];
 
   return (
-    <AppScreen title="Saved trips" subtitle="Favorite tours, hotels, and routes" activeDomain="Solara Trips">
+    <AppScreen title="Collection" subtitle="Badges, boosts, cards, and saved runs" activeDomain="SkillQuest">
       <HeroPoster
-        title="Saved journeys"
-        subtitle="Resume the strongest tour brief, hotel shortlist, route map, or guide match."
+        title="Reward shelf"
+        subtitle="Resume saved quests, inspect badge cards, and spend power-ups."
         imageUrl={domains[2].imageUrl}
         accent={domains[2].accent}
         meta={`${savedOutputs.length} saved`}
@@ -27,24 +27,24 @@ export default function BookmarksScreen() {
 
       <Card tone="gold">
         <Text selectable style={textStyles.cardTitle}>
-          Your travel shelf
+          Your game shelf
         </Text>
         <Text selectable style={textStyles.body}>
-          Saved tours stay ready to compare, continue, review, or open before booking.
+          Saved runs, badge cards, and power-ups stay ready to continue or review.
         </Text>
-        <Button label="Create new trip" icon={Plus} onPress={() => router.push("/session")} />
+        <Button label="Start new quest" icon={Plus} onPress={() => router.push("/session")} />
       </Card>
 
       <View style={{ gap: 10 }}>
         <Text selectable style={textStyles.sectionTitle}>
-          Favorite routes
+          Saved rewards
         </Text>
         {savedOutputs.map((item) => (
           <ListRow
             key={item.id}
             title={item.title}
             body={item.insight}
-            meta={`${item.status} trip output - continue or review`}
+            meta={`${item.status} quest card - continue or review`}
             onPress={() => router.push(`/details/${item.id}`)}
           />
         ))}

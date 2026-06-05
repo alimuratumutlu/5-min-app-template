@@ -18,8 +18,8 @@ export default function TabsLayout() {
           left: 24,
           right: 24,
           bottom: 16,
-          height: 72,
-          borderRadius: 40,
+          height: 64,
+          borderRadius: 34,
           borderCurve: "continuous",
           borderWidth: 1,
           borderColor: "rgba(255,255,255,0.92)",
@@ -28,8 +28,18 @@ export default function TabsLayout() {
           boxShadow: "0 18px 42px rgba(36, 123, 255, 0.14)"
         },
         tabBarItemStyle: {
+          alignItems: "center",
           height: 64,
-          paddingTop: 10
+          justifyContent: "center",
+          paddingBottom: 0,
+          paddingTop: 0
+        },
+        tabBarIconStyle: {
+          alignItems: "center",
+          height: 50,
+          justifyContent: "center",
+          marginTop: 0,
+          width: 58
         }
       }}
     >
