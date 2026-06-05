@@ -94,7 +94,7 @@ export default function HomeScreen() {
         <DomainCarousel items={carouselItems} selectedId={selectedDomain} onSelect={(id) => setSelectedDomain(id as DomainKey)} />
       </View>
 
-      <View style={{ flexDirection: "row", flexWrap: "wrap", justifyContent: "space-between", gap: 10 }}>
+      <View style={{ flexDirection: "row", flexWrap: "wrap", justifyContent: "space-between", gap: 18 }}>
         {quickActions.map((item, index) => (
           <CompactTile
             key={item.label}
@@ -107,7 +107,7 @@ export default function HomeScreen() {
         ))}
       </View>
 
-      <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 10 }}>
+      <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 18 }}>
         <Metric label="combo score" value={`${sessions[0].score}`} delta="x3 streak" tone="purple" />
         <Metric label="next level" value={`${100 - userProgress.confidence}%`} delta="to level 13" tone="green" />
       </View>

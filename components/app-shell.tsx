@@ -835,7 +835,7 @@ const styles = StyleSheet.create({
     flex: 1
   },
   scrollContent: {
-    gap: 18,
+    gap: 22,
     paddingHorizontal: 16,
     paddingTop: 14,
     paddingBottom: 112
@@ -1370,7 +1370,7 @@ const styles = StyleSheet.create({
     minHeight: 148,
     overflow: "hidden",
     padding: 15,
-    width: "48%"
+    width: "47%"
   },
   compactTileGlow: {
     borderRadius: 70,
