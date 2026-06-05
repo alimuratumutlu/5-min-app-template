@@ -1,4 +1,4 @@
-import type { ComponentType, ReactNode } from "react";
+import { useRef, type ComponentType, type ReactNode } from "react";
 import { BlurView } from "expo-blur";
 import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
@@ -14,6 +14,7 @@ import {
   type LucideIcon
 } from "lucide-react-native";
 import {
+  Animated,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -23,6 +24,8 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { userProgress } from "@/lib/template-data";
+
+const AnimatedBlurView = Animated.createAnimatedComponent(BlurView);
 
 export const colors = {
   background: "#FFFFFF",
@@ -89,17 +92,21 @@ type MetricProps = {
 type Tone = "blue" | "green" | "purple" | "coral" | "gold";
 
 export function AppScreen({ title, subtitle, activeDomain = "Template", children, footer }: AppScreenProps) {
+  const scrollY = useRef(new Animated.Value(0)).current;
+
   return (
     <SafeAreaView style={styles.safeArea} edges={["top", "left", "right"]}>
-      <AppHeader title={title} subtitle={subtitle} activeDomain={activeDomain} />
-      <ScrollView
+      <AppHeader title={title} subtitle={subtitle} activeDomain={activeDomain} scrollY={scrollY} />
+      <Animated.ScrollView
         style={styles.scroll}
         contentContainerStyle={[styles.scrollContent, footer ? styles.scrollWithFooter : null]}
         contentInsetAdjustmentBehavior="automatic"
         keyboardShouldPersistTaps="handled"
+        onScroll={Animated.event([{ nativeEvent: { contentOffset: { y: scrollY } } }], { useNativeDriver: false })}
+        scrollEventThrottle={16}
       >
         {children}
-      </ScrollView>
+      </Animated.ScrollView>
       {footer ? <View style={styles.footer}>{footer}</View> : null}
     </SafeAreaView>
   );
@@ -109,10 +116,67 @@ export function ScreenScaffold(props: AppScreenProps) {
   return <AppScreen {...props} />;
 }
 
-export function AppHeader({ title, subtitle, activeDomain }: { title: string; subtitle?: string; activeDomain: string }) {
+export function AppHeader({
+  title,
+  subtitle,
+  activeDomain,
+  scrollY
+}: {
+  title: string;
+  subtitle?: string;
+  activeDomain: string;
+  scrollY?: Animated.Value;
+}) {
+  const animatedFrameStyle = scrollY
+    ? {
+        paddingHorizontal: scrollY.interpolate({
+          inputRange: [0, 52, 124],
+          outputRange: [12, 5, 0],
+          extrapolate: "clamp"
+        }),
+        paddingTop: scrollY.interpolate({
+          inputRange: [0, 52, 124],
+          outputRange: [8, 4, 0],
+          extrapolate: "clamp"
+        })
+      }
+    : null;
+  const animatedBlurStyle = scrollY
+    ? {
+        borderRadius: scrollY.interpolate({
+          inputRange: [0, 40, 116],
+          outputRange: [36, 24, 0],
+          extrapolate: "clamp"
+        }),
+        transform: [
+          {
+            translateY: scrollY.interpolate({
+              inputRange: [0, 48, 120],
+              outputRange: [0, -4, -8],
+              extrapolate: "clamp"
+            })
+          },
+          {
+            scaleX: scrollY.interpolate({
+              inputRange: [0, 36, 84, 124],
+              outputRange: [0.968, 0.995, 1.018, 1],
+              extrapolate: "clamp"
+            })
+          },
+          {
+            scaleY: scrollY.interpolate({
+              inputRange: [0, 72, 124],
+              outputRange: [1, 1.025, 1],
+              extrapolate: "clamp"
+            })
+          }
+        ]
+      }
+    : null;
+
   return (
-    <View style={styles.headerFrame}>
-      <BlurView intensity={62} tint="light" style={styles.headerBlur}>
+    <Animated.View style={[styles.headerFrame, animatedFrameStyle]}>
+      <AnimatedBlurView intensity={62} tint="light" style={[styles.headerBlur, animatedBlurStyle]}>
         <View style={styles.headerContent}>
           <View style={styles.logoMark}>
             <Sparkles color={colors.blue} size={18} strokeWidth={2.8} />
@@ -140,8 +204,8 @@ export function AppHeader({ title, subtitle, activeDomain }: { title: string; su
             </Text>
           </View>
         </View>
-      </BlurView>
-    </View>
+      </AnimatedBlurView>
+    </Animated.View>
   );
 }
 
