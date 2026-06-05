@@ -762,13 +762,9 @@ const styles = StyleSheet.create({
     height: "100%"
   },
   questionCard: {
-    backgroundColor: "#FFFFFF",
-    borderRadius: 36,
-    borderCurve: "continuous",
     gap: 17,
     minHeight: 460,
-    padding: 17,
-    boxShadow: "0 22px 46px rgba(16,17,22,0.09)"
+    paddingVertical: 10
   },
   questionHeader: {
     alignItems: "center",
