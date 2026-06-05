@@ -925,9 +925,6 @@ const styles = StyleSheet.create({
     lineHeight: 12
   },
   footer: {
-    backgroundColor: colors.surface,
-    borderColor: colors.border,
-    borderTopWidth: 1,
     bottom: 0,
     left: 0,
     padding: 16,
