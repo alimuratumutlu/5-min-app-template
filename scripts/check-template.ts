@@ -14,6 +14,7 @@ function read(relativePath: string) {
 }
 
 const templateData = read("lib/template-data.ts");
+const inputMechanics = read("lib/input-mechanics.ts");
 const adapters = read("lib/platform-adapters.ts");
 const shell = read("components/app-shell.tsx");
 const routes = [
@@ -30,6 +31,8 @@ assert((templateData.match(/eyebrow: "/g) ?? []).length >= 3, "player setup flow
 assert((templateData.match(/score:/g) ?? []).length >= 3, "template must include non-empty session results");
 assert((templateData.match(/reason:/g) ?? []).length >= 3, "template must include domain-specific recommendations");
 assert((templateData.match(/delta:/g) ?? []).length >= 4, "analytics must include meaningful metrics");
+assert((inputMechanics.match(/^  \["/gm) ?? []).length === 100, "template must include exactly 100 input mechanics");
+assert(inputMechanics.includes("research-25") && inputMechanics.includes("original-40") && inputMechanics.includes("hassar-100"), "input mechanics must include all three growth layers");
 assert(adapters.includes("Clerk"), "Clerk adapter note missing");
 assert(adapters.includes("D1"), "Cloudflare D1 adapter note missing");
 assert(adapters.includes("R2"), "Cloudflare R2 adapter note missing");

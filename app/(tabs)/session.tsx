@@ -2,9 +2,10 @@ import { useMemo, useState, type ComponentType } from "react";
 import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
-import { Brain, Clock3, Crown, Flame, Gamepad2, Play, Sparkles, Star, Trophy, Zap } from "lucide-react-native";
+import { Brain, Clock3, Crown, Flame, Gamepad2, Layers3, Play, Sparkles, Star, Trophy, WandSparkles, Zap } from "lucide-react-native";
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { AppScreen, Button, ProgressStatus, colors, fonts, textStyles } from "@/components/app-shell";
+import { inputMechanicStats } from "@/lib/input-mechanics";
 import { domains, userProgress } from "@/lib/template-data";
 
 type Tone = "coral" | "gold" | "green" | "purple" | "blue";
@@ -172,6 +173,26 @@ export default function SessionScreen() {
   return (
     <AppScreen title="Play quest" subtitle="Games, runs, rewards" activeDomain="SkillQuest">
       <EditorHero game={selectedGame} onPlay={() => router.push(`/game/${selectedGame.id}`)} />
+
+      <Pressable onPress={() => router.push("/mechanics")} style={({ pressed }) => [styles.mechanicLabCard, pressed ? styles.pressed : null]}>
+        <View style={styles.mechanicLabIcon}>
+          <WandSparkles color="#FFFFFF" size={24} strokeWidth={3} />
+        </View>
+        <View style={{ flex: 1, gap: 4 }}>
+          <Text selectable style={styles.mechanicLabTitle}>
+            100 input mechanics lab
+          </Text>
+          <Text selectable style={styles.mechanicLabBody}>
+            Browse playful ways to collect daily-life data across HASSAR apps.
+          </Text>
+        </View>
+        <View style={styles.mechanicLabCount}>
+          <Layers3 color={colors.blue} size={16} strokeWidth={3} />
+          <Text selectable style={styles.mechanicLabCountText}>
+            {inputMechanicStats.total}
+          </Text>
+        </View>
+      </Pressable>
 
       <View style={styles.continuePanel}>
         <View style={styles.sectionHeader}>
@@ -516,6 +537,53 @@ const styles = StyleSheet.create({
     fontFamily: fonts.bold,
     fontSize: 13,
     fontWeight: "700"
+  },
+  mechanicLabCard: {
+    alignItems: "center",
+    backgroundColor: "#FFFFFF",
+    borderRadius: 30,
+    borderCurve: "continuous",
+    flexDirection: "row",
+    gap: 12,
+    padding: 14,
+    boxShadow: "0 18px 38px rgba(36, 123, 255, 0.12)"
+  },
+  mechanicLabIcon: {
+    alignItems: "center",
+    backgroundColor: colors.blue,
+    borderRadius: 24,
+    height: 52,
+    justifyContent: "center",
+    width: 52
+  },
+  mechanicLabTitle: {
+    color: colors.text,
+    fontFamily: fonts.black,
+    fontSize: 18,
+    fontWeight: "900",
+    lineHeight: 21
+  },
+  mechanicLabBody: {
+    color: colors.textMuted,
+    fontFamily: fonts.medium,
+    fontSize: 13,
+    lineHeight: 18
+  },
+  mechanicLabCount: {
+    alignItems: "center",
+    backgroundColor: colors.blueSoft,
+    borderRadius: 18,
+    flexDirection: "row",
+    gap: 5,
+    paddingHorizontal: 10,
+    paddingVertical: 8
+  },
+  mechanicLabCountText: {
+    color: colors.blue,
+    fontFamily: fonts.black,
+    fontSize: 14,
+    fontWeight: "900",
+    lineHeight: 16
   },
   continuePanel: {
     backgroundColor: "#FFFFFF",
