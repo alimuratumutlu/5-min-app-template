@@ -153,7 +153,7 @@ export default function MechanicDetailScreen() {
 function ExampleSurface({ mechanic }: { mechanic: InputMechanic }) {
   const mode = useMemo(() => getExampleMode(mechanic), [mechanic]);
   const [selected, setSelected] = useState("Today");
-  const [chips, setChips] = useState<string[]>(["Energy"]);
+  const [chips, setChips] = useState<string[]>(() => buildOptions(mechanic).slice(0, 2));
   const [note, setNote] = useState("");
 
   const toggleChip = (chip: string) => {
@@ -178,6 +178,8 @@ function ExampleSurface({ mechanic }: { mechanic: InputMechanic }) {
 
       {mode === "sort" ? (
         <SortPreview mechanic={mechanic} />
+      ) : mode === "multi" ? (
+        <MultiPickPreview mechanic={mechanic} chips={chips} onChip={toggleChip} />
       ) : mode === "scale" ? (
         <ScalePreview mechanic={mechanic} />
       ) : mode === "media" ? (
@@ -195,6 +197,37 @@ function ExampleSurface({ mechanic }: { mechanic: InputMechanic }) {
         <Text selectable style={styles.savedText}>
           Captured signal, not marked right or wrong.
         </Text>
+      </View>
+    </View>
+  );
+}
+
+function MultiPickPreview({ mechanic, chips, onChip }: { mechanic: InputMechanic; chips: string[]; onChip: (value: string) => void }) {
+  const options = buildMultiOptions(mechanic);
+  return (
+    <View style={styles.multiPickCard}>
+      <View style={styles.multiPickHeader}>
+        <Text selectable style={styles.multiPickTitle}>
+          Pick all that apply
+        </Text>
+        <View style={styles.multiPickCount}>
+          <Text selectable style={styles.multiPickCountText}>
+            {chips.length} selected
+          </Text>
+        </View>
+      </View>
+      <View style={styles.multiChipGrid}>
+        {options.map((option) => {
+          const active = chips.includes(option);
+          return (
+            <Pressable key={option} onPress={() => onChip(option)} style={({ pressed }) => [styles.multiChip, active ? styles.multiChipActive : null, pressed ? styles.pressed : null]}>
+              <Text selectable style={[styles.multiChipText, active ? styles.multiChipTextActive : null]}>
+                {option}
+              </Text>
+              {active ? <Check color="#FFFFFF" size={15} strokeWidth={3} /> : null}
+            </Pressable>
+          );
+        })}
       </View>
     </View>
   );
@@ -365,6 +398,7 @@ function getExampleMode(mechanic: InputMechanic) {
   const text = `${mechanic.title} ${mechanic.pattern} ${mechanic.captures}`.toLowerCase();
   if (text.includes("photo") || text.includes("scan") || text.includes("visual") || text.includes("image")) return "media";
   if (text.includes("voice") || text.includes("speak") || text.includes("pronunciation") || text.includes("audio")) return "voice";
+  if (text.includes("multi pick") || text.includes("chip tray") || text.includes("chips") || text.includes("selectable")) return "multi";
   if (text.includes("sort") || text.includes("bucket") || text.includes("triage") || text.includes("slot")) return "sort";
   if (text.includes("slider") || text.includes("scale") || text.includes("meter") || text.includes("pulse")) return "scale";
   return "choice";
@@ -382,8 +416,15 @@ function buildOptions(mechanic: Partial<InputMechanic>) {
   return Array.from(new Set(options)).slice(0, 3).map((item) => titleCase(item));
 }
 
+function buildMultiOptions(mechanic: InputMechanic) {
+  const base = buildOptions(mechanic);
+  const extras = ["Mood", "Energy", "Sleep", "Food", "Pain", "Context"];
+  return Array.from(new Set([...base, ...extras])).slice(0, 8);
+}
+
 function buildSampleValue(mechanic: InputMechanic) {
   if (mechanic.effort === "rich") return "media-or-voice-capture-ready";
+  if (getExampleMode(mechanic) === "multi") return buildOptions(mechanic).slice(0, 2);
   if (mechanic.effort === "short") return buildOptions(mechanic).join(" + ");
   return buildOptions(mechanic)[0];
 }
@@ -507,6 +548,75 @@ const styles = StyleSheet.create({
   },
   optionStack: {
     gap: 11
+  },
+  multiPickCard: {
+    backgroundColor: "#F6FAFF",
+    borderColor: "#DDEBFF",
+    borderCurve: "continuous",
+    borderRadius: 28,
+    borderWidth: 1,
+    gap: 12,
+    padding: 14
+  },
+  multiPickHeader: {
+    alignItems: "center",
+    flexDirection: "row",
+    gap: 10,
+    justifyContent: "space-between"
+  },
+  multiPickTitle: {
+    color: colors.text,
+    flex: 1,
+    fontFamily: fonts.black,
+    fontSize: 17,
+    fontWeight: "900",
+    lineHeight: 20
+  },
+  multiPickCount: {
+    backgroundColor: colors.purpleSoft,
+    borderRadius: 16,
+    paddingHorizontal: 9,
+    paddingVertical: 7
+  },
+  multiPickCountText: {
+    color: colors.purple,
+    fontFamily: fonts.black,
+    fontSize: 11,
+    fontWeight: "900",
+    lineHeight: 13
+  },
+  multiChipGrid: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 9
+  },
+  multiChip: {
+    alignItems: "center",
+    backgroundColor: "#FFFFFF",
+    borderColor: "#E1E8F2",
+    borderRadius: 22,
+    borderWidth: 2,
+    flexDirection: "row",
+    gap: 7,
+    minHeight: 46,
+    paddingHorizontal: 13,
+    paddingVertical: 10,
+    boxShadow: "0 6px 0 rgba(216,223,232,0.9)"
+  },
+  multiChipActive: {
+    backgroundColor: colors.blue,
+    borderColor: colors.blue,
+    boxShadow: "0 6px 0 rgba(24,93,205,0.9)"
+  },
+  multiChipText: {
+    color: colors.text,
+    fontFamily: fonts.black,
+    fontSize: 14,
+    fontWeight: "900",
+    lineHeight: 17
+  },
+  multiChipTextActive: {
+    color: "#FFFFFF"
   },
   duoShell: {
     backgroundColor: "#D8DFE8",
