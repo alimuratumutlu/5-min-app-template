@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useRouter } from "expo-router";
-import { Save, WandSparkles } from "lucide-react-native";
+import { Clock3, Save, WandSparkles } from "lucide-react-native";
 import { Text, TextInput, View } from "react-native";
-import { AppScreen, Button, Card, ProgressStatus, textStyles } from "@/components/app-shell";
+import { AppScreen, Button, Card, HeroPoster, ProgressStatus, textStyles } from "@/components/app-shell";
 import { domains, sessions } from "@/lib/template-data";
 
 export default function SessionScreen() {
@@ -13,6 +13,15 @@ export default function SessionScreen() {
 
   return (
     <AppScreen title="5-Min Session" subtitle="Primary action workflow" activeDomain="Main Action">
+      <HeroPoster
+        title="Your next action, decoded"
+        subtitle="One input becomes one script, one timer, one saved result."
+        imageUrl={activeDomain.imageUrl}
+        accent={activeDomain.accent}
+        meta={`${step}/4 steps`}
+        onPress={() => setStep((value) => Math.min(4, value + 1))}
+      />
+
       <Card tone="blue">
         <Text selectable style={textStyles.cardTitle}>
           Generate the first useful output
@@ -56,7 +65,7 @@ export default function SessionScreen() {
         <Text selectable style={textStyles.body}>
           Result brief: split the product shell from backend services, mature the UX first, then attach Clerk, D1, R2, analytics, and payments through adapters.
         </Text>
-        <Button label="Open saved result" variant="secondary" onPress={() => router.push(`/details/${sessions[0].id}`)} />
+        <Button label="Open saved result" icon={Clock3} variant="secondary" onPress={() => router.push(`/details/${sessions[0].id}`)} />
       </Card>
 
       <View style={{ gap: 10 }}>

@@ -7,7 +7,7 @@
   "last_completed_stage": "010-qa-pass",
   "next_stage": "011-store-assets-aso",
   "started_at": "2026-06-05T00:00:00.000Z",
-  "updated_at": "2026-06-05T06:56:38.000Z",
+  "updated_at": "2026-06-05T07:10:33.000Z",
   "inputs": {
     "requirements_md": "present",
     "runbook_md": "present",
@@ -43,9 +43,9 @@
     "production_deployed": false
   },
   "checks": {
-    "last_command": "npm run start:check && npm run typecheck && npm run platform:validate && Expo web browser smoke",
+    "last_command": "npm run start:check && npm run typecheck && npm run platform:validate && npx expo install --check && Expo web browser smoke",
     "last_result": "passed",
-    "last_checked_at": "2026-06-05T06:56:38.000Z",
+    "last_checked_at": "2026-06-05T07:10:33.000Z",
     "commands": [
       {
         "command": "npm run start:check",
@@ -63,9 +63,14 @@
         "notes": "HASSAR product shell validator passed with no blockers or warnings."
       },
       {
+        "command": "npx expo install --check",
+        "result": "passed",
+        "notes": "Expo dependency versions are compatible, including expo-image."
+      },
+      {
         "command": "npx expo start --web --port 8097 + Playwright route smoke",
         "result": "passed",
-        "notes": "Home, Analytics, Session, and detail routes rendered in browser. Expo/RN emitted a pointerEvents deprecation warning."
+        "notes": "Home, Session, and Bookmarks rendered in browser with updated visual poster surfaces. Expo/RN emitted a pointerEvents deprecation warning."
       }
     ]
   },

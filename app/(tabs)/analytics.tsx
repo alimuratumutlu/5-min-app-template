@@ -1,6 +1,7 @@
 import { useRouter } from "expo-router";
+import { Activity, BookmarkCheck, TrendingUp, Trophy } from "lucide-react-native";
 import { Text, View } from "react-native";
-import { AppScreen, Button, Card, ListRow, Metric, ProgressStatus, textStyles } from "@/components/app-shell";
+import { AppScreen, Button, Card, CompactTile, ListRow, Metric, ProgressStatus, textStyles } from "@/components/app-shell";
 import { analyticsMetrics, recommendations, sessions, userProgress } from "@/lib/template-data";
 
 export default function AnalyticsScreen() {
@@ -12,6 +13,13 @@ export default function AnalyticsScreen() {
         {analyticsMetrics.map((metric) => (
           <Metric key={metric.label} label={metric.label} value={metric.value} delta={metric.delta} tone={metric.tone} />
         ))}
+      </View>
+
+      <View style={{ flexDirection: "row", flexWrap: "wrap", justifyContent: "space-between", gap: 10 }}>
+        <CompactTile title="Tour schedule" body="Session cadence and completion windows." tone="green" icon={Activity} onPress={() => router.push("/details/launch-plan")} />
+        <CompactTile title="Rewards" body={`${userProgress.points} points with ${userProgress.streak} day streak.`} tone="gold" icon={Trophy} onPress={() => router.push("/details/carousel-lab")} />
+        <CompactTile title="Saved" body="Favorite outputs reused across sessions." tone="blue" icon={BookmarkCheck} onPress={() => router.push("/bookmarks")} />
+        <CompactTile title="Trend" body="Confidence and validation movement." tone="purple" icon={TrendingUp} onPress={() => router.push("/details/onboarding-lab")} />
       </View>
 
       <Card tone="purple">

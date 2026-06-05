@@ -13,8 +13,10 @@ export type TemplateDomain = {
   key: DomainKey;
   title: string;
   shortTitle: string;
+  category: string;
   accent: string;
   softAccent: string;
+  imageUrl: string;
   icon: LucideIcon;
   promise: string;
   sessionInput: string;
@@ -55,8 +57,10 @@ export const domains: TemplateDomain[] = [
     key: "focus",
     title: "5-Min Focus Coach",
     shortTitle: "Focus",
-    accent: "#3657FF",
-    softAccent: "#E7EBFF",
+    category: "Productivity",
+    accent: "#FF8A5B",
+    softAccent: "#FFE6D8",
+    imageUrl: "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=900&q=80",
     icon: Brain,
     promise: "Turn one vague task into a tiny next action.",
     sessionInput: "Avoided task",
@@ -67,8 +71,10 @@ export const domains: TemplateDomain[] = [
     key: "health",
     title: "5-Min Health Reset",
     shortTitle: "Health",
-    accent: "#00A676",
-    softAccent: "#DEF8EF",
+    category: "Health care",
+    accent: "#2FBF8F",
+    softAccent: "#DDF7EC",
+    imageUrl: "https://images.unsplash.com/photo-1498837167922-ddd27525d352?auto=format&fit=crop&w=900&q=80",
     icon: HeartPulse,
     promise: "Check one signal and choose the safest next step.",
     sessionInput: "Body signal",
@@ -79,8 +85,10 @@ export const domains: TemplateDomain[] = [
     key: "learning",
     title: "5-Min Learning Sprint",
     shortTitle: "Learn",
-    accent: "#8B5CF6",
-    softAccent: "#EFE7FF",
+    category: "Learning",
+    accent: "#8B7CFF",
+    softAccent: "#ECE9FF",
+    imageUrl: "https://images.unsplash.com/photo-1497633762265-9d179a990aa6?auto=format&fit=crop&w=900&q=80",
     icon: BookOpenCheck,
     promise: "Practice one concept until it becomes usable.",
     sessionInput: "Topic",
@@ -91,8 +99,10 @@ export const domains: TemplateDomain[] = [
     key: "family",
     title: "5-Min Family Helper",
     shortTitle: "Family",
-    accent: "#FF6B4A",
-    softAccent: "#FFE9E2",
+    category: "Family",
+    accent: "#35B8C7",
+    softAccent: "#DDF7FA",
+    imageUrl: "https://images.unsplash.com/photo-1511895426328-dc8714191300?auto=format&fit=crop&w=900&q=80",
     icon: BadgeCheck,
     promise: "Convert a household friction point into one agreement.",
     sessionInput: "Family friction",
@@ -103,8 +113,10 @@ export const domains: TemplateDomain[] = [
     key: "work",
     title: "5-Min Work Coach",
     shortTitle: "Work",
-    accent: "#E0A100",
-    softAccent: "#FFF4CD",
+    category: "Work",
+    accent: "#E4A62F",
+    softAccent: "#FFF1CF",
+    imageUrl: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=900&q=80",
     icon: BriefcaseBusiness,
     promise: "Clarify one decision, message, or meeting move.",
     sessionInput: "Work situation",
@@ -196,6 +208,13 @@ export const analyticsMetrics = [
   { label: "saved result", value: "11", delta: "+3", tone: "green" as const },
   { label: "confidence trend", value: "74%", delta: "+9%", tone: "purple" as const },
   { label: "idea validation", value: "6", delta: "+2", tone: "gold" as const }
+];
+
+export const quickActions = [
+  { label: "Onboarding", tone: "coral" as const },
+  { label: "Carousel", tone: "green" as const },
+  { label: "Header", tone: "blue" as const },
+  { label: "Backend", tone: "gold" as const }
 ];
 
 export function getDomain(key: DomainKey) {

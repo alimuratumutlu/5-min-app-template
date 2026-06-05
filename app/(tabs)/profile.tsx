@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useRouter } from "expo-router";
-import { Bell, CreditCard, Palette, ShieldCheck } from "lucide-react-native";
+import { Bell, CreditCard, Palette, ShieldCheck, UserRoundCheck } from "lucide-react-native";
 import { Switch, Text, View } from "react-native";
-import { AppScreen, Button, Card, IconButton, ListRow, ProgressStatus, colors, textStyles } from "@/components/app-shell";
+import { AppScreen, Button, Card, CompactTile, IconButton, ListRow, ProgressStatus, colors, textStyles } from "@/components/app-shell";
 import { domains, userProgress } from "@/lib/template-data";
 
 export default function ProfileScreen() {
@@ -40,6 +40,11 @@ export default function ProfileScreen() {
           <IconButton icon={Palette} label="Edit personalization" onPress={() => router.push("/details/cloudflare-ready")} />
         </View>
       </Card>
+
+      <View style={{ flexDirection: "row", flexWrap: "wrap", justifyContent: "space-between", gap: 10 }}>
+        <CompactTile title="2k" body="Profile events and app actions." tone="blue" icon={UserRoundCheck} onPress={() => router.push("/details/onboarding-lab")} />
+        <CompactTile title="7 apps" body="Reusable shell variants tested." tone="coral" icon={Palette} onPress={() => router.push("/details/carousel-lab")} />
+      </View>
 
       <Card tone="green">
         <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", gap: 12 }}>

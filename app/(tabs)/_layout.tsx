@@ -10,21 +10,22 @@ export default function TabsLayout() {
       screenOptions={{
         headerShown: false,
         tabBarShowLabel: false,
-        tabBarActiveTintColor: colors.blue,
-        tabBarInactiveTintColor: "#7C8797",
-        tabBarBackground: () => <BlurView intensity={72} tint="light" style={StyleSheet.absoluteFill} />,
+        tabBarActiveTintColor: colors.ink,
+        tabBarInactiveTintColor: "rgba(255,255,255,0.62)",
+        tabBarBackground: () => <BlurView intensity={58} tint="dark" style={StyleSheet.absoluteFill} />,
         tabBarStyle: {
           position: "absolute",
-          left: 18,
-          right: 18,
+          left: 34,
+          right: 34,
           bottom: 16,
           height: 66,
           borderRadius: 8,
           borderCurve: "continuous",
           borderWidth: 1,
-          borderColor: "rgba(54, 87, 255, 0.15)",
-          backgroundColor: "rgba(255, 255, 255, 0.72)",
-          overflow: "hidden"
+          borderColor: "rgba(255,255,255,0.12)",
+          backgroundColor: "rgba(28, 29, 31, 0.92)",
+          overflow: "hidden",
+          boxShadow: "0 18px 42px rgba(0, 0, 0, 0.22)"
         },
         tabBarItemStyle: {
           height: 58,

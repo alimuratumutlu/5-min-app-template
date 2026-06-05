@@ -1,10 +1,13 @@
 import type { ComponentType, ReactNode } from "react";
 import { BlurView } from "expo-blur";
+import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
 import {
   ArrowRight,
   Check,
   ChevronRight,
+  Search,
+  SlidersHorizontal,
   Sparkles,
   Star,
   type LucideIcon
@@ -22,22 +25,23 @@ import { userProgress } from "@/lib/template-data";
 
 export const colors = {
   background: "#FFFFFF",
-  canvas: "#F5F7FB",
+  canvas: "#F0F1F0",
   surface: "#FFFFFF",
-  surfaceRaised: "#F9FBFF",
-  text: "#111827",
-  textMuted: "#5F6B7A",
-  border: "#DCE3EE",
-  blue: "#3657FF",
-  blueSoft: "#E7EBFF",
-  green: "#00A676",
-  greenSoft: "#DEF8EF",
-  purple: "#8B5CF6",
-  purpleSoft: "#EFE7FF",
-  coral: "#FF6B4A",
-  coralSoft: "#FFE9E2",
-  gold: "#E0A100",
-  goldSoft: "#FFF4CD",
+  surfaceRaised: "#F8F8F6",
+  ink: "#202123",
+  text: "#171717",
+  textMuted: "#6E716F",
+  border: "#E4E4DF",
+  blue: "#4F7DFF",
+  blueSoft: "#E5EDFF",
+  green: "#2FBF8F",
+  greenSoft: "#DDF7EC",
+  purple: "#8B7CFF",
+  purpleSoft: "#ECE9FF",
+  coral: "#FF8A5B",
+  coralSoft: "#FFE6D8",
+  gold: "#E4A62F",
+  goldSoft: "#FFF1CF",
   danger: "#D92D20"
 };
 
@@ -173,16 +177,16 @@ export function IconButton({
   icon: LucideIcon;
   label: string;
   onPress?: () => void;
-  tone?: "blue" | "green" | "purple" | "coral" | "gold";
+  tone?: "blue" | "green" | "purple" | "coral" | "gold" | "dark";
 }) {
   return (
     <Pressable
       accessibilityRole="button"
       accessibilityLabel={label}
       onPress={onPress}
-      style={({ pressed }) => [styles.iconButton, toneStyles[tone], pressed ? styles.pressed : null]}
+      style={({ pressed }) => [styles.iconButton, tone === "dark" ? styles.darkIconButton : toneStyles[tone], pressed ? styles.pressed : null]}
     >
-      <Icon color={accentByTone[tone]} size={19} strokeWidth={2.7} />
+      <Icon color={tone === "dark" ? "#FFFFFF" : accentByTone[tone]} size={19} strokeWidth={2.7} />
     </Pressable>
   );
 }
@@ -228,7 +232,7 @@ export function DomainCarousel({
   selectedId,
   onSelect
 }: {
-  items: Array<{ id: string; title: string; body: string; accent: string; softAccent: string; icon: LucideIcon }>;
+  items: Array<{ id: string; title: string; body: string; accent: string; softAccent: string; imageUrl: string; category: string; icon: LucideIcon }>;
   selectedId: string;
   onSelect: (id: string) => void;
 }) {
@@ -250,23 +254,131 @@ export function DomainCarousel({
             onPress={() => onSelect(item.id)}
             style={({ pressed }) => [
               styles.carouselCard,
-              { backgroundColor: selected ? item.softAccent : colors.surface, borderColor: selected ? item.accent : colors.border },
+              { borderColor: selected ? item.accent : colors.border },
               pressed ? styles.pressed : null
             ]}
           >
+            <Image source={{ uri: item.imageUrl }} style={styles.carouselImage} contentFit="cover" />
+            <View style={styles.carouselScrim} />
             <View style={[styles.carouselIcon, { backgroundColor: item.softAccent }]}>
-              <Icon color={item.accent} size={22} strokeWidth={2.8} />
+              <Icon color={item.accent} size={18} strokeWidth={2.8} />
             </View>
+            <Text selectable style={styles.carouselCategory}>
+              {item.category}
+            </Text>
             <Text selectable style={styles.carouselTitle}>
               {item.title}
             </Text>
-            <Text selectable style={styles.carouselBody}>
+            <Text selectable numberOfLines={2} style={styles.carouselBody}>
               {item.body}
             </Text>
           </Pressable>
         );
       })}
     </ScrollView>
+  );
+}
+
+export function SearchPill({ placeholder = "Search templates" }: { placeholder?: string }) {
+  return (
+    <View style={styles.searchRow}>
+      <View style={styles.searchPill}>
+        <Search color={colors.textMuted} size={18} strokeWidth={2.5} />
+        <Text selectable style={styles.searchText}>
+          {placeholder}
+        </Text>
+      </View>
+      <IconButton icon={SlidersHorizontal} label="Filter template controls" tone="dark" />
+    </View>
+  );
+}
+
+export function PillSelector({ items, selected, onSelect }: { items: string[]; selected: string; onSelect: (item: string) => void }) {
+  return (
+    <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.pillSelector}>
+      {items.map((item) => {
+        const active = item === selected;
+        return (
+          <Pressable
+            key={item}
+            accessibilityRole="button"
+            accessibilityState={{ selected: active }}
+            onPress={() => onSelect(item)}
+            style={({ pressed }) => [styles.segmentPill, active ? styles.segmentPillActive : null, pressed ? styles.pressed : null]}
+          >
+            <Text selectable style={[styles.segmentText, active ? styles.segmentTextActive : null]}>
+              {item}
+            </Text>
+          </Pressable>
+        );
+      })}
+    </ScrollView>
+  );
+}
+
+export function HeroPoster({
+  title,
+  subtitle,
+  imageUrl,
+  accent,
+  meta,
+  onPress
+}: {
+  title: string;
+  subtitle: string;
+  imageUrl: string;
+  accent: string;
+  meta: string;
+  onPress?: () => void;
+}) {
+  return (
+    <Pressable onPress={onPress} style={({ pressed }) => [styles.heroPoster, pressed ? styles.pressed : null]}>
+      <Image source={{ uri: imageUrl }} style={styles.heroImage} contentFit="cover" />
+      <LinearGradient colors={["rgba(0,0,0,0.02)", "rgba(0,0,0,0.74)"]} style={styles.heroOverlay} />
+      <View style={[styles.heroBadge, { backgroundColor: accent }]}>
+        <Sparkles color="#FFFFFF" size={14} strokeWidth={3} />
+        <Text selectable style={styles.heroBadgeText}>
+          {meta}
+        </Text>
+      </View>
+      <View style={styles.heroCopy}>
+        <Text selectable style={styles.heroTitle}>
+          {title}
+        </Text>
+        <Text selectable numberOfLines={2} style={styles.heroSubtitle}>
+          {subtitle}
+        </Text>
+      </View>
+      <View style={styles.heroAction}>
+        <ArrowRight color={colors.ink} size={20} strokeWidth={3} />
+      </View>
+    </Pressable>
+  );
+}
+
+export function CompactTile({
+  title,
+  body,
+  tone = "blue",
+  icon: Icon = Sparkles,
+  onPress
+}: {
+  title: string;
+  body: string;
+  tone?: "blue" | "green" | "purple" | "coral" | "gold";
+  icon?: LucideIcon;
+  onPress?: () => void;
+}) {
+  return (
+    <Pressable onPress={onPress} style={({ pressed }) => [styles.compactTile, toneStyles[tone], pressed ? styles.pressed : null]}>
+      <Icon color={accentByTone[tone]} size={20} strokeWidth={2.8} />
+      <Text selectable style={styles.compactTileTitle}>
+        {title}
+      </Text>
+      <Text selectable numberOfLines={2} style={styles.compactTileBody}>
+        {body}
+      </Text>
+    </Pressable>
   );
 }
 
@@ -346,7 +458,7 @@ export function ListRow({
 export function TabBarIcon({ icon: Icon, focused, color, size = 23 }: { icon: LucideIcon; focused: boolean; color: string; size?: number }) {
   return (
     <View style={[styles.tabIconWrap, focused ? styles.tabIconWrapFocused : null]}>
-      <Icon color={focused ? colors.blue : color} size={size} strokeWidth={focused ? 3 : 2.4} />
+      <Icon color={focused ? colors.ink : color} size={size} strokeWidth={focused ? 3 : 2.4} />
     </View>
   );
 }
@@ -413,8 +525,8 @@ const toneStyles = StyleSheet.create({
 
 const buttonStyles = StyleSheet.create({
   primary: {
-    backgroundColor: colors.blue,
-    borderColor: colors.blue
+    backgroundColor: colors.ink,
+    borderColor: colors.ink
   },
   secondary: {
     backgroundColor: colors.surface,
@@ -454,9 +566,10 @@ const styles = StyleSheet.create({
   headerBlur: {
     borderRadius: 8,
     borderCurve: "continuous",
-    borderColor: "rgba(54, 87, 255, 0.14)",
+    borderColor: "rgba(255, 255, 255, 0.72)",
     borderWidth: 1,
-    overflow: "hidden"
+    overflow: "hidden",
+    boxShadow: "0 12px 34px rgba(18, 20, 22, 0.08)"
   },
   headerContent: {
     alignItems: "center",
@@ -468,7 +581,7 @@ const styles = StyleSheet.create({
   },
   logoMark: {
     alignItems: "center",
-    backgroundColor: colors.blueSoft,
+    backgroundColor: colors.coralSoft,
     borderRadius: 8,
     height: 38,
     justifyContent: "center",
@@ -535,7 +648,8 @@ const styles = StyleSheet.create({
     borderCurve: "continuous",
     borderWidth: 1,
     gap: 11,
-    padding: 14
+    padding: 14,
+    boxShadow: "0 14px 32px rgba(22, 24, 24, 0.06)"
   },
   metricCard: {
     flex: 1,
@@ -604,6 +718,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     width: 42
   },
+  darkIconButton: {
+    backgroundColor: colors.ink,
+    borderColor: colors.ink
+  },
   progressWrap: {
     gap: 8
   },
@@ -640,35 +758,178 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     borderWidth: 1,
     gap: 9,
-    minHeight: 174,
+    height: 228,
+    justifyContent: "flex-end",
+    overflow: "hidden",
     padding: 13,
-    width: 206
+    width: 214
+  },
+  carouselImage: {
+    ...StyleSheet.absoluteFillObject
+  },
+  carouselScrim: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: "rgba(0, 0, 0, 0.28)"
   },
   carouselIcon: {
     alignItems: "center",
     borderRadius: 8,
-    height: 42,
+    height: 34,
     justifyContent: "center",
-    width: 42
+    position: "absolute",
+    right: 12,
+    top: 12,
+    width: 34
+  },
+  carouselCategory: {
+    color: "rgba(255,255,255,0.82)",
+    fontSize: 11,
+    fontWeight: "900",
+    lineHeight: 14,
+    textTransform: "uppercase"
   },
   carouselTitle: {
-    color: colors.text,
-    fontSize: 16,
+    color: "#FFFFFF",
+    fontSize: 18,
     fontWeight: "900",
-    lineHeight: 20
+    lineHeight: 22
   },
   carouselBody: {
-    color: colors.textMuted,
+    color: "rgba(255,255,255,0.86)",
     fontSize: 13,
     lineHeight: 18
   },
+  searchRow: {
+    alignItems: "center",
+    flexDirection: "row",
+    gap: 10
+  },
+  searchPill: {
+    alignItems: "center",
+    backgroundColor: colors.surface,
+    borderColor: "rgba(255,255,255,0.88)",
+    borderRadius: 8,
+    borderWidth: 1,
+    flex: 1,
+    flexDirection: "row",
+    gap: 10,
+    minHeight: 48,
+    paddingHorizontal: 14,
+    boxShadow: "0 12px 24px rgba(20, 22, 24, 0.06)"
+  },
+  searchText: {
+    color: colors.textMuted,
+    fontSize: 14,
+    fontWeight: "700"
+  },
+  pillSelector: {
+    gap: 8,
+    paddingRight: 16
+  },
+  segmentPill: {
+    backgroundColor: colors.surface,
+    borderColor: colors.border,
+    borderRadius: 8,
+    borderWidth: 1,
+    minHeight: 38,
+    justifyContent: "center",
+    paddingHorizontal: 14
+  },
+  segmentPillActive: {
+    backgroundColor: colors.ink,
+    borderColor: colors.ink
+  },
+  segmentText: {
+    color: colors.textMuted,
+    fontSize: 12,
+    fontWeight: "800"
+  },
+  segmentTextActive: {
+    color: "#FFFFFF"
+  },
+  heroPoster: {
+    backgroundColor: colors.ink,
+    borderRadius: 8,
+    borderCurve: "continuous",
+    height: 312,
+    overflow: "hidden",
+    padding: 16,
+    justifyContent: "space-between",
+    boxShadow: "0 22px 40px rgba(18, 20, 22, 0.18)"
+  },
+  heroImage: {
+    ...StyleSheet.absoluteFillObject
+  },
+  heroOverlay: {
+    ...StyleSheet.absoluteFillObject
+  },
+  heroBadge: {
+    alignItems: "center",
+    alignSelf: "flex-start",
+    borderRadius: 8,
+    flexDirection: "row",
+    gap: 6,
+    paddingHorizontal: 10,
+    paddingVertical: 7
+  },
+  heroBadgeText: {
+    color: "#FFFFFF",
+    fontSize: 12,
+    fontWeight: "900"
+  },
+  heroCopy: {
+    gap: 7,
+    maxWidth: "78%"
+  },
+  heroTitle: {
+    color: "#FFFFFF",
+    fontSize: 30,
+    fontWeight: "900",
+    lineHeight: 34
+  },
+  heroSubtitle: {
+    color: "rgba(255,255,255,0.84)",
+    fontSize: 14,
+    lineHeight: 20
+  },
+  heroAction: {
+    alignItems: "center",
+    backgroundColor: "#FFFFFF",
+    borderRadius: 8,
+    bottom: 16,
+    height: 46,
+    justifyContent: "center",
+    position: "absolute",
+    right: 16,
+    width: 46
+  },
+  compactTile: {
+    borderRadius: 8,
+    borderWidth: 1,
+    gap: 8,
+    minHeight: 126,
+    padding: 13,
+    width: "48%"
+  },
+  compactTileTitle: {
+    color: colors.text,
+    fontSize: 15,
+    fontWeight: "900",
+    lineHeight: 19
+  },
+  compactTileBody: {
+    color: colors.textMuted,
+    fontSize: 12,
+    lineHeight: 16
+  },
   onboardingPanel: {
-    borderColor: "#C9D4FF",
+    borderColor: "#FFFFFF",
     borderRadius: 8,
     borderWidth: 1,
     gap: 13,
     overflow: "hidden",
-    padding: 15
+    padding: 15,
+    boxShadow: "0 16px 34px rgba(22, 24, 24, 0.08)"
   },
   onboardingTop: {
     alignItems: "center",
@@ -750,8 +1011,8 @@ const styles = StyleSheet.create({
     width: 44
   },
   tabIconWrapFocused: {
-    backgroundColor: colors.blueSoft,
-    borderColor: "#BFC8FF",
+    backgroundColor: "#FFFFFF",
+    borderColor: "rgba(255,255,255,0.82)",
     borderWidth: 1
   }
 });
