@@ -171,7 +171,7 @@ export default function SessionScreen() {
   const continueGames = useMemo(() => allGames.filter((game) => game.progress > 35).slice(0, 3), []);
 
   return (
-    <AppScreen title="Play quest" subtitle="Games, runs, rewards" activeDomain="SkillQuest">
+    <AppScreen title="Play quest" subtitle="Games, runs, rewards" activeDomain="SkillQuest" headerOverlay>
       <EditorHero game={selectedGame} onPlay={() => router.push(`/game/${selectedGame.id}`)} />
 
       <Pressable onPress={() => router.push("/mechanics")} style={({ pressed }) => [styles.mechanicLabCard, pressed ? styles.pressed : null]}>

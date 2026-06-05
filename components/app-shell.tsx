@@ -64,6 +64,7 @@ type AppScreenProps = {
   activeDomain?: string;
   children: ReactNode;
   footer?: ReactNode;
+  headerOverlay?: boolean;
 };
 
 type CardProps = {
@@ -91,15 +92,15 @@ type MetricProps = {
 
 type Tone = "blue" | "green" | "purple" | "coral" | "gold";
 
-export function AppScreen({ title, subtitle, activeDomain = "Template", children, footer }: AppScreenProps) {
+export function AppScreen({ title, subtitle, activeDomain = "Template", children, footer, headerOverlay = false }: AppScreenProps) {
   const scrollY = useRef(new Animated.Value(0)).current;
 
   return (
     <SafeAreaView style={styles.safeArea} edges={["top", "left", "right"]}>
-      <AppHeader title={title} subtitle={subtitle} activeDomain={activeDomain} scrollY={scrollY} />
+      <AppHeader title={title} subtitle={subtitle} activeDomain={activeDomain} scrollY={scrollY} overlay={headerOverlay} />
       <Animated.ScrollView
         style={styles.scroll}
-        contentContainerStyle={[styles.scrollContent, footer ? styles.scrollWithFooter : null]}
+        contentContainerStyle={[styles.scrollContent, headerOverlay ? styles.scrollContentHeaderOverlay : null, footer ? styles.scrollWithFooter : null]}
         contentInsetAdjustmentBehavior="automatic"
         keyboardShouldPersistTaps="handled"
         onScroll={Animated.event([{ nativeEvent: { contentOffset: { y: scrollY } } }], { useNativeDriver: false })}
@@ -120,12 +121,14 @@ export function AppHeader({
   title,
   subtitle,
   activeDomain,
-  scrollY
+  scrollY,
+  overlay = false
 }: {
   title: string;
   subtitle?: string;
   activeDomain: string;
   scrollY?: Animated.Value;
+  overlay?: boolean;
 }) {
   const animatedFrameStyle = scrollY
     ? {
@@ -175,7 +178,7 @@ export function AppHeader({
     : null;
 
   return (
-    <Animated.View style={[styles.headerFrame, animatedFrameStyle]}>
+    <Animated.View style={[styles.headerFrame, overlay ? styles.headerFrameOverlay : null, animatedFrameStyle]}>
       <AnimatedBlurView intensity={62} tint="light" style={[styles.headerBlur, animatedBlurStyle]}>
         <View style={styles.headerContent}>
           <View style={styles.logoMark}>
@@ -840,12 +843,22 @@ const styles = StyleSheet.create({
     paddingTop: 14,
     paddingBottom: 112
   },
+  scrollContentHeaderOverlay: {
+    paddingTop: 0
+  },
   scrollWithFooter: {
     paddingBottom: 242
   },
   headerFrame: {
     paddingHorizontal: 12,
     paddingTop: 8
+  },
+  headerFrameOverlay: {
+    left: 0,
+    position: "absolute",
+    right: 0,
+    top: 0,
+    zIndex: 20
   },
   headerBlur: {
     borderRadius: 36,
