@@ -1,5 +1,5 @@
 import { useRouter } from "expo-router";
-import { Activity, BookmarkCheck, TrendingUp, Trophy } from "lucide-react-native";
+import { Activity, Medal, TrendingUp, Trophy } from "lucide-react-native";
 import { Text, View } from "react-native";
 import { AppScreen, Button, Card, CompactTile, ListRow, Metric, ProgressStatus, textStyles } from "@/components/app-shell";
 import { BarChart, ChartCard, ComparisonBars, DonutChart, HeatmapChart, LineChart, RadarChart } from "@/components/charts";
@@ -42,7 +42,7 @@ export default function AnalyticsScreen() {
       <View style={{ flexDirection: "row", flexWrap: "wrap", justifyContent: "space-between", gap: 10 }}>
         <CompactTile title="Quest flow" body="Daily cadence and completed reward windows." tone="green" icon={Activity} onPress={() => router.push("/details/launch-plan")} />
         <CompactTile title="Rewards" body={`${userProgress.points} points with ${userProgress.streak} day streak.`} tone="gold" icon={Trophy} onPress={() => router.push("/details/carousel-lab")} />
-        <CompactTile title="Saved" body="Favorite badges, cards, and power-ups." tone="blue" icon={BookmarkCheck} onPress={() => router.push("/bookmarks")} />
+        <CompactTile title="League" body="Ruby League rank, promotion, and weekly rivals." tone="blue" icon={Medal} onPress={() => router.push("/bookmarks")} />
         <CompactTile title="Trend" body="XP velocity and mastery movement." tone="purple" icon={TrendingUp} onPress={() => router.push("/details/onboarding-lab")} />
       </View>
 
