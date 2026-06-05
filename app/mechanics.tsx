@@ -118,6 +118,7 @@ function MechanicCard({ mechanic }: { mechanic: InputMechanic }) {
   return (
     <Link href={`/mechanics/${mechanic.id}`} asChild>
       <Pressable accessibilityRole="button" accessibilityLabel={`Open ${mechanic.title}`} style={({ pressed }) => [styles.mechanicCard, pressed ? styles.pressed : null]}>
+        <View style={styles.mechanicGlow} />
         <View style={styles.mechanicTop}>
           <View style={styles.numberBadge}>
             <Text selectable style={styles.numberText}>
@@ -270,23 +271,40 @@ const styles = StyleSheet.create({
     gap: 2
   },
   mechanicList: {
-    gap: 18
+    gap: 20
   },
   mechanicCard: {
-    backgroundColor: "#FFFFFF",
-    borderColor: "rgba(232, 237, 244, 0.92)",
-    borderRadius: 32,
+    backgroundColor: "#FFF9F5",
+    borderColor: "rgba(255, 164, 122, 0.28)",
+    borderRadius: 34,
     borderCurve: "continuous",
     borderWidth: 1,
-    gap: 12,
+    gap: 13,
     overflow: "hidden",
-    padding: 17,
-    boxShadow: "0 22px 46px rgba(16,17,22,0.13)"
+    padding: 14,
+    position: "relative",
+    boxShadow: "0 22px 44px rgba(255, 111, 61, 0.16)"
+  },
+  mechanicGlow: {
+    backgroundColor: "rgba(255, 111, 61, 0.12)",
+    borderRadius: 70,
+    height: 118,
+    position: "absolute",
+    right: -38,
+    top: -42,
+    width: 118
   },
   mechanicTop: {
     alignItems: "flex-start",
+    backgroundColor: "rgba(255,255,255,0.88)",
+    borderColor: "rgba(255,255,255,0.9)",
+    borderCurve: "continuous",
+    borderRadius: 26,
+    borderWidth: 1,
     flexDirection: "row",
-    gap: 10
+    gap: 10,
+    padding: 12,
+    boxShadow: "0 12px 24px rgba(16,17,22,0.06)"
   },
   numberBadge: {
     alignItems: "center",
@@ -349,22 +367,24 @@ const styles = StyleSheet.create({
   },
   openBadge: {
     alignItems: "center",
-    backgroundColor: "#F5F7FA",
+    backgroundColor: "#FFFFFF",
     borderRadius: 15,
     height: 30,
     justifyContent: "center",
-    width: 30
+    width: 30,
+    boxShadow: "0 7px 14px rgba(16,17,22,0.08)"
   },
   captureBox: {
     alignItems: "center",
-    backgroundColor: "#F3F7FF",
-    borderColor: "#E3EEFF",
-    borderRadius: 22,
+    backgroundColor: "#FFFFFF",
+    borderColor: "rgba(36, 123, 255, 0.13)",
+    borderRadius: 24,
     borderWidth: 1,
     flexDirection: "row",
     gap: 8,
-    paddingHorizontal: 12,
-    paddingVertical: 12
+    paddingHorizontal: 13,
+    paddingVertical: 12,
+    boxShadow: "0 10px 22px rgba(36, 123, 255, 0.08)"
   },
   captureText: {
     color: colors.text,
@@ -378,7 +398,8 @@ const styles = StyleSheet.create({
     color: colors.textMuted,
     fontFamily: fonts.medium,
     fontSize: 13,
-    lineHeight: 18
+    lineHeight: 18,
+    paddingHorizontal: 3
   },
   fitRail: {
     flexDirection: "row",
