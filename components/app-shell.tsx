@@ -229,17 +229,21 @@ export function Button({ label, onPress, variant = "primary", icon: Icon = Arrow
       disabled={disabled}
       onPress={onPress}
       style={({ pressed }) => [
-        styles.button,
-        buttonStyles[variant],
+        styles.buttonShell,
+        buttonShellStyles[variant],
         fullWidth ? styles.fullWidth : null,
         disabled ? styles.disabled : null,
-        pressed && !disabled ? styles.pressed : null
+        pressed && !disabled ? styles.buttonShellPressed : null
       ]}
     >
-      <Text selectable style={[styles.buttonText, isPrimary ? styles.buttonTextLight : styles.buttonTextDark]}>
-        {label}
-      </Text>
-      <Icon color={iconColor} size={17} strokeWidth={2.6} />
+      {({ pressed }) => (
+        <View style={[styles.buttonFace, buttonStyles[variant], pressed && !disabled ? styles.buttonFacePressed : null]}>
+          <Text selectable style={[styles.buttonText, isPrimary ? styles.buttonTextLight : styles.buttonTextDark]}>
+            {label}
+          </Text>
+          <Icon color={iconColor} size={17} strokeWidth={2.8} />
+        </View>
+      )}
     </Pressable>
   );
 }
@@ -770,14 +774,29 @@ const toneStyles = StyleSheet.create({
   }
 });
 
+const buttonShellStyles = StyleSheet.create({
+  primary: {
+    backgroundColor: "#D94E25"
+  },
+  secondary: {
+    backgroundColor: "#D8DFE8"
+  },
+  quiet: {
+    backgroundColor: "#CBDCF7"
+  },
+  danger: {
+    backgroundColor: "#A82318"
+  }
+});
+
 const buttonStyles = StyleSheet.create({
   primary: {
     backgroundColor: colors.coral,
-    borderColor: colors.coral
+    borderColor: "#FF8C66"
   },
   secondary: {
     backgroundColor: colors.surface,
-    borderColor: colors.border
+    borderColor: "#E7ECF2"
   },
   quiet: {
     backgroundColor: "#F6FAFF",
@@ -785,7 +804,7 @@ const buttonStyles = StyleSheet.create({
   },
   danger: {
     backgroundColor: colors.danger,
-    borderColor: colors.danger
+    borderColor: "#F04438"
   }
 });
 
@@ -969,16 +988,31 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 20
   },
-  button: {
-    alignItems: "center",
-    borderRadius: 28,
+  buttonShell: {
+    borderRadius: 30,
     borderCurve: "continuous",
-    borderWidth: 1,
+    minHeight: 58,
+    paddingBottom: 6
+  },
+  buttonShellPressed: {
+    paddingBottom: 1,
+    paddingTop: 5
+  },
+  buttonFace: {
+    alignItems: "center",
+    borderRadius: 30,
+    borderCurve: "continuous",
+    borderWidth: 2,
     flexDirection: "row",
     gap: 8,
     justifyContent: "center",
     minHeight: 52,
-    paddingHorizontal: 18
+    paddingHorizontal: 19,
+    boxShadow: "0 6px 0 rgba(0, 0, 0, 0.06)"
+  },
+  buttonFacePressed: {
+    transform: [{ translateY: 3 }],
+    boxShadow: "0 1px 0 rgba(0, 0, 0, 0.04)"
   },
   buttonText: {
     fontFamily: fonts.bold,
